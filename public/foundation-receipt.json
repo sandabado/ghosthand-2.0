@@ -1,11 +1,11 @@
 {
   "measured": true,
-  "measuredAt": "2026-11-14T04:12:20.811Z",
+  "measuredAt": "2026-11-14T04:52:18.921Z",
   "method": "Static-export filesystem bytes; initial references are a lower-bound entry set, all-client totals include lazy/not-found chunks and exclude this small diagnostic JSON. Gzip is a node:zlib estimate, not network transfer.",
   "targetBytes": 4000000,
-  "initialReferencedRawBytes": 1214074,
-  "initialReferencedGzipBytes": 362097,
-  "conservativeClientRawBytes": 2338856,
-  "conservativeClientGzipBytes": 722843,
+  "initialReferencedRawBytes": 1234622,
+  "initialReferencedGzipBytes": 366689,
+  "conservativeClientRawBytes": 2369661,
+  "conservativeClientGzipBytes": 730571,
   "runtimeFps": "Unmeasured by filesystem; browser heartbeat is not a GPU/device benchmark."
 }

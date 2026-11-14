@@ -6,8 +6,9 @@ import { useJourney } from '@/core/world';
 import { useParam } from '@/core/params';
 import { queueInput } from '@/core/input';
 import { HAND_SVG } from '@/systems/ink/sources';
-import { memberBuilds, drainAudit, relics, stations } from '@/core/fixtures';
-import { advanceJourney, completeGate, releaseDrain, commitFork, navigate, sealRitual, resetJourney, setSelectedMember, setSelectedRelic } from '@/core/director';
+import DrainScene from './DrainScene';
+import { memberBuilds, relics, stations } from '@/core/fixtures';
+import { advanceJourney, completeGate, commitFork, navigate, sealRitual, resetJourney, setSelectedMember, setSelectedRelic } from '@/core/director';
 
 function SceneLabel({ scene, detail }: { scene: SceneId; detail?: string }) {
   const def = SCENES[scene];
@@ -32,15 +33,6 @@ function Legend() {
   return <><SceneLabel scene="LEGEND"/><div className="scene-title"><span className="scene-overline">TWO INSTINCTS. ONE PRACTICE.</span><h2>The work needs<br/><em>both hands.</em></h2></div><div className="founder-diptych"><article><div className="founder-fixture" aria-label="Chris Kyser portrait placeholder">CK<span>PORTRAIT FIXTURE</span></div><span className="scene-overline">ARCHITECTURE / INTELLIGENCE</span><h3>Chris Kyser</h3><p>Application systems, knowledge architecture, and the technical foundations beneath the experience.</p></article><div className="blade-relay" aria-hidden="true"/><article><div className="founder-fixture" aria-label="Jesse Gawlik portrait placeholder">JG<span>PORTRAIT FIXTURE</span></div><span className="scene-overline">PRODUCT / CREATIVE SYSTEMS</span><h3>Jesse Gawlik</h3><p>Experience strategy, product design, and the instinct that makes complex things feel clear.</p></article></div><div className="credential-fragments" aria-label="Areas of prior experience"><span>PRODUCT FOUNDATIONS</span><span>KNOWLEDGE SYSTEMS</span><span>DESIGN OPERATIONS</span><span>BRAND WORLDS</span></div><NextStep>Look beneath the surface</NextStep></>;
 }
 
-function Drain() {
-  const released = useJourney(s => s.drainReleased);
-  const [selected, setSelected] = useState(0);
-  const [gesture, setGesture] = useState(false);
-  const start = useRef<{ x: number; y: number } | null>(null);
-  const onDown = (event: PointerEvent<HTMLDivElement>) => { if(released) return; event.currentTarget.setPointerCapture(event.pointerId); start.current = {x:event.clientX,y:event.clientY}; setGesture(true); };
-  const onUp = (event: PointerEvent<HTMLDivElement>) => { const origin=start.current; start.current=null; setGesture(false); if(origin && origin.y-event.clientY >= TIMING.lookUpPixels && Math.abs(origin.x-event.clientX)<Math.abs(origin.y-event.clientY)) releaseDrain(); };
-  return <><SceneLabel scene="DRAIN" detail={released ? 'THE THREADS LET GO.' : 'ILLUSTRATIVE AUDIT / NOT YOUR ACCOUNT DATA'}/><div className="drain-layout"><div><div className="scene-title"><span className="scene-overline">THE COST OF BORROWED POWER</span><h2>{released ? <>You can<br/><em>let go.</em></> : <>What is<br/><em>owning you?</em></>}</h2></div><p className="scene-lede">{released ? 'The camera has not turned. The world has changed.' : 'Rent. Noise. Friction. Every invisible thread asks for a little more of you.'}</p><div className={`look-up-area ${gesture ? 'is-armed' : ''} ${released ? 'is-released' : ''}`} role="group" aria-label="Look up interaction area" tabIndex={0} onPointerDown={onDown} onPointerUp={onUp} onPointerCancel={()=>{start.current=null;setGesture(false);}} onKeyDown={e=>{if(e.key==='ArrowUp'){e.preventDefault();releaseDrain();}}}><span className="look-up-glyph" aria-hidden="true">{released?'手':'↑'}</span><strong>{released ? 'A different dawn.' : 'Look up.'}</strong><span>{released ? 'Filaments released. Continue when ready.' : 'Press here. Draw upward. Release.'}</span><span className="gesture-key">KEYBOARD: FOCUS HERE + ↑</span></div><button className="keyboard-action" disabled={released} onClick={releaseDrain}>{released ? 'The threads are released' : 'Release the threads · keyboard alternative'}</button></div><div className="drain-audit"><span className="scene-overline">FOLLOW A THREAD</span><ul>{drainAudit.map((item,index)=><li key={item.id}><button onMouseEnter={()=>setSelected(index)} onFocus={()=>setSelected(index)} onClick={()=>setSelected(index)} aria-pressed={selected===index}><span>{item.name}</span><b>{item.rate}</b></button></li>)}</ul><p className="audit-meaning" role="status">{drainAudit[selected]?.meaning}</p></div></div><NextStep disabled={!released}>Pass into the craft</NextStep></>;
-}
 
 type StrokeProps = { label: string; className?: string; onCommit:()=>void; disabled?:boolean; children?:ReactNode; };
 /** A click never commits. Keyboard stroke is arm → travel → release. */
@@ -142,7 +134,7 @@ export default function SceneDirector({sceneOverride}:{sceneOverride?:SceneId}={
   const scene=sceneOverride??activeScene;
   const reset=useJourney(s=>s.resetVersion);
   let content:ReactNode;
-  switch(scene){case 'THRESHOLD':content=<Threshold/>;break;case 'LEGEND':content=<Legend/>;break;case 'DRAIN':content=<Drain/>;break;case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<CraftGate key={`${scene}-${reset}`} gate={Number(scene.slice(-1))}/>;break;case 'PURSUIT':content=<Pursuit/>;break;case 'MERGE':content=<Merge/>;break;case 'FORK':content=<Fork/>;break;case 'DOJO':content=<Dojo/>;break;case 'COMMISSION':content=<Commission/>;break;case 'CHAINS_HOLD':content=<ChainsHold/>;break;case 'OATH':content=<Oath/>;break;}
+  switch(scene){case 'THRESHOLD':content=<Threshold/>;break;case 'LEGEND':content=<Legend/>;break;case 'DRAIN':content=<DrainScene/>;break;case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<CraftGate key={`${scene}-${reset}`} gate={Number(scene.slice(-1))}/>;break;case 'PURSUIT':content=<Pursuit/>;break;case 'MERGE':content=<Merge/>;break;case 'FORK':content=<Fork/>;break;case 'DOJO':content=<Dojo/>;break;case 'COMMISSION':content=<Commission/>;break;case 'CHAINS_HOLD':content=<ChainsHold/>;break;case 'OATH':content=<Oath/>;break;}
   return <section key={`${scene}-${reset}`} className={`gh-scene gh-${scene.toLowerCase()}`} aria-label={SCENES[scene].title} data-scene={scene}>{content}</section>;
 }
 

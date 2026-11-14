@@ -8,6 +8,8 @@ export function worldUniforms() {
     uInkFlow:{value:0},uLightIntensity:{value:1},uChromaOffset:{value:0},uCutProgress:{value:0},
     uPursuit:{value:0},uHand:{value:0},uInkTipDecay:{value:0},uSword:{value:0},uFlash:{value:0},uReleased:{value:0},
     uSceneMix:{value:1},uVariant:{value:0},uInkBleed:{value:1},uInkPressure:{value:1},uColor:{value:new Color(PALETTE.candle)},
+    uDrainTension:{value:0},uDrainSnap:{value:0},uDrainDawn:{value:0},uDrainFocus:{value:0},uDrainGesture:{value:0},
+    uDrainMix:{value:0},uSmoke:{value:new Color(PALETTE.smoke)},uCandle:{value:new Color(PALETTE.candle)},uCandleDim:{value:new Color(PALETTE.candleDim)},
     uBone:{value:new Color(PALETTE.bone)},uVoid:{value:new Color(PALETTE.void)},
   };
 }
@@ -47,14 +49,22 @@ export const fogFragment=`
 export const atmosphereVertex=`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`;
 export const atmosphereFragment=`
   varying vec2 vUv;uniform float uTime;uniform float uFogDensity;uniform float uLightIntensity;
-  uniform float uReleased;uniform vec3 uColor;uniform vec3 uVoid;
+  uniform float uDrainDawn;uniform float uDrainMix;uniform vec3 uColor;uniform vec3 uVoid;
+  uniform vec3 uSmoke;uniform vec3 uCandle;uniform vec3 uCandleDim;
   float haze(vec2 p){return sin(p.x*2.0+sin(p.y*3.2+uTime*0.06))*sin(p.y*2.3-uTime*0.025);}
   void main(){
     vec2 p=vUv*2.0-1.0;
     float cloud=0.5+0.5*haze(p*2.0);
     float edge=exp(-dot(p*vec2(0.8,1.4),p*vec2(0.8,1.4))*2.5);
-    float dawn=exp(-length(p-vec2(0.3,-0.45))*3.4)*uReleased;
-    vec3 col=mix(uVoid,uColor,(edge*cloud*uFogDensity*0.23+dawn*0.19)*uLightIntensity);
+    vec3 ordinary=mix(uVoid,uColor,edge*cloud*uFogDensity*0.23*uLightIntensity);
+    vec3 burden=mix(uVoid,uSmoke,edge*(0.28+cloud*0.3)*uFogDensity);
+    vec3 col=mix(ordinary,burden,uDrainMix);
+    float dawn=clamp(uDrainDawn,0.0,1.0);
+    float horizon=exp(-pow((p.y+0.28+dawn*0.12)*3.2,2.0))*exp(-p.x*p.x*0.8);
+    float opening=exp(-length(p-vec2(0.18,-0.42))*mix(6.0,1.4,dawn));
+    float angle=atan(p.x,p.y+1.45);
+    float shafts=pow(max(0.0,sin(angle*24.0+0.2)*0.5+0.5),9.0)*smoothstep(-0.7,0.8,p.y);
+    col+=mix(uCandleDim,uCandle,horizon*0.68)*(horizon*0.23+opening*0.18+shafts*0.035)*dawn;
     gl_FragColor=vec4(col,1.0);
   }`;
 

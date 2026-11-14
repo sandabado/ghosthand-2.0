@@ -6,6 +6,7 @@ import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette } from '@re
 import { BlendFunction, ChromaticAberrationEffect } from 'postprocessing';
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Group, Material, Mesh, ShaderMaterial, Vector2 } from 'three';
 import { InkStroke } from '../systems/InkStroke';
+import DrainField from '../systems/drain/DrainField';
 import { svgToStrokes } from '../systems/ink/geometry';
 import { HAND_SVG,SIGIL_SVG,SLASH_SVG } from '../systems/ink/sources';
 import { PALETTE, SCENES, type SceneId } from '../core/config';
@@ -30,13 +31,16 @@ function SharedAtmosphere() {
     const state=useJourney.getState();
     uploadUniforms(material,state.params);
     if(state.reducedMotion) material.uniforms.uTime.value=0;
-    material.uniforms.uColor.value.set(state.scene==='CHAINS_HOLD'||state.scene==='DRAIN'&&!state.drainReleased?PALETTE.smoke:PALETTE.candle);
+    const drainMix=state.scene==='DRAIN'?1:state.previousScene==='DRAIN'?1-state.params.sceneMix:0;
+    material.uniforms.uColor.value.set(state.scene==='CHAINS_HOLD'?PALETTE.smoke:PALETTE.candle);
+    material.uniforms.uDrainMix.value=drainMix;material.uniforms.uDrainDawn.value=state.params.drainDawn*drainMix;
   },-20);
   useEffect(()=>()=>material.dispose(),[material]);
   return <mesh position={[0,0,-35]} material={material} renderOrder={-100}><planeGeometry args={[120,90]}/></mesh>;
 }
 
 export function ParticleSystem() {
+  const dawnTint=useMemo(()=>new Color(PALETTE.candleDim),[]);
   const geometry=useMemo(()=>{
     const geo=new BufferGeometry();const positions=new Float32Array(540*3);const seeds=new Float32Array(540);
     for(let i=0;i<540;i++){
@@ -52,7 +56,9 @@ export function ParticleSystem() {
   useFrame(()=>{
     const state=useJourney.getState();uploadUniforms(material,state.params);
     if(state.reducedMotion)material.uniforms.uTime.value=0;
-    material.uniforms.uColor.value.set(state.scene==='CHAINS_HOLD'?PALETTE.smoke:PALETTE.candleDim);
+    const inDrain=state.scene==='DRAIN'||state.previousScene==='DRAIN';
+    if(inDrain)material.uniforms.uColor.value.set(PALETTE.smoke).lerp(dawnTint,state.params.drainDawn);
+    else material.uniforms.uColor.value.set(state.scene==='CHAINS_HOLD'?PALETTE.smoke:PALETTE.candleDim);
   },-19);
   useEffect(()=>()=>{geometry.dispose();material.dispose();},[geometry,material]);
   return <points geometry={geometry} material={material} frustumCulled={false}/>;
@@ -127,11 +133,6 @@ function CraftEnvironment({scene}:{scene:SceneId}) {
   </group>;
 }
 
-function DrainEnvironment() {
-  const group=useRef<Group>(null);
-  useFrame(()=>{if(group.current){const p=useJourney.getState().params;group.current.scale.y=Math.max(.001,1-p.released);}} ,-12);
-  return <group ref={group} position={[1.7,-3,-3]}>{Array.from({length:18},(_,i)=><Line key={i} points={[[Math.sin(i*2.4)*.65,0,0],[Math.sin(i*1.5)*2,3,-1],[Math.cos(i*1.7)*4,7,-4],[Math.cos(i)*6,14,-12]]} color={PALETTE.enemy} lineWidth={1+(i%3)*.25} transparent opacity={.65}/>)}</group>;
-}
 
 function ChainsRoom() {
   return <group>
@@ -185,7 +186,7 @@ function SceneGeometry({scene,previous=false}:{scene:SceneId;previous?:boolean})
   switch(scene){
     case 'THRESHOLD':case 'MERGE': content=<><GhostHand settled={previous}/><InkAccents previous={previous}/>{!previous&&<Sword/>}</>;break;
     case 'LEGEND': content=<><InkAccents previous={previous} legend/><group position={[2,0,-6]}>{[-1,1].map(x=><group key={x} position={[x*1.35,0,0]}><mesh><boxGeometry args={[2.2,3.7,.12]}/><meshStandardMaterial color={PALETTE.void} emissive={PALETTE.candleDim} emissiveIntensity={.12}/></mesh><Line points={[[-1.1,-1.85,.08],[-1.1,1.85,.08],[1.1,1.85,.08],[1.1,-1.85,.08]]} color={PALETTE.candleDim} lineWidth={.5}/></group>)}<Line points={[[0,-2.4,.1],[0,2.4,.1]]} color={PALETTE.candle} lineWidth={.8}/></group></>;break;
-    case 'DRAIN':content=<DrainEnvironment/>;break;
+    case 'DRAIN':content=<DrainField previous={previous}/>;break;
     case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<CraftEnvironment scene={scene}/>;break;
     case 'PURSUIT':content=<>{[-14,-29,-44].map(z=><Torii key={z} z={z}/>)}{!previous&&<Sword/>}</>;break;
     case 'FORK':content=<group position={[0,0,-8]}><Line points={[[0,-5,0],[0,5,0]]} color={PALETTE.candle} lineWidth={1}/><mesh position={[-5,0,-1]}><planeGeometry args={[9,14]}/><meshBasicMaterial color={PALETTE.candleDim} transparent opacity={.045}/></mesh><mesh position={[5,0,-1]}><planeGeometry args={[9,14]}/><meshBasicMaterial color={PALETTE.enemy} transparent opacity={.16}/></mesh></group>;break;
@@ -207,6 +208,7 @@ function CameraAdapter() {
     else if(verb==='ENTER'){camera.position.set(p.cameraX,.15,8+p.cameraZ);camera.rotation.y=p.pointerX*.05;}
     else if(state.scene==='PURSUIT'){camera.position.set(Math.sin(p.pursuit*Math.PI)*.55,0,8-p.pursuit*5);camera.rotation.z=Math.sin(p.pursuit*Math.PI)*.035;}
     else camera.position.set(0,0,8-Math.max(p.progress,p.pass)*(state.scene.startsWith('CRAFT')?4:0));
+    runtime.cameraRotation=[camera.rotation.x,camera.rotation.y,camera.rotation.z];
     if(key.current)key.current.intensity=3*p.lightIntensity;
   },-25);
   return <><ambientLight color={PALETTE.bone} intensity={.35}/><pointLight ref={key} color={PALETTE.candle} position={[2,3,5]} intensity={3} distance={45}/><hemisphereLight color={PALETTE.bone} groundColor={PALETTE.void} intensity={.22}/></>;
@@ -216,7 +218,7 @@ function GlobalGrade() {
   const chroma=useRef<ChromaticAberrationEffect>(null);const offset=useMemo(()=>new Vector2(),[]);
   useEffect(()=>{runtime.composerMounts++;return()=>{runtime.composerMounts--;};},[]);
   useFrame(()=>{const p=useJourney.getState().params;chroma.current?.offset.set(p.chromaOffset,p.chromaOffset*.45);},-2);
-  return <EffectComposer multisampling={0} enableNormalPass={false}>
+  return <EffectComposer multisampling={2} enableNormalPass={false}>
     <Bloom luminanceThreshold={.6} luminanceSmoothing={.4} intensity={.75} mipmapBlur/>
     <Vignette eskil={false} offset={.25} darkness={.75}/>
     <Noise opacity={.035} blendFunction={BlendFunction.SOFT_LIGHT}/>

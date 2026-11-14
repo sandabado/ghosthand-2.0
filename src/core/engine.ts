@@ -5,7 +5,7 @@ import Lenis from 'lenis';
 import { SCENES,TIMING } from './config';
 import { runtime,useJourney,notifyParams } from './world';
 import { input,clearInput } from './input';
-import { advanceJourney,canScrollAdvance,recordSword,transitionTo } from './director';
+import { advanceJourney,canScrollAdvance,recordSword,transitionTo,prepareDrain,stopDrainRite,settleDrainForReducedMotion } from './director';
 import { tlFall,tlPass,tlPursue } from './verbs';
 import { soundDirector } from './sound';
 
@@ -46,6 +46,7 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
   function sceneEntry(){
     timeline?.kill();
     const s=useJourney.getState(),p=s.params;
+    if(s.scene==='DRAIN')prepareDrain();else stopDrainRite();
     soundDirector.setSilent(false);clearInput();
     p.inkFlow=0;p.hand=0;p.inkTipDecay=0;p.sword=0;p.flash=0;p.ceremonyTime=0;p.pursuit=0;
     p.progress=0;p.pass=0;p.fall=0;p.cameraX=0;p.cameraZ=0;
@@ -105,7 +106,8 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
     if(document.pointerLockElement){input.dx+=event.movementX/180;input.dy+=event.movementY/180;return;}
     input.x=(event.clientX/innerWidth-0.5)*2;input.y=(event.clientY/innerHeight-0.5)*2;
     input.cursorX=event.clientX;input.cursorY=event.clientY;
-    input.hover=Boolean((event.target as Element)?.closest('button,a,input,summary,[role="button"]'));
+    input.serial++;
+    input.hover=Boolean((event.target as Element)?.closest('button,a,input,summary,[role="button"],.drain-look-zone,.drain-thread-list,.drain-trace-card'));
   };
   const onKey=(event:KeyboardEvent)=>{
     if((event.target as Element)?.closest('input,textarea,select,[contenteditable="true"]'))return;
@@ -115,15 +117,20 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
   const onKeyUp=(event:KeyboardEvent)=>input.keys.delete(event.code);
   const onResize=()=>{resizePending=true;};
   const onVisibility=()=>{pauseNextFrame=true;clearInput();};
-  const onMotion=()=>{useJourney.setState({reducedMotion:reduced.matches});lenis.options.smoothWheel=!reduced.matches;resizePending=true;};
-  window.addEventListener('pointermove',onPointer,{passive:true});window.addEventListener('keydown',onKey);
+  const onMotion=()=>{
+    useJourney.setState({reducedMotion:reduced.matches});
+    if(reduced.matches)settleDrainForReducedMotion();
+    lenis.options.smoothWheel=!reduced.matches;resizePending=true;
+  };
+  window.addEventListener('pointermove',onPointer,{passive:true});window.addEventListener('pointerdown',onPointer,{passive:true});window.addEventListener('keydown',onKey);
   window.addEventListener('keyup',onKeyUp);window.addEventListener('blur',clearInput);
   window.addEventListener('resize',onResize);reduced.addEventListener('change',onMotion);
   document.addEventListener('visibilitychange',onVisibility);
   function domAdapter(){
     const p=useJourney.getState().params;
     const vars={hand:p.hand,sword:p.sword,flash:p.flash,cut:p.cutProgress,ceremony:p.ceremonyTime,
-      'scene-mix':p.sceneMix,ink:p.inkFlow,time:p.time,depth:p.depth,progress:p.progress,'pointer-x':p.pointerX};
+      'scene-mix':p.sceneMix,ink:p.inkFlow,time:p.time,depth:p.depth,progress:p.progress,'pointer-x':p.pointerX,
+      'drain-tension':p.drainTension,'drain-snap':p.drainSnap,'drain-dawn':p.drainDawn,'drain-gesture':p.drainGesture,released:p.released};
     for(const [name,value] of Object.entries(vars))root.style.setProperty(`--${name}`,String(value));
     const cursor=root.querySelector<HTMLElement>('.cursor-ghost');
     if(cursor){cursor.style.transform=`translate3d(${p.cursorX}px,${p.cursorY}px,0)`;cursor.dataset.hover=String(p.cursorHover>0.5);}
@@ -135,6 +142,7 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
     logicalTime+=elapsedDelta;
     const s=useJourney.getState(),p=s.params;
     runtime.clockPhases=['input'];
+    p.pointerPixelX=input.cursorX;p.pointerPixelY=input.cursorY;p.pointerSerial=input.serial;
     if(!s.reducedMotion){
       p.pointerX+= (input.x-p.pointerX)*0.08;p.pointerY+=(input.y-p.pointerY)*0.08;
       if(s.scene==='DOJO'){
@@ -169,17 +177,17 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
   };
   window.__GH_DEBUG={setFog,setInk,snapshot:()=>{
     const s=useJourney.getState();return {scene:s.scene,navUnlocked:s.navUnlocked,thresholdReady:s.thresholdReady,
-      drainReleased:s.drainReleased,completedGates:s.completedGates,swordMoments:s.swordMoments,
+      drainReleased:s.drainReleased,drainSettled:s.drainSettled,drainAuditIndex:s.drainAuditIndex,drainAuditSource:s.drainAuditSource,completedGates:s.completedGates,swordMoments:s.swordMoments,
       swordCount:s.swordMoments.length,shingCount:s.shingCount,soundEnabled:s.soundEnabled,
       reducedMotion:s.reducedMotion,dojoSeal:s.dojoSeal,commissionSeal:s.commissionSeal,
       visitedScenes:s.visitedScenes,journey:s.journeyNumber,
       params:Object.fromEntries(Object.entries(s.params).filter(([,value])=>typeof value==='number')),audio:soundDirector.snapshot(),runtime:{...runtime}};
   }};
-  console.info('BUILT BY GHOST HANDS — v2 foundation. Local fixtures; no trackers. Runtime receipt: window.__GH_DEBUG.snapshot()');
+  console.info('BUILT BY GHOST HANDS — v4 Drain. Local fixtures; no trackers. Runtime receipt: window.__GH_DEBUG.snapshot()');
   return {setAdvance(fn){advanceWorld=fn;},destroy(){
-    destroyed=true;timeline?.kill();unsubscribe();lenis.destroy();spine.kill();ScrollTrigger.disable(false,true);
+    destroyed=true;timeline?.kill();stopDrainRite();unsubscribe();lenis.destroy();spine.kill();ScrollTrigger.disable(false,true);
     gsap.ticker.remove(heartbeat);runtime.heartbeatOwners--;gsap.ticker.add(gsap.updateRoot);
-    window.removeEventListener('pointermove',onPointer);window.removeEventListener('keydown',onKey);
+    window.removeEventListener('pointermove',onPointer);window.removeEventListener('pointerdown',onPointer);window.removeEventListener('keydown',onKey);
     window.removeEventListener('keyup',onKeyUp);window.removeEventListener('blur',clearInput);
     window.removeEventListener('resize',onResize);reduced.removeEventListener('change',onMotion);
     document.removeEventListener('visibilitychange',onVisibility);window.history.scrollRestoration=oldRestoration;

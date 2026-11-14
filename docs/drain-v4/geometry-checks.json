@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-11-14T04:52:19.038Z",
+  "checks": [
+    {
+      "name": "Instancing has bounded, finite transform and attribute data",
+      "passed": true
+    },
+    {
+      "name": "Filaments emerge near the camera body and rise toward distant anchors",
+      "passed": true
+    },
+    {
+      "name": "Segment transforms connect to the sampled curved filament without gaps",
+      "passed": true
+    },
+    {
+      "name": "Raycast instance IDs map to valid, fully covered illustrative audit fixtures",
+      "passed": true
+    },
+    {
+      "name": "Seeded variation is deterministic and keeps release order and radii bounded",
+      "passed": true
+    },
+    {
+      "name": "Release remains bounded and monotonic, with a staggered body-to-anchor cascade",
+      "passed": true
+    },
+    {
+      "name": "Dissolution particle fixtures remain finite, mapped, and bounded",
+      "passed": true
+    },
+    {
+      "name": "Custom instance budgets preserve shape and fixture mapping",
+      "passed": true
+    },
+    {
+      "name": "Drain rendering consumes the shared clock, palette, and global grade",
+      "passed": true
+    }
+  ],
+  "counts": {
+    "strands": 28,
+    "segmentsPerStrand": 32,
+    "instances": 896,
+    "auditFixtures": 14,
+    "particles": 672
+  },
+  "limitations": [
+    "CPU geometry and source checks do not establish actual GPU raycast targeting, shader appearance, input behavior, or the emotional quality of release/dawn.",
+    "Ordinary-scroll safety, deliberate gesture/keyboard parity, camera orientation, settled advancement, lifecycle cleanup, and Merge timing require browser evidence.",
+    "No GPU/device FPS or physical mobile acceptance is inferred."
+  ]
+}

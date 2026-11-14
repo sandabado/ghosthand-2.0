@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-11-14T04:52:19.134Z",
+  "checks": [
+    {
+      "name": "Ribbon attributes and topology are finite",
+      "passed": true
+    },
+    {
+      "name": "Reveal bounds and paired coordinates are stable",
+      "passed": true
+    },
+    {
+      "name": "Pressure varies and ends are tapered",
+      "passed": true
+    },
+    {
+      "name": "Width is a geometric footprint rather than line width",
+      "passed": true
+    },
+    {
+      "name": "Identical inputs produce deterministic geometry",
+      "passed": true
+    },
+    {
+      "name": "Reversed and repeated-point paths stay finite",
+      "passed": true
+    },
+    {
+      "name": "Degenerate input rejects or returns safe empty geometry",
+      "passed": true
+    },
+    {
+      "name": "Tip particles expose finite reveal and seed attributes",
+      "passed": true
+    },
+    {
+      "name": "Ink renderer consumes the shared clock and grade",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "SVG XML/viewBox conversion requires browser DOMParser and is not exercised by this Node geometry check.",
+    "Shader appearance, GPU compilation, playback timing, resource lifecycle, and device FPS require separate browser evidence."
+  ]
+}

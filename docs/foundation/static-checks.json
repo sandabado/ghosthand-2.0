@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-14T04:12:20.825Z",
+  "checkedAt": "2026-11-14T04:52:18.936Z",
   "checks": [
     {
       "name": "Closed palette",
@@ -59,30 +59,30 @@
     {
       "name": "Initial payload target (conservative raw upper bound)",
       "passed": true,
-      "detail": "2,339,440 raw bytes across root HTML, all exported client assets, and the eager receipt JSON; gzip estimate 723,212 bytes."
+      "detail": "2,370,245 raw bytes across root HTML, all exported client assets, and the eager receipt JSON; gzip estimate 730,939 bytes."
     }
   ],
   "payload": {
-    "measuredAt": "2026-11-14T04:12:20.811Z",
+    "measuredAt": "2026-11-14T04:52:18.921Z",
     "method": "Filesystem byte measurement of static export. Root HTML references are a lower-bound entry set; all exported JS/CSS/font/image assets plus root HTML are a conservative client-asset upper bound including lazy and not-found chunks. The small eagerly fetched measurement receipt is counted separately in conservativeAppLoadRawBytes. Gzip is estimated with node:zlib, not measured network transfer.",
     "targetBytes": 4000000,
-    "rootHtmlBytes": 14547,
-    "initialReferencedRawBytes": 1214074,
-    "initialReferencedGzipBytes": 362097,
-    "conservativeClientRawBytes": 2338856,
-    "conservativeClientGzipBytes": 722843,
-    "totalExportBytes": 2384887,
+    "rootHtmlBytes": 14751,
+    "initialReferencedRawBytes": 1234622,
+    "initialReferencedGzipBytes": 366689,
+    "conservativeClientRawBytes": 2369661,
+    "conservativeClientGzipBytes": 730571,
+    "totalExportBytes": 2415692,
     "exportedFileCount": 41,
     "referencedResources": [
       {
-        "path": "/_next/static/css/3ffb1889e5872a8f.css",
-        "rawBytes": 51703,
-        "gzipBytes": 10603
+        "path": "/_next/static/css/ef1bc815e3bf5748.css",
+        "rawBytes": 62421,
+        "gzipBytes": 12418
       },
       {
-        "path": "/_next/static/chunks/webpack-e4cfa841b7e16ab3.js",
+        "path": "/_next/static/chunks/webpack-bc92ef69adaa5d50.js",
         "rawBytes": 3567,
-        "gzipBytes": 1849
+        "gzipBytes": 1850
       },
       {
         "path": "/_next/static/chunks/4bd1b696-c7408084347438ae.js",
@@ -115,9 +115,9 @@
         "gzipBytes": 31645
       },
       {
-        "path": "/_next/static/chunks/app/page-4981cec7c10e5581.js",
-        "rawBytes": 62019,
-        "gzipBytes": 19819
+        "path": "/_next/static/chunks/app/page-c5594fb55d8efbf2.js",
+        "rawBytes": 71645,
+        "gzipBytes": 22545
       },
       {
         "path": "/_next/static/chunks/polyfills-42372ed130431b0a.js",
@@ -127,12 +127,12 @@
     ],
     "clientAssets": [
       {
-        "path": "_next/static/NvOCnBwZNgdQgHCPo5Hus/_buildManifest.js",
+        "path": "_next/static/XI8iTGSNhSGKdlpgloxxz/_buildManifest.js",
         "rawBytes": 440,
         "gzipBytes": 236
       },
       {
-        "path": "_next/static/NvOCnBwZNgdQgHCPo5Hus/_ssgManifest.js",
+        "path": "_next/static/XI8iTGSNhSGKdlpgloxxz/_ssgManifest.js",
         "rawBytes": 80,
         "gzipBytes": 64
       },
@@ -142,9 +142,9 @@
         "gzipBytes": 31645
       },
       {
-        "path": "_next/static/chunks/383.dabb8d32972b69ce.js",
-        "rawBytes": 26652,
-        "gzipBytes": 8290
+        "path": "_next/static/chunks/306.d326ff7a819cdced.js",
+        "rawBytes": 36855,
+        "gzipBytes": 11419
       },
       {
         "path": "_next/static/chunks/410.5a31f820f00c89d2.js",
@@ -177,14 +177,14 @@
         "gzipBytes": 999
       },
       {
-        "path": "_next/static/chunks/app/layout-22c50b9f1fa14109.js",
-        "rawBytes": 307,
-        "gzipBytes": 192
+        "path": "_next/static/chunks/app/layout-0e46ef1644022110.js",
+        "rawBytes": 361,
+        "gzipBytes": 199
       },
       {
-        "path": "_next/static/chunks/app/page-4981cec7c10e5581.js",
-        "rawBytes": 62019,
-        "gzipBytes": 19819
+        "path": "_next/static/chunks/app/page-c5594fb55d8efbf2.js",
+        "rawBytes": 71645,
+        "gzipBytes": 22545
       },
       {
         "path": "_next/static/chunks/b536a0f1.f06e169bf8dc9367.js",
@@ -257,22 +257,22 @@
         "gzipBytes": 39473
       },
       {
-        "path": "_next/static/chunks/webpack-e4cfa841b7e16ab3.js",
+        "path": "_next/static/chunks/webpack-bc92ef69adaa5d50.js",
         "rawBytes": 3567,
-        "gzipBytes": 1849
+        "gzipBytes": 1850
       },
       {
-        "path": "_next/static/css/3ffb1889e5872a8f.css",
-        "rawBytes": 51703,
-        "gzipBytes": 10603
+        "path": "_next/static/css/ef1bc815e3bf5748.css",
+        "rawBytes": 62421,
+        "gzipBytes": 12418
       }
     ],
     "runtimeFps": "Unmeasured by this script",
     "runtimeDevice": "Unmeasured by this script",
     "receiptRawBytes": 584,
-    "receiptGzipBytes": 369,
-    "conservativeAppLoadRawBytes": 2339440,
-    "conservativeAppLoadGzipBytes": 723212
+    "receiptGzipBytes": 368,
+    "conservativeAppLoadRawBytes": 2370245,
+    "conservativeAppLoadGzipBytes": 730939
   },
   "limitations": [
     "Source scans do not prove library runtime loop count, contextual palette permissions, device FPS, or interactive journey behavior.",

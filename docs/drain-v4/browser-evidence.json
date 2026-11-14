@@ -1,0 +1,1022 @@
+{
+  "checkedAt": "2026-11-14T04:54:24.926Z",
+  "localUrl": "http://localhost:4174/?v=drain-v4",
+  "branch": "codex/drain-v4",
+  "story": "Enter Drain from Threshold and Legend; trace an instanced filament into illustrative audit data; make an intentional upward stroke or keyboard action; release into a local green dawn; advance only when settled.",
+  "environment": {
+    "browser": "Playwright Chromium automation",
+    "desktopViewport": [
+      1440,
+      1000
+    ],
+    "narrowViewports": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        780
+      ]
+    ],
+    "motion": [
+      "no-preference",
+      "reduce"
+    ],
+    "physicalDevice": false,
+    "composerMultisampling": 2
+  },
+  "inputs": {
+    "raycast": [
+      {
+        "target": 2,
+        "hit": 2,
+        "index": 2,
+        "source": "filament",
+        "hits": 2,
+        "title": "Seat tax",
+        "rate": "$24 / person / month"
+      },
+      {
+        "target": 4,
+        "hit": 4,
+        "index": 4,
+        "source": "filament",
+        "hits": 5,
+        "title": "Manual handoffs",
+        "rate": "45 minutes / day"
+      },
+      {
+        "target": 5,
+        "hit": 5,
+        "index": 5,
+        "source": "filament",
+        "hits": 7,
+        "title": "Storage tiers",
+        "rate": "$19 / month"
+      },
+      {
+        "target": 6,
+        "hit": 6,
+        "index": 6,
+        "source": "filament",
+        "hits": 8,
+        "title": "Reporting ritual",
+        "rate": "3 hours / week"
+      },
+      {
+        "target": 7,
+        "hit": 2,
+        "index": 2,
+        "source": "filament",
+        "hits": 10,
+        "title": "Seat tax",
+        "rate": "$24 / person / month"
+      },
+      {
+        "target": 8,
+        "hit": 8,
+        "index": 8,
+        "source": "filament",
+        "hits": 12,
+        "title": "Approval drift",
+        "rate": "2 days / handoff"
+      },
+      {
+        "target": 9,
+        "hit": 9,
+        "index": 9,
+        "source": "filament",
+        "hits": 13,
+        "title": "Export friction",
+        "rate": "6 steps / release"
+      }
+    ],
+    "keyboardAudit": {
+      "index": 11,
+      "source": "keyboard",
+      "title": "Notification rent",
+      "persisted": true
+    },
+    "tap": {
+      "released": false,
+      "armed": "false",
+      "gesture": 0
+    },
+    "short": {
+      "released": false,
+      "armed": "false",
+      "gesture": 0
+    },
+    "sideways": {
+      "released": false,
+      "armed": "false",
+      "gesture": 0
+    },
+    "down": {
+      "released": false,
+      "armed": "false",
+      "gesture": 0
+    },
+    "cancel": {
+      "released": false,
+      "armed": "false"
+    },
+    "blur": {
+      "released": false,
+      "armed": "false"
+    },
+    "scroll": {
+      "released": false,
+      "progress": 0.40181872561934034,
+      "camera": [
+        0,
+        0,
+        0
+      ],
+      "nextDisabled": true
+    }
+  },
+  "finalVisualJourney": {
+    "bound": {
+      "owners": [
+        1,
+        1,
+        1
+      ],
+      "counts": {
+        "instances": 1792,
+        "filaments": 28,
+        "segments": 896,
+        "particles": 672,
+        "pickHits": 0,
+        "lastPicked": -1,
+        "releaseSamples": 0,
+        "attached": 28,
+        "dissolved": 0,
+        "projectedTargets": [
+          {
+            "strand": 0,
+            "audit": 0,
+            "x": 445.61577592459645,
+            "y": 280.26955080330015
+          },
+          {
+            "strand": 1,
+            "audit": 1,
+            "x": 505.6212658473176,
+            "y": 318.4767625043333
+          },
+          {
+            "strand": 2,
+            "audit": 2,
+            "x": 402.7424335136527,
+            "y": 377.86069530507257
+          },
+          {
+            "strand": 3,
+            "audit": 3,
+            "x": 451.92980724714965,
+            "y": 381.9633516475114
+          },
+          {
+            "strand": 4,
+            "audit": 4,
+            "x": 567.1559480087138,
+            "y": 324.59303338294797
+          },
+          {
+            "strand": 5,
+            "audit": 5,
+            "x": 510.31749965848564,
+            "y": 354.81106735651355
+          },
+          {
+            "strand": 6,
+            "audit": 6,
+            "x": 526.7505614113765,
+            "y": 321.5614739054935
+          },
+          {
+            "strand": 7,
+            "audit": 7,
+            "x": 578.7292928919042,
+            "y": 390.4442335448441
+          },
+          {
+            "strand": 8,
+            "audit": 8,
+            "x": 605.5353343930435,
+            "y": 306.6644624605259
+          },
+          {
+            "strand": 9,
+            "audit": 9,
+            "x": 611.0849888574256,
+            "y": 356.8224844754212
+          },
+          {
+            "strand": 10,
+            "audit": 10,
+            "x": 633.663744806236,
+            "y": 336.76495501777225
+          },
+          {
+            "strand": 11,
+            "audit": 11,
+            "x": 631.4704834613119,
+            "y": 346.8158731827736
+          },
+          {
+            "strand": 12,
+            "audit": 12,
+            "x": 709.930866223468,
+            "y": 346.7559417957491
+          },
+          {
+            "strand": 13,
+            "audit": 13,
+            "x": 699.3263313898614,
+            "y": 376.4355358691454
+          },
+          {
+            "strand": 14,
+            "audit": 0,
+            "x": 678.2268085936182,
+            "y": 308.55830681961874
+          },
+          {
+            "strand": 15,
+            "audit": 1,
+            "x": 767.3664271126258,
+            "y": 344.82584573700404
+          },
+          {
+            "strand": 16,
+            "audit": 2,
+            "x": 831.8795493471329,
+            "y": 294.79072743083583
+          },
+          {
+            "strand": 17,
+            "audit": 3,
+            "x": 722.0932620669716,
+            "y": 346.24548004788613
+          },
+          {
+            "strand": 18,
+            "audit": 4,
+            "x": 810.171613052153,
+            "y": 314.09957273742725
+          },
+          {
+            "strand": 19,
+            "audit": 5,
+            "x": 866.8022331691222,
+            "y": 393.33119170398857
+          },
+          {
+            "strand": 20,
+            "audit": 6,
+            "x": 794.3838426739914,
+            "y": 393.44141956898767
+          },
+          {
+            "strand": 21,
+            "audit": 7,
+            "x": 833.5431865911661,
+            "y": 356.156001546783
+          },
+          {
+            "strand": 22,
+            "audit": 8,
+            "x": 922.4211258232904,
+            "y": 344.4765982307837
+          },
+          {
+            "strand": 23,
+            "audit": 9,
+            "x": 893.2863290132403,
+            "y": 378.12289543907053
+          },
+          {
+            "strand": 24,
+            "audit": 10,
+            "x": 934.7894365622798,
+            "y": 329.9855611264971
+          },
+          {
+            "strand": 25,
+            "audit": 11,
+            "x": 948.7168990698272,
+            "y": 352.0109216698475
+          },
+          {
+            "strand": 26,
+            "audit": 12,
+            "x": 947.3401614614036,
+            "y": 369.1582546029166
+          },
+          {
+            "strand": 27,
+            "audit": 13,
+            "x": 1034.724175761572,
+            "y": 331.9796475660892
+          }
+        ]
+      },
+      "scene": "DRAIN",
+      "camera": [
+        0,
+        0,
+        0
+      ],
+      "viewport": {
+        "width": 1440,
+        "client": 1425,
+        "scroll": 1425
+      },
+      "nextBox": {
+        "x": 999.8671875,
+        "y": 766,
+        "width": 245.3828125,
+        "height": 59
+      }
+    },
+    "trace": {
+      "hit": 8,
+      "index": 8,
+      "source": "filament",
+      "hits": 2,
+      "name": "Approval drift"
+    },
+    "gesture": {
+      "ready": "true",
+      "value": 1
+    },
+    "samples": [
+      {
+        "clock": 0.108,
+        "snap": 0,
+        "dawn": 0,
+        "attached": 28,
+        "dissolved": 0,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 0.216,
+        "snap": 0.000076,
+        "dawn": 0,
+        "attached": 28,
+        "dissolved": 0,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 0.316,
+        "snap": 0.00409,
+        "dawn": 0,
+        "attached": 28,
+        "dissolved": 0,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 0.425,
+        "snap": 0.023909,
+        "dawn": 0,
+        "attached": 28,
+        "dissolved": 0,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 0.533,
+        "snap": 0.071513,
+        "dawn": 0,
+        "attached": 26,
+        "dissolved": 0,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 0.941,
+        "snap": 0.667796,
+        "dawn": 0.024674,
+        "attached": 0,
+        "dissolved": 5,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 1.05,
+        "snap": 0.820203,
+        "dawn": 0.051564,
+        "attached": 0,
+        "dissolved": 18,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 1.157,
+        "snap": 0.915631,
+        "dawn": 0.086828,
+        "attached": 0,
+        "dissolved": 27,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 1.258,
+        "snap": 0.967284,
+        "dawn": 0.127553,
+        "attached": 0,
+        "dissolved": 28,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 1.366,
+        "snap": 0.992829,
+        "dawn": 0.178272,
+        "attached": 0,
+        "dissolved": 28,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 1.475,
+        "snap": 0.99973,
+        "dawn": 0.235966,
+        "attached": 0,
+        "dissolved": 28,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "clock": 1.583,
+        "snap": 1,
+        "dawn": 0.298427,
+        "attached": 0,
+        "dissolved": 28,
+        "nextDisabled": true,
+        "camera": [
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "free": {
+      "scene": "DRAIN",
+      "settled": true,
+      "snap": 1,
+      "dawn": 1,
+      "clock": 3.2,
+      "attached": 0,
+      "dissolved": 28,
+      "camera": [
+        0,
+        0,
+        0
+      ],
+      "events": [
+        {
+          "event": "release",
+          "at": 10400.20000000298,
+          "input": "pointer"
+        },
+        {
+          "event": "snap",
+          "at": 10576,
+          "input": "pointer"
+        },
+        {
+          "event": "dawn",
+          "at": 11234.30000000447,
+          "input": "pointer"
+        },
+        {
+          "event": "free",
+          "at": 13592.89999999851,
+          "input": "pointer"
+        }
+      ],
+      "nextBox": {
+        "x": 1005.25,
+        "y": 766,
+        "width": 240,
+        "height": 59
+      },
+      "nextDisabled": false
+    }
+  },
+  "replayAndLiveMotionChange": {
+    "reset": {
+      "scene": "THRESHOLD",
+      "journey": 2,
+      "released": false,
+      "settled": false,
+      "audit": 0,
+      "hits": 0,
+      "releaseSamples": 0,
+      "events": [],
+      "nav": false
+    },
+    "reenter": {
+      "scene": "DRAIN",
+      "attached": 28,
+      "instances": 1792,
+      "hits": 0,
+      "audit": 0
+    },
+    "keyboardMid": {
+      "released": true,
+      "settled": false,
+      "clock": 0.858,
+      "snap": 0.506637,
+      "attached": 0,
+      "dissolved": 0,
+      "camera": [
+        0,
+        0,
+        0
+      ]
+    },
+    "liveReduced": {
+      "reduced": true,
+      "settled": true,
+      "clock": 3.2,
+      "dawn": 1,
+      "snap": 1,
+      "events": [
+        {
+          "event": "release",
+          "at": 68056.89999999851,
+          "input": "keyboard"
+        },
+        {
+          "event": "snap",
+          "at": 68233,
+          "input": "keyboard"
+        },
+        {
+          "event": "dawn",
+          "at": 68750.89999999851,
+          "input": "keyboard"
+        },
+        {
+          "event": "free-static",
+          "at": 69202.89999999851,
+          "input": "reduced-motion"
+        }
+      ],
+      "canvas": "hidden",
+      "backdrop": "radial-gradient(at 68% 72%, color(srgb 0.247059 1 0.619608 / 0.17), rgba(0, 0, 0, 0) 65%), linear-gradient(0deg, color(srgb 0.117647 0.478431 0.301961 / 0.2), rgba(0, 0, 0, 0) 65%)"
+    },
+    "staticEventCount": 1,
+    "exit": {
+      "scene": "CRAFT_F1",
+      "drain": {
+        "instances": 0,
+        "filaments": 0,
+        "segments": 0,
+        "particles": 0,
+        "pickHits": 0,
+        "lastPicked": -1,
+        "releaseSamples": 115,
+        "attached": 0,
+        "dissolved": 0,
+        "projectedTargets": []
+      },
+      "owners": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "mobileTouch": {
+    "bound": {
+      "width": 390,
+      "client": 375,
+      "scroll": 375,
+      "canvases": 1
+    },
+    "audit": {
+      "count": 14,
+      "minHeight": 48.1953125,
+      "selected": 13
+    },
+    "ready": {
+      "ready": "true",
+      "pointer": "touch",
+      "touchAction": "none"
+    },
+    "free": {
+      "scene": "DRAIN",
+      "settled": true,
+      "snap": 1,
+      "dawn": 1,
+      "camera": [
+        0,
+        0,
+        0
+      ],
+      "events": [
+        {
+          "event": "release",
+          "at": 10099.29999999702,
+          "input": "pointer"
+        },
+        {
+          "event": "snap",
+          "at": 10280.89999999851,
+          "input": "pointer"
+        },
+        {
+          "event": "dawn",
+          "at": 10797.59999999404,
+          "input": "pointer"
+        },
+        {
+          "event": "free",
+          "at": 13297.59999999404,
+          "input": "pointer"
+        }
+      ]
+    },
+    "nextBox": {
+      "x": 45,
+      "y": 636.859375,
+      "width": 266,
+      "height": 57
+    },
+    "exit": {
+      "scene": "CRAFT_F1",
+      "instances": 0,
+      "filaments": 0,
+      "particles": 0
+    }
+  },
+  "reduced": {
+    "bound": {
+      "scene": "DRAIN",
+      "reduced": true,
+      "released": false,
+      "settled": false,
+      "width": {
+        "inner": 320,
+        "client": 305,
+        "scroll": 305
+      },
+      "canvas": "hidden",
+      "storyStates": 14
+    },
+    "scrollReleased": false,
+    "audit": {
+      "count": 14,
+      "index": 10,
+      "source": "keyboard"
+    },
+    "release": {
+      "scene": "DRAIN",
+      "settled": true,
+      "clock": 3.2,
+      "dawn": 1,
+      "snap": 1,
+      "events": [
+        {
+          "event": "release",
+          "at": 8724,
+          "input": "keyboard"
+        },
+        {
+          "event": "free-static",
+          "at": 8724,
+          "input": "keyboard"
+        }
+      ],
+      "nextDisabled": false
+    },
+    "staticBackdrop": "radial-gradient(at 68% 72%, color(srgb 0.247059 1 0.619608 / 0.17), rgba(0, 0, 0, 0) 65%), linear-gradient(0deg, color(srgb 0.117647 0.478431 0.301961 / 0.2), rgba(0, 0, 0, 0) 65%)",
+    "advanced": "CRAFT_F1"
+  },
+  "journeyRegression": {
+    "cleanup": {
+      "scene": "CRAFT_F1",
+      "drain": {
+        "instances": 0,
+        "filaments": 0,
+        "segments": 0,
+        "particles": 0,
+        "pickHits": 0,
+        "lastPicked": -1,
+        "releaseSamples": 12551,
+        "attached": 0,
+        "dissolved": 0,
+        "projectedTargets": []
+      },
+      "owners": [
+        1,
+        1,
+        1
+      ],
+      "dawnParam": 1
+    },
+    "mergeSilence": {
+      "scene": "MERGE",
+      "time": 7.083,
+      "audio": {
+        "silent": true,
+        "connected": false,
+        "masterGain": 0,
+        "contextState": "running"
+      },
+      "nav": false,
+      "hand": 1
+    },
+    "fork": {
+      "scene": "FORK",
+      "nav": true,
+      "swordMoments": [
+        "opening-glint",
+        "pursuit",
+        "merge"
+      ],
+      "shing": 3,
+      "audio": {
+        "silent": false,
+        "connected": true,
+        "masterGain": 0.03500000014901161,
+        "contextState": "running"
+      },
+      "violations": 0,
+      "events": [
+        {
+          "event": "summon",
+          "scheduled": 0.4,
+          "observed": 0.40799999999998704,
+          "wallSeconds": 0.4086000000014901
+        },
+        {
+          "event": "hand-start",
+          "scheduled": 1.6,
+          "observed": 1.600000000000108,
+          "wallSeconds": 1.59989999999851
+        },
+        {
+          "event": "sword-start",
+          "scheduled": 3.8,
+          "observed": 3.8000000000002956,
+          "wallSeconds": 3.7998999999985097
+        },
+        {
+          "event": "flash-start",
+          "scheduled": 6.9,
+          "observed": 6.900000000000745,
+          "wallSeconds": 6.89989999999851
+        },
+        {
+          "event": "cut-start",
+          "scheduled": 7,
+          "observed": 7.000000000000767,
+          "wallSeconds": 6.99989999999851
+        },
+        {
+          "event": "cut-end",
+          "scheduled": 7.35,
+          "observed": 7.3500000000008185,
+          "wallSeconds": 7.34980000000447
+        },
+        {
+          "event": "flash-end",
+          "scheduled": 7.4,
+          "observed": 7.40000000000083,
+          "wallSeconds": 7.39989999999851
+        },
+        {
+          "event": "fork-interactive",
+          "scheduled": 8,
+          "observed": 8.00000000000091,
+          "wallSeconds": 7.99989999999851
+        }
+      ],
+      "owners": [
+        1,
+        1,
+        1
+      ],
+      "drain": {
+        "instances": 0,
+        "filaments": 0,
+        "segments": 0,
+        "particles": 0,
+        "pickHits": 0,
+        "lastPicked": -1,
+        "releaseSamples": 12551,
+        "attached": 0,
+        "dissolved": 0,
+        "projectedTargets": []
+      }
+    }
+  },
+  "runtimeAndNetwork": {
+    "probe": {
+      "before": {
+        "counts": {
+          "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0": 1164,
+          "function t(){return tA&&requestAnimationFrame(t)}": 2,
+          "function(){return t===eR&&eD(!0)}": 1
+        },
+        "active": 1,
+        "max": 4,
+        "intervals": 0
+      },
+      "after": {
+        "counts": {
+          "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0": 1344,
+          "function t(){return tA&&requestAnimationFrame(t)}": 2,
+          "function(){return t===eR&&eD(!0)}": 1
+        },
+        "active": 1,
+        "max": 4,
+        "intervals": 0
+      },
+      "recurringDelta": [
+        {
+          "source": "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0",
+          "count": 180
+        }
+      ]
+    },
+    "runtime": {
+      "heartbeat": 118,
+      "owners": [
+        1,
+        1,
+        1
+      ],
+      "scene": "DRAIN",
+      "attached": 28,
+      "webgl": true
+    },
+    "requests": [
+      {
+        "url": "http://localhost:4174/?v=drain-v4",
+        "type": "document"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/css/ef1bc815e3bf5748.css",
+        "type": "stylesheet"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/webpack-bc92ef69adaa5d50.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/4bd1b696-c7408084347438ae.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/794-96ab5d7caefc5d69.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/main-app-b2dd5721388df57d.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/bd904a5c-56e65ed4abb36c15.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/c15bf2b0-c080c4e45c5fb392.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/138-a82c01f12080d6fe.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/app/page-c5594fb55d8efbf2.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/foundation-receipt.json",
+        "type": "fetch"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/b536a0f1.f06e169bf8dc9367.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/a3cd4a83.f8720b64a454b80c.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/f6211eb1.daf52cd3c0634b2c.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/e49654ac.001c6ece8cf3ce4d.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/410.5a31f820f00c89d2.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/306.d326ff7a819cdced.js",
+        "type": "script"
+      }
+    ],
+    "remote": [],
+    "failed": []
+  },
+  "http": {
+    "status": 200,
+    "title": "Ghost Hand — Command the unseen.",
+    "url": "http://localhost:4174/?v=drain-v4"
+  },
+  "console": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "Existing Three.js Clock deprecation warning"
+  },
+  "verification": [
+    "npm run build",
+    "npm run check",
+    "node scripts/verify-drain.mjs",
+    "node scripts/verify-ink.mjs",
+    "git diff --check"
+  ],
+  "captures": [
+    "captures/v4-drain-bound-final.png",
+    "captures/v4-drain-release-final.png",
+    "captures/v4-drain-cascade-final.png",
+    "captures/v4-drain-dawn-final.png",
+    "captures/v4-drain-mobile-bound.png",
+    "captures/v4-drain-mobile-dawn.png",
+    "captures/v4-drain-reduced-dawn.png"
+  ],
+  "methodology": [
+    "Input audit was collected after the final filament/S-curve/material tune. Final visual journey, replay, live reduced preference, mobile touch, reduced-motion and native callback audits use the final export including 2x MSAA, fitted desktop composition, and reduced-motion settlement.",
+    "Raycast uses a broadened invisible rest-space instance proxy. The returned nearest hit determines the selected fixture; a projected target may overlap another nearer strand. This is intentional practical hit tolerance, not pixel-perfect deformed-surface picking.",
+    "Native RAF/interval instrumentation was installed before navigation. Counts were compared for 1.5 seconds after Drain entry without browser polling callbacks in that interval. Historical transient startup callbacks and maximum active count are retained.",
+    "Touch input used Chromium CDP touch dispatch and generated actual browser pointerType touch events; it is emulated input, not a physical mobile benchmark.",
+    "Merge regression followed the actual four gate controls; no forced state navigation or ceremony time jump was used.",
+    "A sandboxed shell curl could not reach loopback; the browser request context returned HTTP 200 and the full resource run had no failed requests."
+  ],
+  "limitations": [
+    "Heartbeat ticks per second are not GPU presented FPS. Physical desktop/mobile GPU targets remain unmeasured, including 2x MSAA cost.",
+    "Illustrative burdens and rates are fixtures, not visitor telemetry or real charges, savings, or observed outcomes.",
+    "No public deployment, DNS change, commerce, account creation, production audio recording, or external agent action.",
+    "V4 visual acceptance remains a human review gate before V5."
+  ]
+}

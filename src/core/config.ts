@@ -10,6 +10,9 @@ export const TIMING = {
     flashStart: 6.9, flashDuration: 0.5, cutStart: 7, cutDuration: 0.35, silenceStart: 7, silenceEnd: 8, fork: 8 },
   overlap: 0.4, pursuit: 2, pass: 0.8, draw: 0.9, nudge: 0.2, fogTween: 0.6, greeting: 3,
   strokePixels: 40, lookUpPixels: 64, scrollBudget: 1100,
+  // V4 builder pacing, separate from the locked Merge ceremony.
+  drain:{entrance:1.1,gesture:0.12,tensionLead:0.16,snapStart:0.18,snapDuration:1.35,
+    dawnStart:0.7,dawnDuration:2.4,settle:3.2},
 } as const;
 
 export const SCENE_IDS = ['THRESHOLD','LEGEND','DRAIN','CRAFT_F1','CRAFT_F2','CRAFT_F3','CRAFT_F4','PURSUIT','MERGE','FORK','DOJO','COMMISSION','CHAINS_HOLD','OATH'] as const;
