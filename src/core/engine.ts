@@ -11,7 +11,7 @@ import { soundDirector } from './sound';
 
 export interface EngineHandle { setAdvance:(advance:(t:number)=>void)=>void; destroy:()=>void; }
 declare global { interface Window { __GH_DEBUG?: {
-  snapshot:()=>unknown; setFog:(value:number)=>void;
+  snapshot:()=>unknown; setFog:(value:number)=>void; setInk:(value:{bleed?:number;pressure?:number})=>void;
 }; } }
 
 export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
@@ -161,7 +161,13 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
   runtime.heartbeatOwners++;gsap.ticker.add(heartbeat);
   sceneEntry();
   const setFog=(value:number)=>gsap.to(useJourney.getState().params,{fogDensity:value,duration:TIMING.fogTween,ease:'power2.out'});
-  window.__GH_DEBUG={setFog,snapshot:()=>{
+  const setInk=(value:{bleed?:number;pressure?:number})=>{
+    const target:Record<string,number>={};
+    if(value.bleed!==undefined)target.inkBleed=Math.max(0,Math.min(1.5,value.bleed));
+    if(value.pressure!==undefined)target.inkPressure=Math.max(0.5,Math.min(1.5,value.pressure));
+    gsap.to(useJourney.getState().params,{...target,duration:TIMING.fogTween,ease:'power2.out'});
+  };
+  window.__GH_DEBUG={setFog,setInk,snapshot:()=>{
     const s=useJourney.getState();return {scene:s.scene,navUnlocked:s.navUnlocked,thresholdReady:s.thresholdReady,
       drainReleased:s.drainReleased,completedGates:s.completedGates,swordMoments:s.swordMoments,
       swordCount:s.swordMoments.length,shingCount:s.shingCount,soundEnabled:s.soundEnabled,

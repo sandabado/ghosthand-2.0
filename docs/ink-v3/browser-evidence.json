@@ -1,0 +1,138 @@
+{
+  "version": "v3-the-ink",
+  "date": "2026-11-13",
+  "journey": {
+    "slider": {
+      "param": 1.5,
+      "uniform": 1.5
+    },
+    "legendResources": {
+      "instances": 1,
+      "ribbonVertices": 162,
+      "tipParticles": 243,
+      "bleedUniform": 1.005446,
+      "pressureUniform": 1
+    },
+    "handEnd": {
+      "time": 3.8,
+      "hand": 1,
+      "ink": {
+        "instances": 31,
+        "ribbonVertices": 5022,
+        "tipParticles": 7533,
+        "bleedUniform": 1,
+        "pressureUniform": 1
+      }
+    },
+    "silence": {
+      "time": 7.101,
+      "audio": {
+        "silent": true,
+        "connected": false,
+        "masterGain": 0,
+        "contextState": "running"
+      },
+      "nav": false
+    },
+    "fork": {
+      "events": [
+        {
+          "event": "summon",
+          "scheduled": 0.4,
+          "observed": 0.4000000000000341,
+          "wallSeconds": 0.39979999999701976
+        },
+        {
+          "event": "hand-start",
+          "scheduled": 1.6,
+          "observed": 1.6000000000001222,
+          "wallSeconds": 1.6
+        },
+        {
+          "event": "sword-start",
+          "scheduled": 3.8,
+          "observed": 3.80000000000031,
+          "wallSeconds": 3.8005
+        },
+        {
+          "event": "flash-start",
+          "scheduled": 6.9,
+          "observed": 6.901000000000536,
+          "wallSeconds": 6.90039999999851
+        },
+        {
+          "event": "cut-start",
+          "scheduled": 7,
+          "observed": 7.001000000000545,
+          "wallSeconds": 7.001
+        },
+        {
+          "event": "cut-end",
+          "scheduled": 7.35,
+          "observed": 7.367000000000573,
+          "wallSeconds": 7.367099999997765
+        },
+        {
+          "event": "flash-end",
+          "scheduled": 7.4,
+          "observed": 7.401000000000579,
+          "wallSeconds": 7.40039999999851
+        },
+        {
+          "event": "fork-interactive",
+          "scheduled": 8,
+          "observed": 8.000000000000625,
+          "wallSeconds": 7.9995999999977645
+        }
+      ],
+      "ink": {
+        "instances": 0,
+        "ribbonVertices": 0,
+        "tipParticles": 0,
+        "bleedUniform": 1,
+        "pressureUniform": 1
+      },
+      "swords": [
+        "opening-glint",
+        "pursuit",
+        "merge"
+      ],
+      "owners": [
+        1,
+        1,
+        1
+      ],
+      "external": []
+    }
+  },
+  "mobile": {
+    "mobile": {
+      "width": 390,
+      "client": 375,
+      "content": 375,
+      "canvas": 1,
+      "ink": {
+        "instances": 30,
+        "ribbonVertices": 4860,
+        "tipParticles": 7290,
+        "bleedUniform": 1,
+        "pressureUniform": 1
+      },
+      "fallback": "none"
+    },
+    "reduced": {
+      "strip": 14,
+      "canvas": 1,
+      "canvasVisibility": "hidden",
+      "fallback": "block",
+      "staticPaths": 24,
+      "content": 375,
+      "client": 375
+    },
+    "keyboard": {
+      "scene": "LEGEND",
+      "focus": "H2"
+    }
+  },
+  "limits": "Authored study paths, not canonical. Viewport/reduced-motion tests are not physical-device FPS benchmarks."
+}

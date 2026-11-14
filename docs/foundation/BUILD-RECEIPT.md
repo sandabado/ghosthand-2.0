@@ -26,7 +26,7 @@
 | TypeScript / source contracts | `npm run check` passed twelve checks: palette, no application RAF/interval, centralized keyframes/timing, one Canvas/composer declaration, local resources, trackers, excluded imagery, fixtures, export, and payload. |
 | Referenced entry set | 1,203,950 raw bytes; 359,183 estimated gzip bytes. Lower bound that excludes some lazy code. |
 | Conservative app-load bound | 2,296,233 raw bytes including HTML, all exported client assets, and diagnostic JSON; 708,828 estimated gzip bytes. Below the 4,000,000-byte target before compression. |
-| Total export | 2,341,680 bytes, reported separately from initial payload. See `payload.json` for lists/method. |
+| Total export | 2,341,680 bytes, reported separately from initial payload. See the preserved `v2-payload.json` for the v2 lists/method. Current automatic payload output may describe later local work. |
 | Fog proof | At scroll zero, GSAP changed density 0.36 → 0.85; GPU uniform reached 0.85. Live Canvas/composer/heartbeat counts stayed 1/1/1. |
 | Native frame audit | Settled ~1.5-second audit: one recurring RAF callback (GSAP, 182 calls), one active RAF, zero intervals. ScrollTrigger startup callbacks had stopped; Playwright polling excluded. |
 | Browser conditions | Chromium 157 automation, 1440×1000, DPR 1; ANGLE Metal renderer reported Apple M2 Max. |

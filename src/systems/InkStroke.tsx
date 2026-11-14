@@ -1,46 +1,93 @@
 'use client';
 import { useEffect,useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AdditiveBlending,BufferAttribute,BufferGeometry,CatmullRomCurve3,Line,ShaderMaterial,Vector3 } from 'three';
-import { useJourney } from '../core/world';
-import { strokeFragment,strokeVertex,uploadUniforms,worldUniforms } from '../world/shaders';
+import { AdditiveBlending,Color,DoubleSide,NormalBlending,ShaderMaterial } from 'three';
+import { PALETTE } from '../core/config';
+import { runtime,useJourney } from '../core/world';
+import { uploadUniforms,worldUniforms } from '../world/shaders';
+import { createBrushGeometry,createTipGeometry,type StrokePoint } from './ink/geometry';
+import { brushFragment,brushVertex,inkTipFragment,inkTipVertex } from './ink/shaders';
 
-export type StrokePoint=[number,number,number];
-/** Temporary geometry adapter. Canonical paths and wet-edge treatment are later inputs. */
-export function strokeGeometry(path:StrokePoint[],segment=0,segments=1){
-  const points=new CatmullRomCurve3(path.map(p=>new Vector3(...p))).getPoints(70);
-  const geometry=new BufferGeometry().setFromPoints(points);
-  geometry.setAttribute('aAlong',new BufferAttribute(new Float32Array(points.map((_,i)=>(segment+i/(points.length-1))/segments)),1));
-  geometry.setAttribute('aSeed',new BufferAttribute(new Float32Array(points.map((_,i)=>((i*37+segment*17)%71)/71)),1));
-  return geometry;
+export type { StrokePoint } from './ink/geometry';
+
+export interface InkStrokeProps {
+  path:StrokePoint[];
+  width?:number;
+  pressure?:number;
+  seed?:number;
+  start?:number;
+  span?:number;
+  /** Compatibility with the original equal-segment fixture; SVG sources use arc-length start/span. */
+  segment?:number;
+  segments?:number;
+  opacity?:number;
+  drawParam?:'hand'|'inkFlow'|'sceneMix';
+  /** Frozen previous-scene stroke; its exit uses the inverse shared scene blend. */
+  settled?:boolean;
 }
-const tipVertex=`
-attribute float aAlong;attribute float aSeed;uniform float uHand;uniform float uTime;uniform float uInkTipDecay;
-varying float vAlpha;
-void main(){
-  float age=max(0.0,uHand-aAlong);
-  float reached=step(aAlong,uHand);
-  vAlpha=reached*(1.0-smoothstep(0.01,0.12,age))*(1.0-uInkTipDecay);
-  vec3 p=position;p.x+=sin(aSeed*24.0+uTime)*age*1.6;
-  p.y+=(age+aSeed*0.04)*uInkTipDecay*1.5;
-  vec4 mv=modelViewMatrix*vec4(p,1.0);gl_Position=projectionMatrix*mv;
-  gl_PointSize=clamp((2.0+aSeed*4.0)/max(1.0,-mv.z)*8.0,1.0,6.0);
-}`;
-const tipFragment=`uniform vec3 uColor;varying float vAlpha;void main(){float d=length(gl_PointCoord-0.5);gl_FragColor=vec4(uColor,(1.0-smoothstep(0.0,0.5,d))*vAlpha*0.5);}`;
 
-/** Shared draw + basic tip-dissolution fixture. Every value comes from world params. */
-export function InkStroke({path,segment=0,segments=1}:{path:StrokePoint[];segment?:number;segments?:number}){
+/** Legacy geometry entry point now returns the pressure ribbon, rather than a one-pixel line. */
+export function strokeGeometry(path:StrokePoint[],segment=0,segments=1){
+  return createBrushGeometry(path,{start:segment/segments,span:1/segments});
+}
+
+/**
+ * Shared SVG-derived sumi-e stroke. Geometry carries pressure; shaders carry pigment and wet edges.
+ * This component consumes the world clock and uniforms. It owns no clock, timeline, or composer.
+ */
+export function InkStroke({path,width=0.11,pressure=1,seed=0.5,start,span,segment=0,segments=1,opacity=1,drawParam='hand',settled=false}:InkStrokeProps){
+  const revealStart=start??segment/segments;
+  const revealSpan=span??1/segments;
   const resource=useMemo(()=>{
-    const geometry=strokeGeometry(path,segment,segments);
-    const lineMaterial=new ShaderMaterial({uniforms:worldUniforms(),vertexShader:strokeVertex,fragmentShader:strokeFragment,transparent:true,depthWrite:false,blending:AdditiveBlending});
-    const tipMaterial=new ShaderMaterial({uniforms:worldUniforms(),vertexShader:tipVertex,fragmentShader:tipFragment,transparent:true,depthWrite:false,blending:AdditiveBlending});
-    return {geometry,lineMaterial,tipMaterial,line:new Line(geometry,lineMaterial)};
-  },[path,segment,segments]);
+    const options={width,pressure,seed,start:revealStart,span:revealSpan};
+    const geometry=createBrushGeometry(path,options);
+    const tips=createTipGeometry(path,options);
+    const extraUniforms=()=>({
+      ...worldUniforms(),
+      uInkDim:{value:new Color(PALETTE.candleDim)},
+      uStrokeOpacity:{value:opacity},uStrokeSeed:{value:seed},uStrokeWidth:{value:width},
+    });
+    const brush=new ShaderMaterial({
+      uniforms:extraUniforms(),vertexShader:brushVertex,fragmentShader:brushFragment,
+      transparent:true,depthWrite:false,side:DoubleSide,blending:NormalBlending,
+    });
+    const tip=new ShaderMaterial({
+      uniforms:extraUniforms(),vertexShader:inkTipVertex,fragmentShader:inkTipFragment,
+      transparent:true,depthWrite:false,blending:AdditiveBlending,
+    });
+    brush.name='GhostHandInkBrush';
+    tip.name='GhostHandInkTips';
+    return {geometry,tips,brush,tip};
+  },[path,width,pressure,seed,revealStart,revealSpan,opacity]);
   useFrame(()=>{
     const state=useJourney.getState();
-    uploadUniforms(resource.lineMaterial,state.params);uploadUniforms(resource.tipMaterial,state.params);
-    if(state.reducedMotion)resource.tipMaterial.uniforms.uTime.value=0;
+    uploadUniforms(resource.brush,state.params);uploadUniforms(resource.tip,state.params);
+    const draw=state.params[drawParam];
+    resource.brush.uniforms.uHand.value=draw;resource.tip.uniforms.uHand.value=draw;
+    if(drawParam!=='hand'){
+      const decay=draw>=0.999?1:0;
+      resource.brush.uniforms.uInkTipDecay.value=decay;resource.tip.uniforms.uInkTipDecay.value=decay;
+    }
+    if(settled){
+      for(const material of [resource.brush,resource.tip]){
+        material.uniforms.uHand.value=1;
+        material.uniforms.uInkTipDecay.value=1;
+        material.uniforms.uSceneMix.value=1-state.params.sceneMix;
+      }
+    }
+    runtime.ink.bleedUniform=resource.brush.uniforms.uInkBleed.value;
+    runtime.ink.pressureUniform=resource.brush.uniforms.uInkPressure.value;
+    if(state.reducedMotion){resource.brush.uniforms.uTime.value=0;resource.tip.uniforms.uTime.value=0;}
   },-16);
-  useEffect(()=>()=>{resource.geometry.dispose();resource.lineMaterial.dispose();resource.tipMaterial.dispose();},[resource]);
-  return <><primitive object={resource.line}/><points geometry={resource.geometry} material={resource.tipMaterial}/></>;
+  useEffect(()=>{
+    const vertices=resource.geometry.getAttribute('position').count;
+    const particles=resource.tips.getAttribute('position').count;
+    runtime.ink.instances++;runtime.ink.ribbonVertices+=vertices;runtime.ink.tipParticles+=particles;
+    return()=>{
+      runtime.ink.instances--;runtime.ink.ribbonVertices-=vertices;runtime.ink.tipParticles-=particles;
+      resource.geometry.dispose();resource.tips.dispose();resource.brush.dispose();resource.tip.dispose();
+    };
+  },[resource]);
+  // Resources are explicitly owned above. Prevent R3F from also disposing their shared references.
+  return <group dispose={null}><mesh geometry={resource.geometry} material={resource.brush}/><points geometry={resource.tips} material={resource.tip}/></group>;
 }

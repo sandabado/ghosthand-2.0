@@ -7,7 +7,7 @@ export function worldUniforms() {
     uTime:{value:0},uProgress:{value:0},uDepth:{value:0},uFogDensity:{value:0.36},
     uInkFlow:{value:0},uLightIntensity:{value:1},uChromaOffset:{value:0},uCutProgress:{value:0},
     uPursuit:{value:0},uHand:{value:0},uInkTipDecay:{value:0},uSword:{value:0},uFlash:{value:0},uReleased:{value:0},
-    uSceneMix:{value:1},uVariant:{value:0},uColor:{value:new Color(PALETTE.candle)},
+    uSceneMix:{value:1},uVariant:{value:0},uInkBleed:{value:1},uInkPressure:{value:1},uColor:{value:new Color(PALETTE.candle)},
     uBone:{value:new Color(PALETTE.bone)},uVoid:{value:new Color(PALETTE.void)},
   };
 }

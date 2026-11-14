@@ -4,11 +4,13 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
 import { BlendFunction, ChromaticAberrationEffect } from 'postprocessing';
-import { AdditiveBlending, BufferAttribute, BufferGeometry, CatmullRomCurve3, Color, Group, Line as ThreeLine, Material, Mesh, ShaderMaterial, Vector2, Vector3 } from 'three';
-import { InkStroke,type StrokePoint } from '../systems/InkStroke';
+import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Group, Material, Mesh, ShaderMaterial, Vector2 } from 'three';
+import { InkStroke } from '../systems/InkStroke';
+import { svgToStrokes } from '../systems/ink/geometry';
+import { HAND_SVG,SIGIL_SVG,SLASH_SVG } from '../systems/ink/sources';
 import { PALETTE, SCENES, type SceneId } from '../core/config';
 import { runtime, useJourney } from '../core/world';
-import { atmosphereFragment, atmosphereVertex, fogFragment, fogVertex, scrollFragment, strokeFragment, strokeVertex, uploadUniforms, worldUniforms } from './shaders';
+import { atmosphereFragment, atmosphereVertex, fogFragment, fogVertex, scrollFragment, uploadUniforms, worldUniforms } from './shaders';
 
 type Advance=(timeSeconds:number)=>void;
 interface Props { onAdvanceReady:(advance:Advance)=>void; }
@@ -56,21 +58,33 @@ export function ParticleSystem() {
   return <points geometry={geometry} material={material} frustumCulled={false}/>;
 }
 
-// Temporary foundation fixture, drawn from simple curves. No canonical hand paths were supplied.
-const handPaths:StrokePoint[][]=[
-  [[2.1,3,0],[1.25,2.1,0],[0.55,1.2,0],[0.35,0.5,0],[-0.1,-0.2,0],[-0.65,-0.8,0],[-0.85,-1.45,0],[-0.65,-1.65,0],[-0.4,-1.2,0],[0.05,-0.7,0]],
-  [[0.85,0.65,0],[0.25,0.1,0],[0.05,-0.5,0],[-0.1,-1.15,0],[0.1,-1.35,0],[0.35,-0.7,0],[0.75,-0.1,0]],
-  [[1.1,0.85,0],[0.8,0.2,0],[0.55,-0.4,0],[0.45,-0.95,0],[0.67,-1.1,0],[0.9,-0.55,0],[1.2,0.05,0]],
-  [[1.35,1,0],[1.2,0.4,0],[1.1,-0.15,0],[1,-0.65,0],[1.2,-0.8,0],[1.45,-0.15,0],[1.65,0.55,0],[1.6,1.2,0],[2.8,2.9,0]],
-  [[0.3,0.5,0],[-0.2,0.2,0],[-0.7,0,0],[-1,-0.4,0],[-0.8,-0.55,0],[-0.3,-0.35,0],[0.3,-0.1,0]],
-  [[2.35,3,0],[1.65,1.95,0],[1.1,1.2,0],[0.7,0.65,0],[0.45,0.1,0]],
-  [[2.6,3,0],[1.9,2.05,0],[1.45,1.4,0],[1.2,0.8,0]],
-];
-
-function GhostHand({position=[2,-0.2,-5] as [number,number,number],scale=1.4}:{position?:[number,number,number];scale?:number}) {
+/** Authored v3 vector studies; canonical prototype and hand sources remain absent. */
+function InkDrawing({source,drawParam='hand',opacity=1,settled=false}:{source:string;drawParam?:'hand'|'inkFlow'|'sceneMix';opacity?:number;settled?:boolean}) {
+  const strokes=useMemo(()=>svgToStrokes(source),[source]);
+  useEffect(()=>{
+    const id=source.match(/data-study="([^"]+)"/)?.[1]??'authored-study';
+    const points=strokes.flatMap(stroke=>stroke.points),xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);
+    runtime.inkSources[id]={paths:strokes.length,revealStart:strokes[0]?.start??0,
+      revealEnd:(strokes.at(-1)?.start??0)+(strokes.at(-1)?.span??0),
+      bounds:[Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)],
+      widthRange:[Math.min(...strokes.map(p=>p.width)),Math.max(...strokes.map(p=>p.width))]};
+  },[source,strokes]);
+  return <>{strokes.map(stroke=><InkStroke key={stroke.id} path={stroke.points} width={stroke.width} pressure={stroke.pressure} seed={stroke.seed} start={stroke.start} span={stroke.span} drawParam={drawParam} opacity={opacity} settled={settled}/>)}</>;
+}
+function GhostHand({settled=false}:{settled?:boolean}) {
   const group=useRef<Group>(null);
-  useFrame(()=>{if(group.current)group.current.visible=useJourney.getState().params.hand>0;},-17);
-  return <group ref={group} position={position} scale={scale}>{handPaths.map((path,index)=><InkStroke key={index} path={path} segment={index} segments={handPaths.length}/>)}</group>;
+  const compact=useThree(state=>state.size.width<760);
+  useFrame(()=>{if(group.current)group.current.visible=settled||useJourney.getState().params.hand>0;},-17);
+  return <group ref={group} position={compact?[0.7,-1.8,-6]:[3.05,-0.3,-5]} scale={compact?1.05:1.45}>
+    <InkDrawing source={HAND_SVG} settled={settled}/>
+  </group>;
+}
+function InkAccents({previous=false,legend=false}:{previous?:boolean;legend?:boolean}) {
+  const compact=useThree(state=>state.size.width<760);
+  return <group>
+    {!legend&&<group position={compact?[1.6,-3.7,-4.5]:[4.4,-2.9,-4.5]} scale={compact?0.16:0.23}><InkDrawing source={SIGIL_SVG} opacity={0.62} settled={previous}/></group>}
+    {!compact&&<group position={legend?[-1.9,1.05,-4.5]:[-2.25,-0.3,-4.5]} scale={0.14}><InkDrawing source={SLASH_SVG} drawParam={legend?'sceneMix':'hand'} opacity={0.65} settled={previous}/></group>}
+  </group>;
 }
 
 function Sword({sheathed=false,handover=false}:{sheathed?:boolean;handover?:boolean}) {
@@ -169,8 +183,8 @@ function SceneGeometry({scene,previous=false}:{scene:SceneId;previous?:boolean})
   },-5);
   let content:ReactNode=null;
   switch(scene){
-    case 'THRESHOLD':case 'MERGE': content=<><GhostHand/>{!previous&&<Sword/>}</>;break;
-    case 'LEGEND': content=<group position={[2,0,-6]}>{[-1,1].map(x=><group key={x} position={[x*1.35,0,0]}><mesh><boxGeometry args={[2.2,3.7,.12]}/><meshStandardMaterial color={PALETTE.void} emissive={PALETTE.candleDim} emissiveIntensity={.12}/></mesh><Line points={[[-1.1,-1.85,.08],[-1.1,1.85,.08],[1.1,1.85,.08],[1.1,-1.85,.08]]} color={PALETTE.candleDim} lineWidth={.5}/></group>)}<Line points={[[0,-2.4,.1],[0,2.4,.1]]} color={PALETTE.candle} lineWidth={.8}/></group>;break;
+    case 'THRESHOLD':case 'MERGE': content=<><GhostHand settled={previous}/><InkAccents previous={previous}/>{!previous&&<Sword/>}</>;break;
+    case 'LEGEND': content=<><InkAccents previous={previous} legend/><group position={[2,0,-6]}>{[-1,1].map(x=><group key={x} position={[x*1.35,0,0]}><mesh><boxGeometry args={[2.2,3.7,.12]}/><meshStandardMaterial color={PALETTE.void} emissive={PALETTE.candleDim} emissiveIntensity={.12}/></mesh><Line points={[[-1.1,-1.85,.08],[-1.1,1.85,.08],[1.1,1.85,.08],[1.1,-1.85,.08]]} color={PALETTE.candleDim} lineWidth={.5}/></group>)}<Line points={[[0,-2.4,.1],[0,2.4,.1]]} color={PALETTE.candle} lineWidth={.8}/></group></>;break;
     case 'DRAIN':content=<DrainEnvironment/>;break;
     case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<CraftEnvironment scene={scene}/>;break;
     case 'PURSUIT':content=<>{[-14,-29,-44].map(z=><Torii key={z} z={z}/>)}{!previous&&<Sword/>}</>;break;

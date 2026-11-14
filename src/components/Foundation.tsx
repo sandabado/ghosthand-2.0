@@ -17,10 +17,12 @@ function Receipt(){
   const [payload,setPayload]=useState<Record<string,unknown>|null>(null);
   useEffect(()=>{fetch('/foundation-receipt.json').then(r=>r.json()).then(setPayload).catch(()=>{});},[]);
   return <details className="receipt-drawer"><summary>Receipt :: 証 <span>{s.swordMoments.length} sword moments</span></summary>
-    <div className="receipt-panel"><div className="receipt-title">BUILT BY GHOST HANDS<span>FOUNDATION II / LOCAL</span></div>
+    <div className="receipt-panel"><div className="receipt-title">BUILT BY GHOST HANDS<span>V3 THE INK / LOCAL</span></div>
       <dl><dt>Clock owners / Canvas / grade</dt><dd>{runtime.heartbeatOwners} / {runtime.canvasMounts} / {runtime.composerMounts}</dd>
       <dt>Observed GSAP heartbeat</dt><dd>{runtime.fps?`${runtime.fps.toFixed(1)} ticks/s`:'Sampling'} · this browser</dd>
       <dt>Fog param → GPU uniform</dt><dd>{s.params.fogDensity.toFixed(3)} → {runtime.fogUniform.toFixed(3)}</dd>
+      <dt>Live ink strokes / ribbon vertices / tip seeds</dt><dd>{runtime.ink.instances} / {runtime.ink.ribbonVertices} / {runtime.ink.tipParticles}</dd>
+      <dt>Ink bleed / pressure uniforms</dt><dd>{runtime.ink.bleedUniform.toFixed(2)} / {runtime.ink.pressureUniform.toFixed(2)}</dd>
       <dt>Sword moments visited</dt><dd>{s.swordMoments.join(' · ')||'None yet'}</dd><dt>Shing cues accepted / cap</dt><dd>{s.shingCount} / 3</dd>
       <dt>Trackers / external media</dt><dd>0 / 0 · source and network checked</dd><dt>Production payload</dt><dd>{payload?.measured?'See export measurement below':'Not yet measured in this session'}</dd></dl>
       <p className="receipt-small">Heartbeat rate is observed here, not a desktop or mobile GPU benchmark. Geometry, hand paths, media, audio tones, and offering copy are temporary fixtures.</p>
@@ -51,7 +53,7 @@ export default function Foundation(){
     <div className="world-canvas" aria-hidden="true"><WorldCanvas onAdvanceReady={onAdvanceReady}/></div>
     <div className="world-vignette" aria-hidden="true"/>
     <header className="world-header"><a className="wordmark" href="#journey" aria-label="Ghost Hand Studio"><span className="wordmark-glyph">手</span><span>GHOST HAND<small>STUDIO / SOVEREIGN CRAFT</small></span></a>
-      <span className="local-edition">FOUNDATION II <b>•</b> LOCAL STUDY</span>
+      <span className="local-edition">INCANTATION III <b>•</b> THE INK</span>
       <button className="sound-toggle" onClick={setSound} aria-pressed={state.soundEnabled}>Sound :: 響 <span>{state.soundEnabled?'ON':'OFF'}</span></button>
     </header>
     <div id="journey" ref={stage} className="journey-stage">
@@ -65,8 +67,8 @@ export default function Foundation(){
       </div>
     </div>
     {state.reducedMotion&&<div className="reduced-strip"><p className="reduced-notice">Stillness is a way through. Your motion preference is respected; all paths and controls remain available.</p><StoryboardStrip/></div>}
-    <aside className="compositor-proof"><details><summary>Compositor :: 霧</summary><div><label htmlFor="fog-proof">Fog density · GSAP → uniform</label><input id="fog-proof" type="range" min="0.05" max="1" step="0.01" defaultValue="0.36" onChange={event=>window.__GH_DEBUG?.setFog(Number(event.target.value))}/><span>Shared field. One world.</span></div></details></aside>
-    <footer className="foundation-footer"><span>GHOSTHAND.STUDIO <i>/</i> PHASE 1</span><Receipt/></footer>
+    <aside className="compositor-proof"><details><summary>Compositor :: 霧</summary><div className="proof-controls"><div className="proof-channel"><label htmlFor="fog-proof">Fog density</label><input id="fog-proof" type="range" min="0.05" max="1" step="0.01" defaultValue="0.36" onChange={event=>window.__GH_DEBUG?.setFog(Number(event.target.value))}/></div><div className="proof-channel"><label htmlFor="ink-bleed">Wet bleed</label><input id="ink-bleed" type="range" min="0" max="1.5" step="0.05" defaultValue="1" onChange={event=>window.__GH_DEBUG?.setInk({bleed:Number(event.target.value)})}/></div><div className="proof-channel"><label htmlFor="ink-pressure">Ink pressure</label><input id="ink-pressure" type="range" min="0.5" max="1.5" step="0.05" defaultValue="1" onChange={event=>window.__GH_DEBUG?.setInk({pressure:Number(event.target.value)})}/></div><span>GSAP → shared uniforms / local material study</span></div></details></aside>
+    <footer className="foundation-footer"><span>GHOSTHAND.STUDIO <i>/</i> V3 · LOCAL</span><Receipt/></footer>
     <div className="ceremonial-flash" aria-hidden="true"/><div className="ceremonial-cut" aria-hidden="true"/>
     <CursorGhost/>
     <p className="sr-only" role="status">{soundError}</p>

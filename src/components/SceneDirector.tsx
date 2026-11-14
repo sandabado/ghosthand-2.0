@@ -5,6 +5,7 @@ import { SCENES, SCENE_IDS, TIMING, type SceneId } from '@/core/config';
 import { useJourney } from '@/core/world';
 import { useParam } from '@/core/params';
 import { queueInput } from '@/core/input';
+import { HAND_SVG } from '@/systems/ink/sources';
 import { memberBuilds, drainAudit, relics, stations } from '@/core/fixtures';
 import { advanceJourney, completeGate, releaseDrain, commitFork, navigate, sealRitual, resetJourney, setSelectedMember, setSelectedRelic } from '@/core/director';
 
@@ -17,14 +18,14 @@ function NextStep({ children = 'Continue the descent', disabled = false }: { chi
   return <button className="journey-next" disabled={disabled} onClick={advanceJourney}>{children}<span aria-hidden="true">↓</span></button>;
 }
 
-/** Temporary path fixture. Canonical prototype and hand paths were not supplied. */
+/** Static authored-study companion for reduced motion. */
 function HandFixture() {
-  return <svg className="ink-hand-fixture" viewBox="0 0 280 320" fill="none" aria-hidden="true"><path pathLength="1" d="M71 245C48 219 41 195 55 189C65 185 77 209 89 211L88 101C87 80 102 76 105 97L111 173L112 61C112 40 128 36 131 59L136 170L144 44C145 24 163 25 162 48L162 171L181 67C186 47 201 55 197 77L185 205C190 237 174 276 145 285C119 292 91 274 71 245ZM89 211L102 244M111 173L112 226M136 170L135 226M162 171L155 231M185 205L173 244M102 244C122 237 149 238 173 244"/><path pathLength="1" d="M105 286L101 317M151 286L157 317M112 106L130 109M144 108L160 112M175 118L189 122M89 147L108 149M116 160L135 161M141 158L160 161"/></svg>;
+  return <div className="ink-hand-fallback" aria-hidden="true" dangerouslySetInnerHTML={{__html:HAND_SVG}}/>;
 }
 
 function Threshold() {
   const ready = useJourney(s => s.thresholdReady);
-  return <><SceneLabel scene="THRESHOLD" detail="A command, not a request."/><div className="threshold-body"><div className="summon-line"><span aria-hidden="true">&gt; </span><span>summon</span><i aria-hidden="true">_</i></div><h1>COMMAND<br/>THE <em>UNSEEN.</em></h1><p>Human instinct.<br/>Sovereign systems.<br/>The work is yours.</p><HandFixture/><div className="threshold-action"><NextStep disabled={!ready}>{ready ? 'Enter the descent' : 'The hand is arriving'}</NextStep><span className="fixture-note">FOUNDATION STUDY / TEMPORARY HAND PATH</span></div></div><span className="threshold-sigil" aria-hidden="true">手</span></>;
+  return <><SceneLabel scene="THRESHOLD" detail="A command, not a request."/><div className="threshold-body"><div className="summon-line"><span aria-hidden="true">&gt; </span><span>summon</span><i aria-hidden="true">_</i></div><h1>COMMAND<br/>THE <em>UNSEEN.</em></h1><p>Human instinct.<br/>Sovereign systems.<br/>The work is yours.</p><HandFixture/><div className="threshold-action"><NextStep disabled={!ready}>{ready ? 'Enter the descent' : 'The hand is arriving'}</NextStep><span className="fixture-note">V3 INK STUDY / AUTHORED PATHS, AWAITING CANONICAL SOURCE</span></div></div><span className="threshold-sigil" aria-hidden="true">手</span></>;
 }
 
 function Legend() {
