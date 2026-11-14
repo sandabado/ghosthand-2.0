@@ -7,8 +7,9 @@ import { useParam } from '@/core/params';
 import { queueInput } from '@/core/input';
 import { HAND_SVG } from '@/systems/ink/sources';
 import DrainScene from './DrainScene';
-import { memberBuilds, relics, stations } from '@/core/fixtures';
-import { advanceJourney, completeGate, commitFork, navigate, sealRitual, resetJourney, setSelectedMember, setSelectedRelic } from '@/core/director';
+import GatesScene from './GatesScene';
+import { memberBuilds, relics } from '@/core/fixtures';
+import { advanceJourney, commitFork, navigate, sealRitual, resetJourney, setSelectedMember, setSelectedRelic } from '@/core/director';
 
 function SceneLabel({ scene, detail }: { scene: SceneId; detail?: string }) {
   const def = SCENES[scene];
@@ -49,38 +50,7 @@ function StrokeCommit({label,className='',onCommit,disabled=false,children}:Stro
   return <button type="button" className={`stroke-commit ${className} ${armed?'is-armed':''} ${travelled?'has-travelled':''}`} aria-label={label} disabled={disabled} onClick={e=>e.preventDefault()} onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={cancel} onKeyDown={onKey} onBlur={cancel}>{children??label}<span className="stroke-guide" aria-hidden="true"><i/>{travelled?'RELEASE TO COMMIT':armed?'DRAW YOUR STROKE':'PRESS · DRAW · RELEASE'}</span><span className="sr-only" aria-live="polite">{travelled?'Stroke ready. Release pointer or press Enter to commit.':armed?'Armed. Drag at least forty pixels, or press Arrow Down then Enter.':'Keyboard: Space to arm, Arrow Down to draw, Enter to commit.'}</span></button>;
 }
 
-function LatticeGate({done}:{done:boolean}) {
-  const [strands,setStrands]=useState<number[]>([]);
-  const start=useRef<{x:number;y:number;index:number}|null>(null);
-  const seat=(index:number)=>{if(strands.includes(index)||done)return;const next=[...strands,index];setStrands(next);if(next.length===3)completeGate(1);};
-  return <div className="lattice-rite"><div className="lattice-field" aria-label="Three lattice strands">{[0,1,2].map(index=><button key={index} className={`lattice-strand ${done||strands.includes(index)?'is-seated':''}`} aria-label={`Drag lattice strand ${index+1} into place`} disabled={done||strands.includes(index)} onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);start.current={x:e.clientX,y:e.clientY,index};}} onPointerUp={e=>{const p=start.current;start.current=null;if(p&&Math.hypot(e.clientX-p.x,e.clientY-p.y)>=TIMING.strokePixels)seat(index);}} onPointerCancel={()=>{start.current=null;}}><span>0{index+1}</span><i/><b>{done||strands.includes(index)?'SEATED':'DRAW INTO PLACE'}</b></button>)}</div><button className="keyboard-action" disabled={done} onClick={()=>seat([0,1,2].find(index=>!strands.includes(index))??0)}>{done?'Lattice complete':'Seat the next strand · keyboard alternative'}</button></div>;
-}
-
-function TrainGate({done}:{done:boolean}) {
-  const [code,setCode]=useState('');
-  return <div className={`training-terminal ${done?'is-compiled':''}`}><div><span>GHOST / LOCAL TERMINAL</span><span>{done?'COMPILED':'AWAITING INPUT'}</span></div><label htmlFor="training-code">Three keystrokes begin the conversation.</label><span className="terminal-prompt">&gt; <input id="training-code" value={code} readOnly={done} autoComplete="off" autoCapitalize="off" spellCheck={false} placeholder="type..." maxLength={24} onChange={event=>{setCode(event.target.value);if(event.target.value.length>=3)completeGate(2);}}/></span><pre aria-live="polite">{done?'hand.connect();\ncontext.compile();\nhuman.retainControl();\n\n✓ a working foundation.':'// your input is the beginning\n// the ghost completes the loop'}</pre><span className="fixture-note">ILLUSTRATIVE CODE / NO COMMANDS ARE EXECUTED</span></div>;
-}
-
-function OwnGate({done}:{done:boolean}) {
-  const ring=useRef<HTMLDivElement>(null);
-  return <div className="ownership-rite"><div ref={ring} className={`ownership-ring ${done?'is-owned':''}`}><span>{done?'主':'＋'}</span><b>{done?'YOUR TOOLS. YOUR TERMS.':'DROP THE TOOL HERE'}</b></div><button className="ownership-tool" disabled={done} aria-label="Drag the tool into the ownership ring" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);}} onPointerUp={e=>{const rect=ring.current?.getBoundingClientRect();if(rect&&e.clientX>=rect.left&&e.clientX<=rect.right&&e.clientY>=rect.top&&e.clientY<=rect.bottom)completeGate(3);}} draggable={!done} onDragStart={e=>e.dataTransfer.setData('text/plain','ghost-tool')} onDragEnd={e=>{const rect=ring.current?.getBoundingClientRect();if(rect&&e.clientX>=rect.left&&e.clientX<=rect.right&&e.clientY>=rect.top&&e.clientY<=rect.bottom)completeGate(3);}}><span aria-hidden="true">⌘</span>{done?'OWNED':'TAKE THE TOOL'}</button><button className="keyboard-action" disabled={done} onClick={()=>completeGate(3)}>{done?'Ownership established':'Place the tool in the ring · keyboard alternative'}</button></div>;
-}
-
-function FleetGate({done}:{done:boolean}) {
-  const [sent,setSent]=useState<number[]>([]);
-  const origin=useRef<{x:number;y:number}|null>(null);
-  const dispatch=(index:number)=>{if(done||sent.includes(index))return;const next=[...sent,index];setSent(next);if(next.length===3)completeGate(4);};
-  return <div className="fleet-rite"><div className="fleet-hands">{[0,1,2].map(index=><button key={index} disabled={done||sent.includes(index)} className={done||sent.includes(index)?'is-dispatched':''} aria-label={`Flick ghost hand ${index+1} into the dark`} onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);origin.current={x:e.clientX,y:e.clientY};}} onPointerUp={e=>{const p=origin.current;origin.current=null;if(p&&Math.hypot(e.clientX-p.x,e.clientY-p.y)>=TIMING.strokePixels)dispatch(index);}} onPointerCancel={()=>{origin.current=null;}}><span aria-hidden="true">手</span><i>{done||sent.includes(index)?'DISPATCHED':`HAND 0${index+1}`}</i></button>)}</div><button className="keyboard-action" disabled={done} onClick={()=>dispatch([0,1,2].find(index=>!sent.includes(index))??0)}>{done?'The fleet is moving':'Dispatch the next hand · keyboard alternative'}</button><span className="fixture-note">FLEET INPUT FIXTURE / NO EXTERNAL AGENTS ARE LAUNCHED</span></div>;
-}
-
-function CraftGate({gate}:{gate:number}) {
-  const completed=useJourney(s=>s.completedGates.includes(gate));
-  const scene=`CRAFT_F${gate}` as SceneId;
-  const def=SCENES[scene];
-  const station=stations[gate-1];
-  const titles=[<>Give form<br/>to <em>the possible.</em></>,<>Teach the system.<br/><em>Keep the instinct.</em></>,<>The tools<br/>should <em>be yours.</em></>,<>One intention.<br/><em>Many hands.</em></>];
-  return <><SceneLabel scene={scene} detail={`GATE ${gate} OF 4 / ${completed?'RITE COMPLETE':'INPUT FIXTURE'}`}/><div className="craft-layout"><div className="scene-title"><span className="gate-kanji" aria-hidden="true">{def.glyph}</span><span className="scene-overline">{station?.stop??def.title}</span><h2>{titles[gate-1]}</h2><p className="scene-lede">{station?.meaning}</p><span className="interaction-instruction">{station?.interact}</span></div><div className="gate-interaction">{gate===1?<LatticeGate done={completed}/>:gate===2?<TrainGate done={completed}/>:gate===3?<OwnGate done={completed}/>:<FleetGate done={completed}/>}</div></div><div className="gate-footer"><span role="status">{completed?'THE WAY IS OPEN.':'COMPLETE THE RITE TO OPEN THE WAY.'}</span><NextStep disabled={!completed}>{gate===4?'Follow what comes next':'Pass through the gate'}</NextStep></div></>;
-}
+function CraftGate({gate}:{gate:number}) { return <GatesScene gate={gate}/>; }
 
 function Pursuit() { return <><SceneLabel scene="PURSUIT" detail="ONE INVITATION / ONE PURSUIT"/><div className="ceremony-title pursuit-title"><span className="scene-overline">THE BLADE LEADS.</span><h2>Follow.</h2><p>The next moment is already in motion.</p></div></>; }
 

@@ -1,0 +1,99 @@
+{
+  "checkedAt": "2026-11-14T17:07:59.582Z",
+  "checks": [
+    {
+      "name": "Authored anchors are finite, normalized, distinct, and meaningfully separated",
+      "passed": true
+    },
+    {
+      "name": "Client-to-board mapping preserves location under translation and resize",
+      "passed": true
+    },
+    {
+      "name": "Forge accepts the matching destination and rejects loose, wrong, and distant drops",
+      "passed": true
+    },
+    {
+      "name": "Forge fails closed for invalid indices, coordinates, and board dimensions",
+      "passed": true
+    },
+    {
+      "name": "Own uses a physical circle at every tested board aspect ratio",
+      "passed": true
+    },
+    {
+      "name": "Own fails closed for non-finite input and collapsed board dimensions",
+      "passed": true
+    },
+    {
+      "name": "Fleet recognizes intentional upward flicks and longer deliberate sweeps",
+      "passed": true
+    },
+    {
+      "name": "Fleet rejects clicks, short or wrong-way travel, and invalid timing",
+      "passed": true
+    },
+    {
+      "name": "Training seed is three Unicode code points of inert text with controls excluded",
+      "passed": true
+    },
+    {
+      "name": "All four gate fields expose bounded finite non-collapsed affine instances and particles",
+      "passed": true
+    },
+    {
+      "name": "Gate field instance and particle fixtures are seeded deterministically",
+      "passed": true
+    },
+    {
+      "name": "Gate visual systems retain shared clock, grade, and contextual palette ownership",
+      "passed": true
+    }
+  ],
+  "contracts": {
+    "forgeStrands": 3,
+    "fleetHands": 3,
+    "trainingSeedCodePoints": 3,
+    "testedBoardSizes": [
+      {
+        "width": 640,
+        "height": 400
+      },
+      {
+        "width": 320,
+        "height": 360
+      },
+      {
+        "width": 260,
+        "height": 290
+      }
+    ]
+  },
+  "geometryCounts": [
+    {
+      "gate": 1,
+      "bars": 60,
+      "particles": 384
+    },
+    {
+      "gate": 2,
+      "bars": 87,
+      "particles": 192
+    },
+    {
+      "gate": 3,
+      "bars": 125,
+      "particles": 192
+    },
+    {
+      "gate": 4,
+      "bars": 61,
+      "particles": 384
+    }
+  ],
+  "limitations": [
+    "Pure math and source checks do not establish actual pointer capture, cursor tracking, cancellation, keyboard/touch parity, animation settlement, GPU appearance, or emotional quality.",
+    "Replay, duplicate action guards, lifecycle cleanup, shared native callback count, reduced-motion behavior, and locked Merge timing require separate browser evidence.",
+    "No GPU presented FPS or physical mobile acceptance is inferred. Training and fleet remain local demonstrations, not executed code or external agents."
+  ]
+}

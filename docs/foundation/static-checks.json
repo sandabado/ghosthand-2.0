@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-14T04:52:18.936Z",
+  "checkedAt": "2026-11-14T17:07:59.385Z",
   "checks": [
     {
       "name": "Closed palette",
@@ -44,7 +44,12 @@
     {
       "name": "Locked markers centralized",
       "passed": true,
-      "detail": "Distinctive locked ceremony markers are not duplicated outside TIMING configuration."
+      "detail": "Distinctive locked markers are not duplicated in GSAP/ceremony clock code outside TIMING. Geometry dimensions are not clocks."
+    },
+    {
+      "name": "Approved Merge schedule",
+      "passed": true,
+      "detail": "D03 expected markers/durations are checked explicitly, including flash/cut overlap, 7–8s silence, and the 8s Fork. Browser timing remains separate."
     },
     {
       "name": "Foundation fixture contracts",
@@ -59,28 +64,28 @@
     {
       "name": "Initial payload target (conservative raw upper bound)",
       "passed": true,
-      "detail": "2,370,245 raw bytes across root HTML, all exported client assets, and the eager receipt JSON; gzip estimate 730,939 bytes."
+      "detail": "2,425,008 raw bytes across root HTML, all exported client assets, and the eager receipt JSON; gzip estimate 744,149 bytes."
     }
   ],
   "payload": {
-    "measuredAt": "2026-11-14T04:52:18.921Z",
+    "measuredAt": "2026-11-14T17:07:59.371Z",
     "method": "Filesystem byte measurement of static export. Root HTML references are a lower-bound entry set; all exported JS/CSS/font/image assets plus root HTML are a conservative client-asset upper bound including lazy and not-found chunks. The small eagerly fetched measurement receipt is counted separately in conservativeAppLoadRawBytes. Gzip is estimated with node:zlib, not measured network transfer.",
     "targetBytes": 4000000,
-    "rootHtmlBytes": 14751,
-    "initialReferencedRawBytes": 1234622,
-    "initialReferencedGzipBytes": 366689,
-    "conservativeClientRawBytes": 2369661,
-    "conservativeClientGzipBytes": 730571,
-    "totalExportBytes": 2415692,
+    "rootHtmlBytes": 14906,
+    "initialReferencedRawBytes": 1274563,
+    "initialReferencedGzipBytes": 375724,
+    "conservativeClientRawBytes": 2424424,
+    "conservativeClientGzipBytes": 743782,
+    "totalExportBytes": 2470455,
     "exportedFileCount": 41,
     "referencedResources": [
       {
-        "path": "/_next/static/css/ef1bc815e3bf5748.css",
-        "rawBytes": 62421,
-        "gzipBytes": 12418
+        "path": "/_next/static/css/3dcbec17a269e679.css",
+        "rawBytes": 84032,
+        "gzipBytes": 15974
       },
       {
-        "path": "/_next/static/chunks/webpack-bc92ef69adaa5d50.js",
+        "path": "/_next/static/chunks/webpack-ee76ec7bc4cb9808.js",
         "rawBytes": 3567,
         "gzipBytes": 1850
       },
@@ -115,9 +120,9 @@
         "gzipBytes": 31645
       },
       {
-        "path": "/_next/static/chunks/app/page-c5594fb55d8efbf2.js",
-        "rawBytes": 71645,
-        "gzipBytes": 22545
+        "path": "/_next/static/chunks/app/page-faecf9e86672f586.js",
+        "rawBytes": 89820,
+        "gzipBytes": 27982
       },
       {
         "path": "/_next/static/chunks/polyfills-42372ed130431b0a.js",
@@ -127,29 +132,19 @@
     ],
     "clientAssets": [
       {
-        "path": "_next/static/XI8iTGSNhSGKdlpgloxxz/_buildManifest.js",
-        "rawBytes": 440,
-        "gzipBytes": 236
-      },
-      {
-        "path": "_next/static/XI8iTGSNhSGKdlpgloxxz/_ssgManifest.js",
-        "rawBytes": 80,
-        "gzipBytes": 64
-      },
-      {
         "path": "_next/static/chunks/138-a82c01f12080d6fe.js",
         "rawBytes": 85264,
         "gzipBytes": 31645
       },
       {
-        "path": "_next/static/chunks/306.d326ff7a819cdced.js",
-        "rawBytes": 36855,
-        "gzipBytes": 11419
+        "path": "_next/static/chunks/178.534965960da5aa3a.js",
+        "rawBytes": 47358,
+        "gzipBytes": 14592
       },
       {
-        "path": "_next/static/chunks/410.5a31f820f00c89d2.js",
-        "rawBytes": 66349,
-        "gzipBytes": 22975
+        "path": "_next/static/chunks/377.43afac7a7f90bbc5.js",
+        "rawBytes": 70612,
+        "gzipBytes": 23969
       },
       {
         "path": "_next/static/chunks/4bd1b696-c7408084347438ae.js",
@@ -177,14 +172,14 @@
         "gzipBytes": 999
       },
       {
-        "path": "_next/static/chunks/app/layout-0e46ef1644022110.js",
-        "rawBytes": 361,
-        "gzipBytes": 199
+        "path": "_next/static/chunks/app/layout-3442f46fd5abd099.js",
+        "rawBytes": 417,
+        "gzipBytes": 208
       },
       {
-        "path": "_next/static/chunks/app/page-c5594fb55d8efbf2.js",
-        "rawBytes": 71645,
-        "gzipBytes": 22545
+        "path": "_next/static/chunks/app/page-faecf9e86672f586.js",
+        "rawBytes": 89820,
+        "gzipBytes": 27982
       },
       {
         "path": "_next/static/chunks/b536a0f1.f06e169bf8dc9367.js",
@@ -257,22 +252,32 @@
         "gzipBytes": 39473
       },
       {
-        "path": "_next/static/chunks/webpack-bc92ef69adaa5d50.js",
+        "path": "_next/static/chunks/webpack-ee76ec7bc4cb9808.js",
         "rawBytes": 3567,
         "gzipBytes": 1850
       },
       {
-        "path": "_next/static/css/ef1bc815e3bf5748.css",
-        "rawBytes": 62421,
-        "gzipBytes": 12418
+        "path": "_next/static/css/3dcbec17a269e679.css",
+        "rawBytes": 84032,
+        "gzipBytes": 15974
+      },
+      {
+        "path": "_next/static/qRKBc6iLVYEjQvcWFA2kl/_buildManifest.js",
+        "rawBytes": 440,
+        "gzipBytes": 236
+      },
+      {
+        "path": "_next/static/qRKBc6iLVYEjQvcWFA2kl/_ssgManifest.js",
+        "rawBytes": 80,
+        "gzipBytes": 64
       }
     ],
     "runtimeFps": "Unmeasured by this script",
     "runtimeDevice": "Unmeasured by this script",
     "receiptRawBytes": 584,
-    "receiptGzipBytes": 368,
-    "conservativeAppLoadRawBytes": 2370245,
-    "conservativeAppLoadGzipBytes": 730939
+    "receiptGzipBytes": 367,
+    "conservativeAppLoadRawBytes": 2425008,
+    "conservativeAppLoadGzipBytes": 744149
   },
   "limitations": [
     "Source scans do not prove library runtime loop count, contextual palette permissions, device FPS, or interactive journey behavior.",

@@ -7,6 +7,7 @@ import { BlendFunction, ChromaticAberrationEffect } from 'postprocessing';
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Group, Material, Mesh, ShaderMaterial, Vector2 } from 'three';
 import { InkStroke } from '../systems/InkStroke';
 import DrainField from '../systems/drain/DrainField';
+import GatesField from '../systems/gates/GatesField';
 import { svgToStrokes } from '../systems/ink/geometry';
 import { HAND_SVG,SIGIL_SVG,SLASH_SVG } from '../systems/ink/sources';
 import { PALETTE, SCENES, type SceneId } from '../core/config';
@@ -119,21 +120,6 @@ function Torii({z=0}:{z?:number}) {
   </group>;
 }
 
-function CraftEnvironment({scene}:{scene:SceneId}) {
-  const completed=useJourney(state=>state.completedGates);
-  const index=Number(scene.at(-1))-1;
-  return <group>
-    {[-8,-19,-30].map(z=><Torii key={z} z={z}/>)}
-    <mesh rotation={[-Math.PI/2,0,0]} position={[0,-3.6,-9]}><planeGeometry args={[60,80]}/><meshStandardMaterial color={PALETTE.void} metalness={0.55} roughness={0.7}/></mesh>
-    {scene==='CRAFT_F1'&&<group position={[2,0,-4]} rotation={[0,0.2,0.15]}>{Array.from({length:6},(_,i)=><Line key={i} points={[[-1.2,i*.4-1.2,0],[1.2,i*.4-1.2,0],[1.2,i*.4-1.2,1.3],[-1.2,i*.4-1.2,1.3],[-1.2,i*.4-1.2,0]]} color={PALETTE.candleDim} lineWidth={0.7}/>)}{Array.from({length:6},(_,i)=><Line key={i} points={[[i*.48-1.2,-1.2,0],[i*.48-1.2,1,0],[i*.48-1.2,1,1.3],[i*.48-1.2,-1.2,1.3]]} color={PALETTE.candle} transparent opacity={.28} lineWidth={0.6}/>)}</group>}
-    {scene==='CRAFT_F2'&&<group position={[2.1,0,-4]}><mesh><boxGeometry args={[3.8,2.6,0.12]}/><meshStandardMaterial color={PALETTE.void} emissive={PALETTE.candleDim} emissiveIntensity={0.12}/></mesh>{Array.from({length:10},(_,i)=><mesh key={i} position={[-.4+(i%3)*.16,0.9-i*.18,.08]}><boxGeometry args={[1.8-(i%3)*.3,.014,.01]}/><meshBasicMaterial color={completed.includes(2)?PALETTE.candle:PALETTE.candleDim}/></mesh>)}</group>}
-    {scene==='CRAFT_F3'&&<group position={[2.1,-.3,-4]}><mesh rotation={[1.05,0,0]}><torusGeometry args={[1.65,.024,8,70]}/><meshBasicMaterial color={PALETTE.candle}/></mesh>{Array.from({length:7},(_,i)=><mesh key={i} position={[Math.cos(i/7*Math.PI*2)*1.65,Math.sin(i/7*Math.PI*2)*.8,Math.sin(i/7*Math.PI*2)*.3]} rotation={[0,0,i]}><octahedronGeometry args={[.14]}/><meshStandardMaterial color={PALETTE.bone} emissive={PALETTE.candleDim} emissiveIntensity={.7}/></mesh>)}</group>}
-    {scene==='CRAFT_F4'&&<group position={[1.6,0,-6]}>{Array.from({length:12},(_,i)=><mesh key={i} position={[Math.sin(i*4)*3,Math.cos(i*3)*1.5,-i*.5]}><icosahedronGeometry args={[.07+(i%3)*.025,0]}/><meshBasicMaterial color={i%3?PALETTE.candleDim:PALETTE.bone}/></mesh>)}</group>}
-    {completed.includes(index+1)&&<pointLight position={[2,0,-4]} color={PALETTE.candle} intensity={3} distance={10}/>}
-  </group>;
-}
-
-
 function ChainsRoom() {
   return <group>
     <mesh position={[1,0,-10]}><boxGeometry args={[20,12,.3]}/><meshStandardMaterial color={PALETTE.smoke} roughness={1}/></mesh>
@@ -187,7 +173,7 @@ function SceneGeometry({scene,previous=false}:{scene:SceneId;previous?:boolean})
     case 'THRESHOLD':case 'MERGE': content=<><GhostHand settled={previous}/><InkAccents previous={previous}/>{!previous&&<Sword/>}</>;break;
     case 'LEGEND': content=<><InkAccents previous={previous} legend/><group position={[2,0,-6]}>{[-1,1].map(x=><group key={x} position={[x*1.35,0,0]}><mesh><boxGeometry args={[2.2,3.7,.12]}/><meshStandardMaterial color={PALETTE.void} emissive={PALETTE.candleDim} emissiveIntensity={.12}/></mesh><Line points={[[-1.1,-1.85,.08],[-1.1,1.85,.08],[1.1,1.85,.08],[1.1,-1.85,.08]]} color={PALETTE.candleDim} lineWidth={.5}/></group>)}<Line points={[[0,-2.4,.1],[0,2.4,.1]]} color={PALETTE.candle} lineWidth={.8}/></group></>;break;
     case 'DRAIN':content=<DrainField previous={previous}/>;break;
-    case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<CraftEnvironment scene={scene}/>;break;
+    case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<GatesField gate={Number(scene.at(-1))} previous={previous}/>;break;
     case 'PURSUIT':content=<>{[-14,-29,-44].map(z=><Torii key={z} z={z}/>)}{!previous&&<Sword/>}</>;break;
     case 'FORK':content=<group position={[0,0,-8]}><Line points={[[0,-5,0],[0,5,0]]} color={PALETTE.candle} lineWidth={1}/><mesh position={[-5,0,-1]}><planeGeometry args={[9,14]}/><meshBasicMaterial color={PALETTE.candleDim} transparent opacity={.045}/></mesh><mesh position={[5,0,-1]}><planeGeometry args={[9,14]}/><meshBasicMaterial color={PALETTE.enemy} transparent opacity={.16}/></mesh></group>;break;
     case 'CHAINS_HOLD':content=<ChainsRoom/>;break;

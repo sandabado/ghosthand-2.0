@@ -1,0 +1,1231 @@
+{
+  "checkedAt": "2026-11-14T17:10:32.784Z",
+  "branch": "codex/gates-v5",
+  "localUrl": "http://localhost:4174/?v=gates-v5",
+  "story": "Travel from the preserved Drain into Forge, Train, Own, and Fleet; make each deliberate input; wait for its local response to settle; pass into the unchanged Pursuit and Merge.",
+  "environment": {
+    "browser": "Playwright Chromium automation",
+    "desktop": [
+      1440,
+      1000
+    ],
+    "mobileViewports": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        780
+      ]
+    ],
+    "physicalDevice": false,
+    "touch": "Chromium CDP emulated touch with real browser pointerType touch"
+  },
+  "primaryFailures": [
+    {
+      "kind": "GPU shader compilation",
+      "firstRun": "Forge architecture missing; repeated WebGL INVALID_OPERATION useProgram warnings.",
+      "compile": "ERROR: 0:84: 'active' : Illegal use of reserved word\nERROR: 0:84: 'active' : syntax error",
+      "link": "Vertex shader is not compiled.",
+      "correction": "Renamed reserved active to activeStrand and activeHand in two vertex shaders.",
+      "proof": "Fresh all-four-gate compile/link instrumentation has an empty error array; final console has zero errors and only existing Three.Clock deprecation warning.",
+      "capture": "captures/first-shader-failure.png"
+    },
+    {
+      "kind": "Static audit false positive",
+      "report": "first-static-checks-failure.json",
+      "cause": "A generic scan treated a 6.9-unit torii post height as the 6.9-second Merge flash marker.",
+      "correction": "Scan GSAP/ceremony clock sources for duplicate markers, and independently compare every Merge marker/duration against approved D03.",
+      "proof": "13 final source/export checks pass; application geometry and ceremony timing were not altered to evade the check."
+    }
+  ],
+  "forge": {
+    "tap": [],
+    "wrong": [],
+    "cancel": [],
+    "escape": [],
+    "blur": [],
+    "tracking": {
+      "expected": {
+        "x": 911.78515625,
+        "y": 355.1875
+      },
+      "observed": {
+        "x": 911.7890625,
+        "y": 355.1875
+      },
+      "error": 0.00390625,
+      "active": 0,
+      "coords": [
+        0.390001,
+        0.24
+      ]
+    },
+    "accepted": {
+      "seated": [
+        0
+      ],
+      "settled": [],
+      "nextDisabled": true
+    },
+    "firstSettled": {
+      "forgeSeated": [
+        0
+      ],
+      "forgeSettled": [
+        0
+      ],
+      "trainSeed": "",
+      "trainPhase": "idle",
+      "ownPhase": "idle",
+      "fleetSent": [],
+      "fleetSettled": []
+    },
+    "complete": {
+      "gate": {
+        "forgeSeated": [
+          0,
+          1,
+          2
+        ],
+        "forgeSettled": [
+          0,
+          1,
+          2
+        ],
+        "trainSeed": "",
+        "trainPhase": "idle",
+        "ownPhase": "idle",
+        "fleetSent": [],
+        "fleetSettled": []
+      },
+      "completed": [
+        1
+      ],
+      "nextDisabled": false,
+      "events": [
+        {
+          "event": "strand-miss",
+          "gate": 1,
+          "at": 90732.09999999404,
+          "input": "pointer"
+        },
+        {
+          "event": "strand-miss",
+          "gate": 1,
+          "at": 91136.79999999702,
+          "input": "pointer"
+        },
+        {
+          "event": "strand-seat",
+          "gate": 1,
+          "at": 93397.09999999404,
+          "input": "pointer"
+        },
+        {
+          "event": "strand-seat",
+          "gate": 1,
+          "at": 94088.79999999702,
+          "input": "pointer"
+        },
+        {
+          "event": "strand-seat",
+          "gate": 1,
+          "at": 94830.29999999702,
+          "input": "pointer"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 1,
+          "at": 95350.40000000596,
+          "input": "pointer"
+        }
+      ]
+    },
+    "trainEntry": {
+      "meshes": 1,
+      "particles": 192,
+      "activeGate": 2,
+      "uniformUploads": 20180
+    }
+  },
+  "train": {
+    "one": {
+      "forgeSeated": [
+        0,
+        1,
+        2
+      ],
+      "forgeSettled": [
+        0,
+        1,
+        2
+      ],
+      "trainSeed": "",
+      "trainPhase": "idle",
+      "ownPhase": "idle",
+      "fleetSent": [],
+      "fleetSettled": []
+    },
+    "two": {
+      "forgeSeated": [
+        0,
+        1,
+        2
+      ],
+      "forgeSettled": [
+        0,
+        1,
+        2
+      ],
+      "trainSeed": "",
+      "trainPhase": "idle",
+      "ownPhase": "idle",
+      "fleetSent": [],
+      "fleetSettled": []
+    },
+    "started": {
+      "gate": {
+        "forgeSeated": [
+          0,
+          1,
+          2
+        ],
+        "forgeSettled": [
+          0,
+          1,
+          2
+        ],
+        "trainSeed": "ink",
+        "trainPhase": "writing",
+        "ownPhase": "idle",
+        "fleetSent": [],
+        "fleetSettled": []
+      },
+      "nextDisabled": true
+    },
+    "partial": {
+      "reveal": 0.39,
+      "compile": 0,
+      "phase": "writing",
+      "written": "intent.capture(\"ink\");\ncontext.▍",
+      "nextDisabled": true
+    },
+    "complete": {
+      "gate": {
+        "forgeSeated": [
+          0,
+          1,
+          2
+        ],
+        "forgeSettled": [
+          0,
+          1,
+          2
+        ],
+        "trainSeed": "ink",
+        "trainPhase": "compiled",
+        "ownPhase": "idle",
+        "fleetSent": [],
+        "fleetSettled": []
+      },
+      "completed": [
+        1,
+        2
+      ],
+      "reveal": 1,
+      "compile": 1,
+      "events": [
+        {
+          "event": "ghost-start",
+          "gate": 2,
+          "at": 114658,
+          "input": "text"
+        },
+        {
+          "event": "compile",
+          "gate": 2,
+          "at": 117335.5,
+          "input": "text"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 2,
+          "at": 117335.59999999404,
+          "input": "text"
+        }
+      ]
+    },
+    "ownEntry": {
+      "meshes": 1,
+      "particles": 192,
+      "activeGate": 3,
+      "uniformUploads": 25426
+    },
+    "gl": []
+  },
+  "own": {
+    "circle": {
+      "board": {
+        "x": 698.59375,
+        "y": 261.59375,
+        "width": 546.65625,
+        "height": 390
+      },
+      "ring": {
+        "x": 973.5859375,
+        "y": 339.59375,
+        "width": 171.59375,
+        "height": 171.59375
+      },
+      "expectedDiameter": 171.6,
+      "diameterError": 0.006249999999994316
+    },
+    "bareUp": "idle",
+    "outsideCircle": {
+      "phase": "idle",
+      "x": 0.18,
+      "y": 0.74
+    },
+    "cancel": "idle",
+    "tracking": {
+      "error": 0
+    },
+    "accepted": {
+      "phase": "locking",
+      "lock": 0,
+      "nextDisabled": true
+    },
+    "ignition": {
+      "lock": 0.332236,
+      "phase": "locking",
+      "nextDisabled": true
+    },
+    "complete": {
+      "phase": "locked",
+      "lock": 1,
+      "completed": [
+        1,
+        2,
+        3
+      ],
+      "events": [
+        {
+          "event": "ownership-miss",
+          "gate": 3,
+          "at": 161819.5,
+          "input": "pointer"
+        },
+        {
+          "event": "ownership-lock",
+          "gate": 3,
+          "at": 162830.70000000298,
+          "input": "pointer"
+        },
+        {
+          "event": "ownership-ignition",
+          "gate": 3,
+          "at": 163884,
+          "input": "pointer"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 3,
+          "at": 163884.09999999404,
+          "input": "pointer"
+        }
+      ]
+    },
+    "fleetEntry": {
+      "meshes": 2,
+      "particles": 384,
+      "activeGate": 4,
+      "uniformUploads": 36626
+    },
+    "gl": []
+  },
+  "fleetAndCeremony": {
+    "tap": [],
+    "short": [],
+    "down": [],
+    "side": [],
+    "slowShort": [],
+    "cancel": [],
+    "accepted": {
+      "sent": [
+        0
+      ],
+      "settled": [],
+      "nextDisabled": true
+    },
+    "flight": {
+      "progress": 0.019942,
+      "sent": [
+        0
+      ],
+      "settled": []
+    },
+    "complete": {
+      "completed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "sent": [
+        0,
+        1,
+        2
+      ],
+      "settled": [
+        0,
+        1,
+        2
+      ],
+      "progress": [
+        1,
+        1,
+        1
+      ],
+      "events": [
+        {
+          "event": "dispatch-miss",
+          "gate": 4,
+          "at": 196596.29999999702,
+          "input": "pointer"
+        },
+        {
+          "event": "dispatch-miss",
+          "gate": 4,
+          "at": 197013.5,
+          "input": "pointer"
+        },
+        {
+          "event": "dispatch-miss",
+          "gate": 4,
+          "at": 197429.90000000596,
+          "input": "pointer"
+        },
+        {
+          "event": "dispatch-miss",
+          "gate": 4,
+          "at": 197846.90000000596,
+          "input": "pointer"
+        },
+        {
+          "event": "dispatch-miss",
+          "gate": 4,
+          "at": 199115.90000000596,
+          "input": "pointer"
+        },
+        {
+          "event": "hand-dispatch",
+          "gate": 4,
+          "at": 199971.5,
+          "input": "pointer"
+        },
+        {
+          "event": "hand-arrived",
+          "gate": 4,
+          "at": 200918.70000000298,
+          "input": "pointer"
+        },
+        {
+          "event": "hand-dispatch",
+          "gate": 4,
+          "at": 201597.29999999702,
+          "input": "pointer"
+        },
+        {
+          "event": "hand-arrived",
+          "gate": 4,
+          "at": 202552,
+          "input": "pointer"
+        },
+        {
+          "event": "hand-dispatch",
+          "gate": 4,
+          "at": 203615.09999999404,
+          "input": "pointer"
+        },
+        {
+          "event": "hand-arrived",
+          "gate": 4,
+          "at": 204560.29999999702,
+          "input": "pointer"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 4,
+          "at": 204560.29999999702,
+          "input": "pointer"
+        }
+      ],
+      "nextDisabled": false
+    },
+    "gl": [],
+    "cleanup": {
+      "scene": "PURSUIT",
+      "resources": {
+        "meshes": 0,
+        "particles": 0,
+        "activeGate": 0,
+        "uniformUploads": 50633
+      }
+    },
+    "silence": {
+      "time": 7.083,
+      "nav": false,
+      "audio": {
+        "silent": true,
+        "connected": false,
+        "masterGain": 0,
+        "contextState": "running"
+      }
+    },
+    "fork": {
+      "nav": true,
+      "shing": 3,
+      "swords": [
+        "opening-glint",
+        "pursuit",
+        "merge"
+      ],
+      "violations": 0,
+      "events": [
+        {
+          "event": "summon",
+          "scheduled": 0.4,
+          "observed": 0.40000000000006253,
+          "wallSeconds": 0.3997000000029802
+        },
+        {
+          "event": "hand-start",
+          "scheduled": 1.6,
+          "observed": 1.600000000000108,
+          "wallSeconds": 1.5997000000029802
+        },
+        {
+          "event": "sword-start",
+          "scheduled": 3.8,
+          "observed": 3.8000000000000114,
+          "wallSeconds": 3.7999000000059606
+        },
+        {
+          "event": "flash-start",
+          "scheduled": 6.9,
+          "observed": 6.899999999999807,
+          "wallSeconds": 6.89970000000298
+        },
+        {
+          "event": "cut-start",
+          "scheduled": 7,
+          "observed": 6.999999999999801,
+          "wallSeconds": 6.9996000000089404
+        },
+        {
+          "event": "cut-end",
+          "scheduled": 7.35,
+          "observed": 7.349999999999767,
+          "wallSeconds": 7.34970000000298
+        },
+        {
+          "event": "flash-end",
+          "scheduled": 7.4,
+          "observed": 7.399999999999778,
+          "wallSeconds": 7.39970000000298
+        },
+        {
+          "event": "fork-interactive",
+          "scheduled": 8,
+          "observed": 8.00799999999984,
+          "wallSeconds": 8.008
+        }
+      ],
+      "resources": {
+        "meshes": 0,
+        "particles": 0,
+        "activeGate": 0,
+        "uniformUploads": 50633
+      },
+      "owners": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "finalKeyboardAndIME": {
+    "forgeIdle": {
+      "meshes": 1,
+      "particles": 384,
+      "activeGate": 1,
+      "uniformUploads": 230
+    },
+    "forgeKeyboard": {
+      "forgeSeated": [
+        0,
+        1,
+        2
+      ],
+      "forgeSettled": [
+        0,
+        1,
+        2
+      ],
+      "trainSeed": "",
+      "trainPhase": "idle",
+      "ownPhase": "idle",
+      "fleetSent": [],
+      "fleetSettled": []
+    },
+    "composingTwo": "idle",
+    "composingThree": "idle",
+    "composed": {
+      "seed": "火手人",
+      "phase": "writing",
+      "reveal": 0.275455,
+      "written": "intent.capture(\"火手人\");\n▍"
+    },
+    "trainComplete": {
+      "phase": "compiled",
+      "count": 1,
+      "complete": [
+        1,
+        2
+      ]
+    },
+    "ownKeyboard": "locked",
+    "flight": {
+      "progress": 0.88121,
+      "sent": [
+        0
+      ],
+      "settled": []
+    },
+    "fleetKeyboard": {
+      "gate": {
+        "forgeSeated": [
+          0,
+          1,
+          2
+        ],
+        "forgeSettled": [
+          0,
+          1,
+          2
+        ],
+        "trainSeed": "火手人",
+        "trainPhase": "compiled",
+        "ownPhase": "locked",
+        "fleetSent": [
+          0,
+          1,
+          2
+        ],
+        "fleetSettled": [
+          0,
+          1,
+          2
+        ]
+      },
+      "completed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "nextDisabled": false
+    },
+    "gl": []
+  },
+  "emulatedTouch": {
+    "forgeWidth": {
+      "inner": 390,
+      "client": 375,
+      "scroll": 375
+    },
+    "touchCancel": [],
+    "forgeTouch": {
+      "pointer": "touch",
+      "seated": [
+        0,
+        1,
+        2
+      ],
+      "settled": [
+        0,
+        1,
+        2
+      ],
+      "complete": [
+        1
+      ],
+      "targets": [
+        {
+          "w": 50,
+          "h": 50
+        },
+        {
+          "w": 50,
+          "h": 50
+        },
+        {
+          "w": 50,
+          "h": 50
+        }
+      ]
+    },
+    "train": {
+      "phase": "compiled",
+      "width": {
+        "inner": 390,
+        "client": 375,
+        "scroll": 375
+      }
+    },
+    "ownTouch": {
+      "phase": "locked",
+      "lock": 1,
+      "width": {
+        "inner": 390,
+        "client": 375,
+        "scroll": 375
+      },
+      "ring": {
+        "x": 162.03515625,
+        "y": 423.37109375,
+        "width": 117.0390625,
+        "height": 117.0390625
+      },
+      "board": {
+        "x": 45,
+        "y": 343.296875,
+        "width": 266,
+        "height": 330
+      }
+    },
+    "fleetTouch": {
+      "sent": [
+        0,
+        1,
+        2
+      ],
+      "settled": [
+        0,
+        1,
+        2
+      ],
+      "complete": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "width": {
+        "inner": 390,
+        "client": 375,
+        "scroll": 375
+      },
+      "nextDisabled": false
+    },
+    "gl": [],
+    "cleanup": {
+      "meshes": 0,
+      "particles": 0,
+      "activeGate": 0,
+      "uniformUploads": 4545
+    }
+  },
+  "reducedAndReplay": {
+    "initial": {
+      "reduced": true,
+      "canvas": "hidden",
+      "states": 14,
+      "width": {
+        "client": 305,
+        "scroll": 305
+      }
+    },
+    "uncommitted": {
+      "seated": [],
+      "active": -1,
+      "point": [
+        0.12,
+        0.24
+      ],
+      "activeNodes": 0
+    },
+    "forgeStatic": {
+      "accepted": [
+        0,
+        1,
+        2
+      ],
+      "settled": [
+        0,
+        1,
+        2
+      ],
+      "complete": [
+        1
+      ]
+    },
+    "trainStatic": {
+      "phase": "compiled",
+      "reveal": 1,
+      "compile": 1,
+      "complete": [
+        1,
+        2
+      ]
+    },
+    "ownBefore": "locking",
+    "ownAfter": {
+      "phase": "locking",
+      "lock": 0.028712
+    },
+    "fleetPartial": {
+      "sent": [
+        0
+      ],
+      "settled": [],
+      "nextDisabled": true
+    },
+    "fleetStatic": {
+      "sent": [
+        0,
+        1,
+        2
+      ],
+      "settled": [
+        0,
+        1,
+        2
+      ],
+      "complete": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "replay": {
+      "scene": "THRESHOLD",
+      "journey": 2,
+      "gate": {
+        "forgeSeated": [],
+        "forgeSettled": [],
+        "trainSeed": "",
+        "trainPhase": "idle",
+        "ownPhase": "idle",
+        "fleetSent": [],
+        "fleetSettled": []
+      },
+      "complete": [],
+      "events": [],
+      "params": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "trainLiveBefore": {
+      "phase": "writing",
+      "reveal": 0.180909
+    },
+    "trainLiveAfter": {
+      "phase": "compiled",
+      "reveal": 1,
+      "compile": 1,
+      "complete": [
+        1,
+        2
+      ]
+    },
+    "gl": []
+  },
+  "confirmedLiveMotion": {
+    "ownBefore": "locking",
+    "ownAfter": {
+      "phase": "locked",
+      "lock": 1,
+      "complete": [
+        1,
+        2,
+        3
+      ],
+      "nextDisabled": false
+    },
+    "fleetBefore": {
+      "sent": [
+        0
+      ],
+      "settled": []
+    },
+    "fleetAfter": {
+      "sent": [
+        0
+      ],
+      "settled": [
+        0
+      ],
+      "nextDisabled": true,
+      "progress": [
+        1,
+        0,
+        0
+      ]
+    },
+    "complete": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "finalAudit": {
+    "scroll": {
+      "progress": 0.3068188119828982,
+      "accepted": [],
+      "completed": []
+    },
+    "native": {
+      "active": 1,
+      "intervals": 0,
+      "delta": [
+        {
+          "source": "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0",
+          "count": 181
+        },
+        {
+          "source": "()=>{this.dispatchScrollendEvent()}",
+          "count": 1
+        },
+        {
+          "source": "()=>{this._preventNextNativeScrollEvent=!1}",
+          "count": 1
+        }
+      ],
+      "heartbeat": 120.07373822964263
+    },
+    "secondary": [],
+    "pointerSnapBusy": {
+      "otherNodeDisabled": true,
+      "alternativeDisabled": true,
+      "nextDisabled": true
+    },
+    "pointerSnapSettled": {
+      "alternativeEnabled": true,
+      "settled": [
+        0
+      ]
+    },
+    "forge": {
+      "meshes": 1,
+      "particles": 384,
+      "activeGate": 1,
+      "uniformUploads": 1046
+    },
+    "train": {
+      "meshes": 1,
+      "particles": 192,
+      "activeGate": 2,
+      "uniformUploads": 2060
+    },
+    "own": {
+      "meshes": 1,
+      "particles": 192,
+      "activeGate": 3,
+      "uniformUploads": 2704
+    },
+    "fleet": {
+      "resources": {
+        "meshes": 2,
+        "particles": 384,
+        "activeGate": 4,
+        "uniformUploads": 3650
+      },
+      "sent": [
+        0,
+        1,
+        2
+      ],
+      "settled": [
+        0,
+        1,
+        2
+      ],
+      "completed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "events": [
+        {
+          "event": "strand-seat",
+          "gate": 1,
+          "at": 14794.09999999404,
+          "input": "pointer"
+        },
+        {
+          "event": "strand-seat",
+          "gate": 1,
+          "at": 15469.79999999702,
+          "input": "keyboard"
+        },
+        {
+          "event": "strand-seat",
+          "gate": 1,
+          "at": 15487.09999999404,
+          "input": "keyboard"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 1,
+          "at": 16008.40000000596,
+          "input": "keyboard"
+        },
+        {
+          "event": "ghost-start",
+          "gate": 2,
+          "at": 17427,
+          "input": "text"
+        },
+        {
+          "event": "compile",
+          "gate": 2,
+          "at": 20106.70000000298,
+          "input": "text"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 2,
+          "at": 20106.90000000596,
+          "input": "text"
+        },
+        {
+          "event": "ownership-lock",
+          "gate": 3,
+          "at": 21529.09999999404,
+          "input": "keyboard"
+        },
+        {
+          "event": "ownership-ignition",
+          "gate": 3,
+          "at": 22583.40000000596,
+          "input": "keyboard"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 3,
+          "at": 22583.40000000596,
+          "input": "keyboard"
+        },
+        {
+          "event": "hand-dispatch",
+          "gate": 4,
+          "at": 24611.40000000596,
+          "input": "keyboard"
+        },
+        {
+          "event": "hand-dispatch",
+          "gate": 4,
+          "at": 25028.09999999404,
+          "input": "keyboard"
+        },
+        {
+          "event": "hand-dispatch",
+          "gate": 4,
+          "at": 25044.59999999404,
+          "input": "keyboard"
+        },
+        {
+          "event": "hand-arrived",
+          "gate": 4,
+          "at": 25558.29999999702,
+          "input": "keyboard"
+        },
+        {
+          "event": "hand-arrived",
+          "gate": 4,
+          "at": 25974.90000000596,
+          "input": "keyboard"
+        },
+        {
+          "event": "hand-arrived",
+          "gate": 4,
+          "at": 25991.59999999404,
+          "input": "keyboard"
+        },
+        {
+          "event": "gate-complete",
+          "gate": 4,
+          "at": 25991.59999999404,
+          "input": "keyboard"
+        }
+      ]
+    },
+    "exit": {
+      "scene": "PURSUIT",
+      "resources": {
+        "meshes": 0,
+        "particles": 0,
+        "activeGate": 0,
+        "uniformUploads": 3800
+      },
+      "owners": [
+        1,
+        1,
+        1
+      ]
+    },
+    "gl": [],
+    "http": 200,
+    "requests": [
+      {
+        "url": "http://localhost:4174/?v=gates-v5",
+        "type": "document"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/css/3dcbec17a269e679.css",
+        "type": "stylesheet"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/webpack-ee76ec7bc4cb9808.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/4bd1b696-c7408084347438ae.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/794-96ab5d7caefc5d69.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/main-app-b2dd5721388df57d.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/bd904a5c-56e65ed4abb36c15.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/c15bf2b0-c080c4e45c5fb392.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/138-a82c01f12080d6fe.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/app/page-faecf9e86672f586.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/foundation-receipt.json",
+        "type": "fetch"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/b536a0f1.f06e169bf8dc9367.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/a3cd4a83.f8720b64a454b80c.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/f6211eb1.daf52cd3c0634b2c.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/e49654ac.001c6ece8cf3ce4d.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/377.43afac7a7f90bbc5.js",
+        "type": "script"
+      },
+      {
+        "url": "http://localhost:4174/_next/static/chunks/178.534965960da5aa3a.js",
+        "type": "script"
+      }
+    ],
+    "remote": [],
+    "failed": []
+  },
+  "settledNativeAndCompact": {
+    "idle": {
+      "active": 1,
+      "intervals": 0,
+      "delta": [
+        {
+          "source": "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0",
+          "count": 181
+        }
+      ],
+      "scene": "FORK"
+    },
+    "own": {
+      "field": {
+        "x": 45,
+        "y": 139.296875,
+        "width": 266,
+        "height": 330
+      },
+      "ring": {
+        "x": 162.03515625,
+        "y": 219.37109375,
+        "width": 117.0390625,
+        "height": 117.0390625
+      }
+    },
+    "width": {
+      "client": 375,
+      "scroll": 375
+    },
+    "gl": []
+  },
+  "console": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "THREE.Clock deprecated; existing dependency warning."
+  },
+  "verification": [
+    "npm run build",
+    "npm run check (13 pass)",
+    "npm run verify:gates (12 pass)",
+    "node scripts/verify-ink.mjs (9 pass)",
+    "node scripts/verify-drain.mjs (9 pass)",
+    "git diff --check"
+  ],
+  "methodology": [
+    "All navigation uses actual UI controls. No forced journey-state changes or ceremony time jumps were used.",
+    "Detailed pointer negative/recognition runs predate only presentation refinements and the Forge pointer-snap busy affordance. Final audit verifies the updated affordance; the latest live-motion test waits for the actual matchMedia change event.",
+    "Own/Fleet immediate observations in reducedAndReplay were taken before asynchronous preference-change delivery. confirmedLiveMotion is the authoritative post-event observation: Own locked at 1, and only the one accepted Fleet hand settled.",
+    "The Forge scroll sample includes two one-shot Lenis native-scroll cleanup callbacks; the settled Fork audit isolates one recurring GSAP callback with one active RAF and zero intervals.",
+    "GPU compile/link hooks and RAF/interval probes are browser-test instrumentation, not application source. Heartbeat cadence is not presented GPU FPS.",
+    "After responsive transforms and glow refinement, compact captures were refreshed at 390px; the 320px uncommitted-drag and reduced-motion paths were also observed."
+  ],
+  "captures": [
+    "captures/v5-forge-connected-final.png",
+    "captures/v5-train-writing-final.png",
+    "captures/v5-own-ignition-final.png",
+    "captures/v5-fleet-flight-final.png",
+    "captures/v5-forge-mobile-final.png",
+    "captures/v5-own-mobile-final.png",
+    "captures/v5-fleet-mobile-final.png",
+    "captures/v5-own-reduced-320.png",
+    "captures/v5-forge-320-final.png"
+  ],
+  "limitations": [
+    "Physical desktop/mobile GPU performance is unmeasured; viewport and touch emulation do not establish device FPS targets.",
+    "Gate code, training completion, ownership, and dispatch are local illustrative interactions. No model job, ownership transfer, payment, or external agent is created.",
+    "Canonical hand art, real member media, production recordings, final catalog/terms, and v6 onward remain separate work.",
+    "Local-only build; no publication or DNS changes. Human visual review before v6."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "ghosthand-studio",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,6 +10,7 @@
     "check": "npm run typecheck && node scripts/verify-foundation.mjs",
     "dev:portfolio": "node scripts/serve.mjs",
     "verify:foundation": "node scripts/verify-foundation.mjs",
+    "verify:gates": "node scripts/verify-gates.mjs",
     "preview": "STATIC_DIR=out PORT=4174 node scripts/serve.mjs"
   },
   "dependencies": {

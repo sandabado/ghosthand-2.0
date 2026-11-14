@@ -36,8 +36,18 @@ const trackerImports = sources.filter(file => /(?:from\s+|import\s*\()['"](?:@ve
 check('No tracker declarations', trackerImports.length === 0, trackerImports.length ? trackerImports.join(', ') : 'No known tracker imports/hosts in application source; this is a source attestation, not a network measurement.');
 const forbiddenAssets = sources.filter(file => /90-staging-conflicts|staging-conflict-(?:restrained-person|ascent-bound-person)/.test(file.text)).map(file => file.path);
 check('Excluded staging imagery', forbiddenAssets.length === 0, forbiddenAssets.length ? forbiddenAssets.join(', ') : 'No references to excluded bound-person images in application source.');
-const duplicatedMarkers = sources.filter(file => file.path !== 'src/core/config.ts' && /\b(?:6\.9|7\.35|7\.4)\b/.test(file.text)).map(file => file.path);
-check('Locked markers centralized', duplicatedMarkers.length === 0, duplicatedMarkers.length ? duplicatedMarkers.join(', ') : 'Distinctive locked ceremony markers are not duplicated outside TIMING configuration.');
+// A physical dimension may equal a time marker. Inspect clock owners/readers,
+// and independently assert the approved schedule rather than banning geometry numbers.
+const ceremonySources = sources.filter(file => file.path !== 'src/core/config.ts' && /\b(?:gsap|ceremonyTime)\b/.test(file.text));
+const duplicatedMarkers = ceremonySources.filter(file => /\b(?:6\.9|7\.35|7\.4)\b/.test(file.text)).map(file => file.path);
+check('Locked markers centralized', duplicatedMarkers.length === 0, duplicatedMarkers.length ? duplicatedMarkers.join(', ') : 'Distinctive locked markers are not duplicated in GSAP/ceremony clock code outside TIMING. Geometry dimensions are not clocks.');
+const timingSource = sources.find(file => file.path === 'src/core/config.ts')?.text || '';
+const mergeBlock = timingSource.match(/merge:\s*\{([^}]+)\}/)?.[1] || '';
+const mergeTiming = Object.fromEntries([...mergeBlock.matchAll(/(\w+):\s*([\d.]+)/g)].map(match => [match[1], Number(match[2])]));
+const approvedMerge = { summon:0.4, handStart:1.6, handDuration:2.2, swordStart:3.8, swordDuration:3,
+  flashStart:6.9, flashDuration:0.5, cutStart:7, cutDuration:0.35, silenceStart:7, silenceEnd:8, fork:8 };
+check('Approved Merge schedule', Object.entries(approvedMerge).every(([key,value]) => mergeTiming[key] === value),
+  'D03 expected markers/durations are checked explicitly, including flash/cut overlap, 7–8s silence, and the 8s Fork. Browser timing remains separate.');
 const fixtureSource = sources.find(file => file.path === 'src/core/fixtures.ts')?.text || '';
 const memberCount = (fixtureSource.match(/id: 'fixture-\d+'/g) || []).length;
 const auditSection = fixtureSource.split('export const drainAudit')[1]?.split('export const relics')[0] || '';

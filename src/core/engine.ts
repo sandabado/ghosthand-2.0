@@ -7,6 +7,7 @@ import { runtime,useJourney,notifyParams } from './world';
 import { input,clearInput } from './input';
 import { advanceJourney,canScrollAdvance,recordSword,transitionTo,prepareDrain,stopDrainRite,settleDrainForReducedMotion } from './director';
 import { tlFall,tlPass,tlPursue } from './verbs';
+import { prepareGate,stopGateRites,settleGatesForReducedMotion } from './gate-director';
 import { soundDirector } from './sound';
 
 export interface EngineHandle { setAdvance:(advance:(t:number)=>void)=>void; destroy:()=>void; }
@@ -47,6 +48,7 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
     timeline?.kill();
     const s=useJourney.getState(),p=s.params;
     if(s.scene==='DRAIN')prepareDrain();else stopDrainRite();
+    if(s.scene.startsWith('CRAFT_F'))prepareGate();else stopGateRites();
     soundDirector.setSilent(false);clearInput();
     p.inkFlow=0;p.hand=0;p.inkTipDecay=0;p.sword=0;p.flash=0;p.ceremonyTime=0;p.pursuit=0;
     p.progress=0;p.pass=0;p.fall=0;p.cameraX=0;p.cameraZ=0;
@@ -120,6 +122,7 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
   const onMotion=()=>{
     useJourney.setState({reducedMotion:reduced.matches});
     if(reduced.matches)settleDrainForReducedMotion();
+    if(reduced.matches)settleGatesForReducedMotion();
     lenis.options.smoothWheel=!reduced.matches;resizePending=true;
   };
   window.addEventListener('pointermove',onPointer,{passive:true});window.addEventListener('pointerdown',onPointer,{passive:true});window.addEventListener('keydown',onKey);
@@ -131,6 +134,9 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
     const vars={hand:p.hand,sword:p.sword,flash:p.flash,cut:p.cutProgress,ceremony:p.ceremonyTime,
       'scene-mix':p.sceneMix,ink:p.inkFlow,time:p.time,depth:p.depth,progress:p.progress,'pointer-x':p.pointerX,
       'drain-tension':p.drainTension,'drain-snap':p.drainSnap,'drain-dawn':p.drainDawn,'drain-gesture':p.drainGesture,released:p.released};
+    Object.assign(vars,{'forge-0':p.forge0,'forge-1':p.forge1,'forge-2':p.forge2,'gate-active':p.gateActive,
+      'gate-drag-x':p.gateDragX,'gate-drag-y':p.gateDragY,'train-reveal':p.trainReveal,'train-compile':p.trainCompile,
+      'own-x':p.ownX,'own-y':p.ownY,'own-lock':p.ownLock,'fleet-0':p.fleet0,'fleet-1':p.fleet1,'fleet-2':p.fleet2,'gate-pulse':p.gatePulse});
     for(const [name,value] of Object.entries(vars))root.style.setProperty(`--${name}`,String(value));
     const cursor=root.querySelector<HTMLElement>('.cursor-ghost');
     if(cursor){cursor.style.transform=`translate3d(${p.cursorX}px,${p.cursorY}px,0)`;cursor.dataset.hover=String(p.cursorHover>0.5);}
@@ -181,11 +187,13 @@ export function startEngine(root:HTMLElement,stage:HTMLElement):EngineHandle {
       swordCount:s.swordMoments.length,shingCount:s.shingCount,soundEnabled:s.soundEnabled,
       reducedMotion:s.reducedMotion,dojoSeal:s.dojoSeal,commissionSeal:s.commissionSeal,
       visitedScenes:s.visitedScenes,journey:s.journeyNumber,
+      gates:{forgeSeated:s.forgeSeated,forgeSettled:s.forgeSettled,trainSeed:s.trainSeed,trainPhase:s.trainPhase,
+        ownPhase:s.ownPhase,fleetSent:s.fleetSent,fleetSettled:s.fleetSettled},
       params:Object.fromEntries(Object.entries(s.params).filter(([,value])=>typeof value==='number')),audio:soundDirector.snapshot(),runtime:{...runtime}};
   }};
-  console.info('BUILT BY GHOST HANDS — v4 Drain. Local fixtures; no trackers. Runtime receipt: window.__GH_DEBUG.snapshot()');
+  console.info('BUILT BY GHOST HANDS — v5 Gates. Local demonstrations; no trackers. Runtime receipt: window.__GH_DEBUG.snapshot()');
   return {setAdvance(fn){advanceWorld=fn;},destroy(){
-    destroyed=true;timeline?.kill();stopDrainRite();unsubscribe();lenis.destroy();spine.kill();ScrollTrigger.disable(false,true);
+    destroyed=true;timeline?.kill();stopDrainRite();stopGateRites();unsubscribe();lenis.destroy();spine.kill();ScrollTrigger.disable(false,true);
     gsap.ticker.remove(heartbeat);runtime.heartbeatOwners--;gsap.ticker.add(gsap.updateRoot);
     window.removeEventListener('pointermove',onPointer);window.removeEventListener('pointerdown',onPointer);window.removeEventListener('keydown',onKey);
     window.removeEventListener('keyup',onKeyUp);window.removeEventListener('blur',clearInput);

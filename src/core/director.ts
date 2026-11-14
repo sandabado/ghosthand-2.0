@@ -5,6 +5,7 @@ import { initialParams,runtime,useJourney } from './world';
 import { soundDirector } from './sound';
 import { clearInput } from './input';
 import { drainAudit } from './fixtures';
+import { stopGateRites } from './gate-director';
 let overlap:gsap.core.Timeline|null=null;
 let drainRite:gsap.core.Timeline|null=null;
 export function stopDrainRite(){drainRite?.kill();drainRite=null;}
@@ -69,12 +70,6 @@ export function advanceJourney(){
     else if(gate<4)transitionTo(`CRAFT_F${gate+1}` as SceneId);
   }
 }
-export function completeGate(gate:number){
-  const s=useJourney.getState();
-  if(s.scene!==`CRAFT_F${gate}`||s.completedGates.includes(gate))return;
-  useJourney.setState({completedGates:[...s.completedGates,gate]});soundDirector.emit(gate===4?'ember':'ink_bloom');
-  gsap.fromTo(s.params,{inkFlow:0},{inkFlow:1,duration:TIMING.draw,ease:'power3.out'});
-}
 export function releaseDrain(input:'pointer'|'keyboard'='keyboard'){
   const s=useJourney.getState();if(s.scene!=='DRAIN'||s.drainReleased)return;
   stopDrainRite();gsap.killTweensOf(s.params,'drainTension,drainGesture');
@@ -115,14 +110,15 @@ export function sealRitual(kind:'dojo'|'commission'){
 export function setSelectedMember(selectedMember:number){useJourney.setState({selectedMember});}
 export function setSelectedRelic(selectedRelic:number){useJourney.setState({selectedRelic});}
 export function resetJourney(){
-  const s=useJourney.getState();overlap?.kill();stopDrainRite();gsap.killTweensOf(s.params);soundDirector.reset();clearInput();
+  const s=useJourney.getState();overlap?.kill();stopDrainRite();stopGateRites();gsap.killTweensOf(s.params);soundDirector.reset();clearInput();
   Object.assign(s.params,initialParams());
   runtime.ceremonyEvents=[];runtime.soundEvents=[];runtime.silenceViolations=0;runtime.drainEvents=[];
   runtime.drain.pickHits=0;runtime.drain.releaseSamples=0;runtime.drain.lastPicked=-1;
+  runtime.gateEvents=[];runtime.gates.uniformUploads=0;
   useJourney.setState({scene:'THRESHOLD',previousScene:null,navUnlocked:false,thresholdReady:false,
     drainReleased:false,drainSettled:false,drainAuditIndex:0,drainAuditSource:'keyboard',completedGates:[],swordMoments:[],pursuitUsed:false,shingCount:0,dojoSeal:false,
     commissionSeal:false,selectedMember:0,selectedRelic:0,journeyNumber:s.journeyNumber+1,
-    resetVersion:s.resetVersion+1,visitedScenes:['THRESHOLD']});
+    resetVersion:s.resetVersion+1,visitedScenes:['THRESHOLD'],forgeSeated:[],forgeSettled:[],trainSeed:'',trainPhase:'idle',ownPhase:'idle',fleetSent:[],fleetSettled:[]});
 }
 export function canScrollAdvance(){
   const s=useJourney.getState();return SCENES[s.scene].budget>0&&s.params.progress>=0.995;

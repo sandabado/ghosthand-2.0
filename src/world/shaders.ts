@@ -10,6 +10,9 @@ export function worldUniforms() {
     uSceneMix:{value:1},uVariant:{value:0},uInkBleed:{value:1},uInkPressure:{value:1},uColor:{value:new Color(PALETTE.candle)},
     uDrainTension:{value:0},uDrainSnap:{value:0},uDrainDawn:{value:0},uDrainFocus:{value:0},uDrainGesture:{value:0},
     uDrainMix:{value:0},uSmoke:{value:new Color(PALETTE.smoke)},uCandle:{value:new Color(PALETTE.candle)},uCandleDim:{value:new Color(PALETTE.candleDim)},
+    uForge0:{value:0},uForge1:{value:0},uForge2:{value:0},uGateActive:{value:-1},uGateDragX:{value:0},uGateDragY:{value:0},
+    uTrainReveal:{value:0},uTrainCompile:{value:0},uOwnX:{value:.18},uOwnY:{value:.74},uOwnLock:{value:0},
+    uFleet0:{value:0},uFleet1:{value:0},uFleet2:{value:0},uGatePulse:{value:0},
     uBone:{value:new Color(PALETTE.bone)},uVoid:{value:new Color(PALETTE.void)},
   };
 }

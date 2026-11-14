@@ -13,6 +13,7 @@ export const TIMING = {
   // V4 builder pacing, separate from the locked Merge ceremony.
   drain:{entrance:1.1,gesture:0.12,tensionLead:0.16,snapStart:0.18,snapDuration:1.35,
     dawnStart:0.7,dawnDuration:2.4,settle:3.2},
+  gates:{drag:.07,return:.28,forgeSnap:.52,trainType:2.2,trainCompile:.48,ownLock:1.05,fleetFlight:.95,pulse:.32},
 } as const;
 
 export const SCENE_IDS = ['THRESHOLD','LEGEND','DRAIN','CRAFT_F1','CRAFT_F2','CRAFT_F3','CRAFT_F4','PURSUIT','MERGE','FORK','DOJO','COMMISSION','CHAINS_HOLD','OATH'] as const;

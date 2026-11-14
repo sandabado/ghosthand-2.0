@@ -1,0 +1,286 @@
+{
+  "checkedAt": "2026-11-14T17:07:59.385Z",
+  "checks": [
+    {
+      "name": "Closed palette",
+      "passed": true,
+      "detail": "Raw color literals exist only in src/core/config.ts. Context permissions still require runtime/visual review."
+    },
+    {
+      "name": "No independent application RAF/interval",
+      "passed": true,
+      "detail": "Application source declares no requestAnimationFrame or setInterval calls. Library internals are assessed separately."
+    },
+    {
+      "name": "Central motion CSS",
+      "passed": true,
+      "detail": "Any custom keyframes are confined to motion.css."
+    },
+    {
+      "name": "Permanent Canvas declaration",
+      "passed": true,
+      "detail": "1 Canvas JSX declarations; live instance count requires runtime receipt."
+    },
+    {
+      "name": "Persistent global composer declaration",
+      "passed": true,
+      "detail": "1 EffectComposer JSX declarations; live instance count requires runtime receipt."
+    },
+    {
+      "name": "Self-hosted application resources",
+      "passed": true,
+      "detail": "No remote asset/import/fetch declarations in app source. Runtime request audit remains separate."
+    },
+    {
+      "name": "No tracker declarations",
+      "passed": true,
+      "detail": "No known tracker imports/hosts in application source; this is a source attestation, not a network measurement."
+    },
+    {
+      "name": "Excluded staging imagery",
+      "passed": true,
+      "detail": "No references to excluded bound-person images in application source."
+    },
+    {
+      "name": "Locked markers centralized",
+      "passed": true,
+      "detail": "Distinctive locked markers are not duplicated in GSAP/ceremony clock code outside TIMING. Geometry dimensions are not clocks."
+    },
+    {
+      "name": "Approved Merge schedule",
+      "passed": true,
+      "detail": "D03 expected markers/durations are checked explicitly, including flash/cut overlap, 7–8s silence, and the 8s Fork. Browser timing remains separate."
+    },
+    {
+      "name": "Foundation fixture contracts",
+      "passed": true,
+      "detail": "6 member shaders, 14 illustrative audit items, 3 relic fixtures, 4 stations."
+    },
+    {
+      "name": "Static export root",
+      "passed": true,
+      "detail": "out/index.html exists and contains a complete HTML document."
+    },
+    {
+      "name": "Initial payload target (conservative raw upper bound)",
+      "passed": true,
+      "detail": "2,425,008 raw bytes across root HTML, all exported client assets, and the eager receipt JSON; gzip estimate 744,149 bytes."
+    }
+  ],
+  "payload": {
+    "measuredAt": "2026-11-14T17:07:59.371Z",
+    "method": "Filesystem byte measurement of static export. Root HTML references are a lower-bound entry set; all exported JS/CSS/font/image assets plus root HTML are a conservative client-asset upper bound including lazy and not-found chunks. The small eagerly fetched measurement receipt is counted separately in conservativeAppLoadRawBytes. Gzip is estimated with node:zlib, not measured network transfer.",
+    "targetBytes": 4000000,
+    "rootHtmlBytes": 14906,
+    "initialReferencedRawBytes": 1274563,
+    "initialReferencedGzipBytes": 375724,
+    "conservativeClientRawBytes": 2424424,
+    "conservativeClientGzipBytes": 743782,
+    "totalExportBytes": 2470455,
+    "exportedFileCount": 41,
+    "referencedResources": [
+      {
+        "path": "/_next/static/css/3dcbec17a269e679.css",
+        "rawBytes": 84032,
+        "gzipBytes": 15974
+      },
+      {
+        "path": "/_next/static/chunks/webpack-ee76ec7bc4cb9808.js",
+        "rawBytes": 3567,
+        "gzipBytes": 1850
+      },
+      {
+        "path": "/_next/static/chunks/4bd1b696-c7408084347438ae.js",
+        "rawBytes": 203721,
+        "gzipBytes": 64115
+      },
+      {
+        "path": "/_next/static/chunks/794-96ab5d7caefc5d69.js",
+        "rawBytes": 242282,
+        "gzipBytes": 67408
+      },
+      {
+        "path": "/_next/static/chunks/main-app-b2dd5721388df57d.js",
+        "rawBytes": 513,
+        "gzipBytes": 224
+      },
+      {
+        "path": "/_next/static/chunks/bd904a5c-56e65ed4abb36c15.js",
+        "rawBytes": 385859,
+        "gzipBytes": 101740
+      },
+      {
+        "path": "/_next/static/chunks/c15bf2b0-c080c4e45c5fb392.js",
+        "rawBytes": 52005,
+        "gzipBytes": 19889
+      },
+      {
+        "path": "/_next/static/chunks/138-a82c01f12080d6fe.js",
+        "rawBytes": 85264,
+        "gzipBytes": 31645
+      },
+      {
+        "path": "/_next/static/chunks/app/page-faecf9e86672f586.js",
+        "rawBytes": 89820,
+        "gzipBytes": 27982
+      },
+      {
+        "path": "/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "rawBytes": 112594,
+        "gzipBytes": 39473
+      }
+    ],
+    "clientAssets": [
+      {
+        "path": "_next/static/chunks/138-a82c01f12080d6fe.js",
+        "rawBytes": 85264,
+        "gzipBytes": 31645
+      },
+      {
+        "path": "_next/static/chunks/178.534965960da5aa3a.js",
+        "rawBytes": 47358,
+        "gzipBytes": 14592
+      },
+      {
+        "path": "_next/static/chunks/377.43afac7a7f90bbc5.js",
+        "rawBytes": 70612,
+        "gzipBytes": 23969
+      },
+      {
+        "path": "_next/static/chunks/4bd1b696-c7408084347438ae.js",
+        "rawBytes": 203721,
+        "gzipBytes": 64115
+      },
+      {
+        "path": "_next/static/chunks/794-96ab5d7caefc5d69.js",
+        "rawBytes": 242282,
+        "gzipBytes": 67408
+      },
+      {
+        "path": "_next/static/chunks/a3cd4a83.f8720b64a454b80c.js",
+        "rawBytes": 70939,
+        "gzipBytes": 16096
+      },
+      {
+        "path": "_next/static/chunks/app/_global-error/page-aba28f88d5781771.js",
+        "rawBytes": 147,
+        "gzipBytes": 135
+      },
+      {
+        "path": "_next/static/chunks/app/_not-found/page-0d39951ee7cfa121.js",
+        "rawBytes": 2667,
+        "gzipBytes": 999
+      },
+      {
+        "path": "_next/static/chunks/app/layout-3442f46fd5abd099.js",
+        "rawBytes": 417,
+        "gzipBytes": 208
+      },
+      {
+        "path": "_next/static/chunks/app/page-faecf9e86672f586.js",
+        "rawBytes": 89820,
+        "gzipBytes": 27982
+      },
+      {
+        "path": "_next/static/chunks/b536a0f1.f06e169bf8dc9367.js",
+        "rawBytes": 368083,
+        "gzipBytes": 88008
+      },
+      {
+        "path": "_next/static/chunks/bd904a5c-56e65ed4abb36c15.js",
+        "rawBytes": 385859,
+        "gzipBytes": 101740
+      },
+      {
+        "path": "_next/static/chunks/c15bf2b0-c080c4e45c5fb392.js",
+        "rawBytes": 52005,
+        "gzipBytes": 19889
+      },
+      {
+        "path": "_next/static/chunks/e49654ac.001c6ece8cf3ce4d.js",
+        "rawBytes": 164420,
+        "gzipBytes": 51836
+      },
+      {
+        "path": "_next/static/chunks/f6211eb1.daf52cd3c0634b2c.js",
+        "rawBytes": 96790,
+        "gzipBytes": 71073
+      },
+      {
+        "path": "_next/static/chunks/framework-9a78fc3e45365ec2.js",
+        "rawBytes": 189664,
+        "gzipBytes": 59780
+      },
+      {
+        "path": "_next/static/chunks/main-2b22eabd0141d599.js",
+        "rawBytes": 137477,
+        "gzipBytes": 40361
+      },
+      {
+        "path": "_next/static/chunks/main-app-b2dd5721388df57d.js",
+        "rawBytes": 513,
+        "gzipBytes": 224
+      },
+      {
+        "path": "_next/static/chunks/next/dist/client/components/builtin/app-error-aba28f88d5781771.js",
+        "rawBytes": 147,
+        "gzipBytes": 135
+      },
+      {
+        "path": "_next/static/chunks/next/dist/client/components/builtin/forbidden-aba28f88d5781771.js",
+        "rawBytes": 147,
+        "gzipBytes": 135
+      },
+      {
+        "path": "_next/static/chunks/next/dist/client/components/builtin/global-error-52279c9e735a8354.js",
+        "rawBytes": 179,
+        "gzipBytes": 161
+      },
+      {
+        "path": "_next/static/chunks/next/dist/client/components/builtin/not-found-aba28f88d5781771.js",
+        "rawBytes": 147,
+        "gzipBytes": 135
+      },
+      {
+        "path": "_next/static/chunks/next/dist/client/components/builtin/unauthorized-aba28f88d5781771.js",
+        "rawBytes": 147,
+        "gzipBytes": 135
+      },
+      {
+        "path": "_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "rawBytes": 112594,
+        "gzipBytes": 39473
+      },
+      {
+        "path": "_next/static/chunks/webpack-ee76ec7bc4cb9808.js",
+        "rawBytes": 3567,
+        "gzipBytes": 1850
+      },
+      {
+        "path": "_next/static/css/3dcbec17a269e679.css",
+        "rawBytes": 84032,
+        "gzipBytes": 15974
+      },
+      {
+        "path": "_next/static/qRKBc6iLVYEjQvcWFA2kl/_buildManifest.js",
+        "rawBytes": 440,
+        "gzipBytes": 236
+      },
+      {
+        "path": "_next/static/qRKBc6iLVYEjQvcWFA2kl/_ssgManifest.js",
+        "rawBytes": 80,
+        "gzipBytes": 64
+      }
+    ],
+    "runtimeFps": "Unmeasured by this script",
+    "runtimeDevice": "Unmeasured by this script",
+    "receiptRawBytes": 584,
+    "receiptGzipBytes": 367,
+    "conservativeAppLoadRawBytes": 2425008,
+    "conservativeAppLoadGzipBytes": 744149
+  },
+  "limitations": [
+    "Source scans do not prove library runtime loop count, contextual palette permissions, device FPS, or interactive journey behavior.",
+    "No public deployment was performed by this check."
+  ]
+}
