@@ -1,38 +1,48 @@
-# Ghosthand Studio
+# Ghost Hand Studio — foundation v2
 
-An experimental portfolio for Chris Kyser and Jesse Gawlik, built as a dependency-free static web application.
+Local Phase 1 of the approved cinematic grimoire. Next.js App Router, strict TypeScript, R3F/drei, one four-effect composer, GSAP, Lenis, Zustand, Tailwind, and user-initiated Web Audio.
 
-## Run
+## Run locally
 
 ```sh
+npm install
 npm run dev
 ```
 
-Open http://localhost:4173. `PORT` can select another local port. Run `npm run check` for JavaScript syntax checks. The deployable application lives in `dist/`; no build step is needed.
+Development uses http://127.0.0.1:4174. To serve the reviewed production export instead:
 
-## Experience
+```sh
+npm run build
+npm run check
+npm run preview
+```
 
-- Interactive spectral field with pointer response, an amplified mode, pause, reduced motion, and offscreen suspension.
-- Filterable work gallery and keyboard-accessible case dialogs.
-- Native capability accordions and responsive mobile navigation.
-- Project brief creation, edit, copy, text download, and an email draft addressed to `hello@ghosthand.studio`.
+Development and preview use the same port; run one at a time. The current review server is the static export at http://localhost:4174. No public deployment or domain change is part of this assignment.
 
-The brief is processed in the browser. No form data is stored or sent by the site. Opening an email draft requires the visitor to send it from their email application.
+## Review evidence
 
-## Content and assets
+- [BUILD RECEIPT](docs/foundation/BUILD-RECEIPT.md)
+- [Dependency-ranked STUB MANIFEST](docs/foundation/STUB-MANIFEST.md)
+- [D08–D14 builder choices](docs/foundation/ASSUMPTIONS.md)
+- [Browser evidence](docs/foundation/browser-evidence.json)
+- [Static checks](docs/foundation/static-checks.json) and [payload measurement](docs/foundation/payload.json)
 
-`dist/cases.js` holds project narratives adapted from the earlier Ghosthand source. Prior individual experience is attributed in each case; Knowledge Systems is identified as in development. The portfolio artwork is a set of new conceptual studies, not project screenshots or outcome evidence. Replace these with approved project artifacts as they become available.
+Source authority: `BUILD-NOW.md` and `RESOLVED-DECISIONS.md` at `/Users/cougarceleste/Websites/ghost-hand-studio/inspo/ghost-hand-storyboard/00-builder-instructions/`. Approved D01–D07 supersede conflicting original wording. Stop at the human sanity gate before v3.
 
-The spectral hand is an existing generated mood image from the earlier project's `inspo/Lumo generated 2026-11-12 15.13.png`. The hand icon and abstract work illustrations are new design studies, not an approved final identity. Fonts are DM Sans and IBM Plex Mono, served through Google Fonts with system fallbacks.
+## Architecture
 
-The intended public brand domain is `ghosthand.studio`. The initial Sites version is private; domain connection and public launch have not been performed.
+`Foundation` mounts the permanent Canvas and readable DOM Director. The shared GSAP heartbeat consumes input, advances Lenis/ScrollTrigger and timelines, copies parameters to DOM, uploads uniforms, and advances R3F through the persistent composer. ScrollTrigger's global housekeeping is disabled; its one persistent instance is manually updated. See the public-API integration tradeoff in ASSUMPTIONS.
 
-## Structure
+Camera entrance parameters are separate from scroll progress. Generic 400ms overlaps never own Merge's locked cut. Threshold and Merge have independent local clocks. Ceremony markers live only in `src/core/config.ts` under `TIMING`.
 
-- `dist/index.html` — page, accessible dialogs, portfolio visual studies
-- `dist/style.css` — responsive visual design
-- `dist/app.js` — navigation, filters, cases, brief flow
-- `dist/field.js` — Canvas particle field
-- `dist/cases.js` — editable case content
-- `scripts/serve.mjs` — local static development server
-- `.openai/hosting.json` — Sites identity and static output configuration
+The compositor control demonstrates fog density through the parameter/uniform pipeline without scrolling. The footer lists live owners, visited sword moments, and the separate shing allowance. `window.__GH_DEBUG.snapshot()` exposes local review evidence. No visitor progress or personal data is persisted.
+
+## Temporary foundation fixtures
+
+All fourteen journey states are playable shells. Hand curves, monograms, geometry, shader screens, Drain examples, station meanings, relic descriptions, and synthesized tones are fixtures. No membership, payment, account, commission order, or external agent is created. Canonical paths, prototype/brand sources, real member media, recordings, and production terms remain required inputs.
+
+Keyboard alternatives and a static reduced-motion strip cover the same states. Pointer-lock, drag, WASD, and optional gyro plumbing exist; physical-device/gyro acceptance remains unmeasured. GPU FPS targets are unverified; heartbeat frequency is reported separately.
+
+## Preserved portfolio
+
+The earlier portfolio remains unchanged in `dist/`, with its original source at Git commit `038d956`. Run `npm run dev:portfolio` on port 4173. Its README is preserved in [docs/portfolio-v1.md](docs/portfolio-v1.md). The existing `.openai/hosting.json` still identifies that earlier private Site; it has not been repurposed or published for v2.

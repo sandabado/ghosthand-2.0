@@ -1,0 +1,532 @@
+{
+  "date": "2026-11-13",
+  "scope": "Local v2 foundation; source inputs D01-D07 approved; builder choices D08-D14 provisional",
+  "runs": {
+    "foundation_flow_evidence": {
+      "ordinaryScroll": {
+        "release": false,
+        "progress": 0.021364526032249063
+      },
+      "gates": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "soundEnabled": true,
+      "overlap": {
+        "clock": 7.05,
+        "flash": 0.7,
+        "cut": 0.62492,
+        "scene": "MERGE",
+        "nav": false,
+        "fork": false
+      },
+      "events": [
+        {
+          "event": "summon",
+          "scheduled": 0.4,
+          "observed": 0.4
+        },
+        {
+          "event": "hand-start",
+          "scheduled": 1.6,
+          "observed": 1.6
+        },
+        {
+          "event": "sword-start",
+          "scheduled": 3.8,
+          "observed": 3.8
+        },
+        {
+          "event": "flash-start",
+          "scheduled": 6.9,
+          "observed": 6.9
+        },
+        {
+          "event": "cut-start",
+          "scheduled": 7,
+          "observed": 7
+        },
+        {
+          "event": "cut-end",
+          "scheduled": 7.35,
+          "observed": 7.35
+        },
+        {
+          "event": "flash-end",
+          "scheduled": 7.4,
+          "observed": 7.4
+        },
+        {
+          "event": "fork-interactive",
+          "scheduled": 8,
+          "observed": 8
+        }
+      ],
+      "beforeBranch": {
+        "scene": "FORK",
+        "swordMoments": [
+          "opening-glint",
+          "pursuit",
+          "merge"
+        ],
+        "shingCount": 3,
+        "live": [
+          1,
+          1,
+          1
+        ]
+      },
+      "clickDoesNotCommit": "FORK",
+      "chains": {
+        "nav": 2,
+        "text": "10 / THE HOLDING ROOM\nONE ROOM. ONE DOOR.\n\u7e1b\nThe door\nis still yours.\n\nNothing needs to be bought.\nYou can simply choose again.\n\nONE STEP / RETURN TO THE FORK\n\u2191"
+      },
+      "returned": "FORK"
+    },
+    "foundation_branches_evidence": {
+      "pointerStroke": "DOJO",
+      "wasd": {
+        "x": 0,
+        "z": -0.08850000000000001
+      },
+      "dojoSealed": true,
+      "oathDojo": [
+        "opening-glint",
+        "pursuit",
+        "merge",
+        "sheathed-oath"
+      ],
+      "full": {
+        "scene": "OATH",
+        "navUnlocked": true,
+        "thresholdReady": true,
+        "drainReleased": true,
+        "completedGates": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "swordMoments": [
+          "opening-glint",
+          "pursuit",
+          "merge",
+          "sheathed-oath",
+          "commission-handover"
+        ],
+        "swordCount": 5,
+        "shingCount": 3,
+        "soundEnabled": true,
+        "reducedMotion": false,
+        "dojoSeal": true,
+        "commissionSeal": true,
+        "visitedScenes": [
+          "THRESHOLD",
+          "LEGEND",
+          "DRAIN",
+          "CRAFT_F1",
+          "CRAFT_F2",
+          "CRAFT_F3",
+          "CRAFT_F4",
+          "PURSUIT",
+          "MERGE",
+          "FORK",
+          "CHAINS_HOLD",
+          "DOJO",
+          "OATH",
+          "COMMISSION"
+        ],
+        "journey": 1,
+        "params": {
+          "progress": 0,
+          "depth": 3.0000009090900828,
+          "fogDensity": 0.36,
+          "inkFlow": 0,
+          "lightIntensity": 1.125739,
+          "chromaOffset": 0.000593,
+          "cutProgress": 0,
+          "pursuit": 0,
+          "time": 153.65699999999154,
+          "sceneMix": 0,
+          "ceremonyTime": 0,
+          "hand": 0,
+          "sword": 0,
+          "flash": 0,
+          "pointerX": 0.017911975527570675,
+          "pointerY": 0.4755008773761003,
+          "cameraX": 0,
+          "cameraZ": 0,
+          "released": 1,
+          "cursorX": 852.2333892358716,
+          "cursorY": 751.2301948654509,
+          "cursorHover": 1,
+          "pass": 0,
+          "fall": 0
+        },
+        "runtime": {
+          "frames": 18346,
+          "heartbeatOwners": 1,
+          "canvasMounts": 1,
+          "composerMounts": 1,
+          "uniformUploads": 133438,
+          "fogUniform": 0.36,
+          "fps": 120.08570432018483,
+          "sampleSeconds": 2.00689999999851,
+          "silenceViolations": 0,
+          "clockPhases": [
+            "input",
+            "Lenis",
+            "GSAP timelines",
+            "DOM / uniform adapters",
+            "R3F uniform upload / composer render"
+          ],
+          "webgl": true,
+          "soundEvents": [
+            "shing:muted",
+            "ink_bloom:muted",
+            "ink_bloom:muted",
+            "ember:muted",
+            "shing:synth-fixture",
+            "shing:synth-fixture",
+            "ink_bloom:synth-fixture",
+            "ink_bloom:synth-fixture",
+            "ink_bloom:synth-fixture"
+          ],
+          "ceremonyEvents": [
+            {
+              "event": "summon",
+              "scheduled": 0.4,
+              "observed": 0.4
+            },
+            {
+              "event": "hand-start",
+              "scheduled": 1.6,
+              "observed": 1.6
+            },
+            {
+              "event": "sword-start",
+              "scheduled": 3.8,
+              "observed": 3.8
+            },
+            {
+              "event": "flash-start",
+              "scheduled": 6.9,
+              "observed": 6.9
+            },
+            {
+              "event": "cut-start",
+              "scheduled": 7,
+              "observed": 7
+            },
+            {
+              "event": "cut-end",
+              "scheduled": 7.35,
+              "observed": 7.35
+            },
+            {
+              "event": "flash-end",
+              "scheduled": 7.4,
+              "observed": 7.4
+            },
+            {
+              "event": "fork-interactive",
+              "scheduled": 8,
+              "observed": 8
+            }
+          ]
+        }
+      },
+      "external": []
+    },
+    "foundation_final_timing": {
+      "defaultSound": false,
+      "pointerLookUp": true,
+      "audioSilence": {
+        "at": 7.106,
+        "audio": {
+          "silent": true,
+          "masterGain": 0.03500000014901161,
+          "contextState": "running"
+        },
+        "nav": false,
+        "scene": "MERGE"
+      },
+      "ceremony": [
+        {
+          "event": "summon",
+          "scheduled": 0.4,
+          "observed": 0.4089999999999794,
+          "wallSeconds": 0.4081000000014901
+        },
+        {
+          "event": "hand-start",
+          "scheduled": 1.6,
+          "observed": 1.6079999999999188,
+          "wallSeconds": 1.607199999999255
+        },
+        {
+          "event": "sword-start",
+          "scheduled": 3.8,
+          "observed": 3.806999999999803,
+          "wallSeconds": 3.806699999999255
+        },
+        {
+          "event": "flash-start",
+          "scheduled": 6.9,
+          "observed": 6.904999999999667,
+          "wallSeconds": 6.904699999999255
+        },
+        {
+          "event": "cut-start",
+          "scheduled": 7,
+          "observed": 7.006999999999664,
+          "wallSeconds": 7.005900000002235
+        },
+        {
+          "event": "cut-end",
+          "scheduled": 7.35,
+          "observed": 7.35599999999965,
+          "wallSeconds": 7.355199999999255
+        },
+        {
+          "event": "flash-end",
+          "scheduled": 7.4,
+          "observed": 7.405999999999647,
+          "wallSeconds": 7.4059000000022355
+        },
+        {
+          "event": "fork-interactive",
+          "scheduled": 8,
+          "observed": 8.005999999999641,
+          "wallSeconds": 8.0055
+        }
+      ],
+      "preBranchHistory": [
+        "THRESHOLD",
+        "LEGEND",
+        "DRAIN",
+        "CRAFT_F1",
+        "CRAFT_F2",
+        "CRAFT_F3",
+        "CRAFT_F4",
+        "PURSUIT",
+        "MERGE",
+        "FORK"
+      ],
+      "commissionWithoutChains": {
+        "scene": "COMMISSION",
+        "chainsVisited": false
+      },
+      "oathWithoutRitual": {
+        "scene": "OATH",
+        "dojoSeal": false,
+        "commissionSeal": false,
+        "swordMoments": [
+          "opening-glint",
+          "pursuit",
+          "merge",
+          "commission-handover",
+          "sheathed-oath"
+        ],
+        "shingCount": 3,
+        "live": [
+          1,
+          1,
+          1
+        ]
+      },
+      "reset": {
+        "journey": 2,
+        "nav": false,
+        "gates": [],
+        "swords": [],
+        "shing": 0,
+        "sound": true,
+        "ready": false
+      }
+    },
+    "foundation_reduced_evidence": {
+      "mobile": {
+        "width": 390,
+        "client": 375,
+        "content": 375,
+        "strip": 14,
+        "canvas": 0,
+        "canvasVisibility": "hidden",
+        "flashVisibility": "hidden",
+        "nav": 0
+      },
+      "keyboardNext": {
+        "scene": "LEGEND",
+        "focus": "H2"
+      },
+      "reducedRelease": true
+    },
+    "foundation_audio_clock": {
+      "silence": {
+        "at": 7.106,
+        "audio": {
+          "silent": true,
+          "connected": false,
+          "masterGain": 0,
+          "contextState": "running"
+        },
+        "violations": 0,
+        "scene": "MERGE",
+        "nav": false
+      },
+      "events": [
+        {
+          "event": "summon",
+          "scheduled": 0.4,
+          "observed": 0.40799999999997993,
+          "wallSeconds": 0.408
+        },
+        {
+          "event": "hand-start",
+          "scheduled": 1.6,
+          "observed": 1.6069999999999176,
+          "wallSeconds": 1.6072999999970197
+        },
+        {
+          "event": "sword-start",
+          "scheduled": 3.8,
+          "observed": 3.8069999999998014,
+          "wallSeconds": 3.8070999999977646
+        },
+        {
+          "event": "flash-start",
+          "scheduled": 6.9,
+          "observed": 6.905999999999702,
+          "wallSeconds": 6.90629999999702
+        },
+        {
+          "event": "cut-start",
+          "scheduled": 7,
+          "observed": 7.0059999999997,
+          "wallSeconds": 7.00629999999702
+        },
+        {
+          "event": "cut-end",
+          "scheduled": 7.35,
+          "observed": 7.3559999999997014,
+          "wallSeconds": 7.356099999997765
+        },
+        {
+          "event": "flash-end",
+          "scheduled": 7.4,
+          "observed": 7.404999999999701,
+          "wallSeconds": 7.404599999997765
+        },
+        {
+          "event": "fork-interactive",
+          "scheduled": 8,
+          "observed": 8.005999999999686,
+          "wallSeconds": 8.006
+        }
+      ],
+      "audit": {
+        "activeRaf": 1,
+        "activeIntervals": 0,
+        "recurring": [
+          {
+            "source": "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0",
+            "delta": 182
+          }
+        ],
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+        "devicePixelRatio": 1,
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2 Max, Unspecified Version)",
+        "live": {
+          "frames": 2384,
+          "heartbeatOwners": 1,
+          "canvasMounts": 1,
+          "composerMounts": 1,
+          "uniformUploads": 31040,
+          "fogUniform": 0.36,
+          "fps": 120.00796733397542,
+          "sampleSeconds": 2.008199999999255,
+          "silenceViolations": 0,
+          "clockPhases": [
+            "input",
+            "Lenis",
+            "GSAP timelines",
+            "DOM / uniform adapters",
+            "R3F uniform upload / composer render"
+          ],
+          "webgl": true,
+          "soundEvents": [
+            "shing:muted",
+            "ink_bloom:muted",
+            "ember:muted",
+            "shing:synth-fixture",
+            "shing:synth-fixture"
+          ],
+          "ceremonyEvents": [
+            {
+              "event": "summon",
+              "scheduled": 0.4,
+              "observed": 0.40799999999997993,
+              "wallSeconds": 0.408
+            },
+            {
+              "event": "hand-start",
+              "scheduled": 1.6,
+              "observed": 1.6069999999999176,
+              "wallSeconds": 1.6072999999970197
+            },
+            {
+              "event": "sword-start",
+              "scheduled": 3.8,
+              "observed": 3.8069999999998014,
+              "wallSeconds": 3.8070999999977646
+            },
+            {
+              "event": "flash-start",
+              "scheduled": 6.9,
+              "observed": 6.905999999999702,
+              "wallSeconds": 6.90629999999702
+            },
+            {
+              "event": "cut-start",
+              "scheduled": 7,
+              "observed": 7.0059999999997,
+              "wallSeconds": 7.00629999999702
+            },
+            {
+              "event": "cut-end",
+              "scheduled": 7.35,
+              "observed": 7.3559999999997014,
+              "wallSeconds": 7.356099999997765
+            },
+            {
+              "event": "flash-end",
+              "scheduled": 7.4,
+              "observed": 7.404999999999701,
+              "wallSeconds": 7.404599999997765
+            },
+            {
+              "event": "fork-interactive",
+              "scheduled": 8,
+              "observed": 8.005999999999686,
+              "wallSeconds": 8.006
+            }
+          ]
+        },
+        "overflow": {
+          "client": 1425,
+          "content": 1425
+        },
+        "external": []
+      }
+    }
+  },
+  "evidencePolicy": {
+    "final_timing_and_audio": "foundation_audio_clock is final production audio/clock acceptance; earlier gain-only evidence is superseded.",
+    "earlier_progression": "Earlier timeline observations were local parameter values, not wall-time; use final events.wallSeconds.",
+    "reduced_canvas": "Initial sample preceded lazy Canvas initialization; settled state had one mounted Canvas/composer/heartbeat and hidden presentation.",
+    "fps": "Heartbeat frequency only; physical-device GPU/presentation FPS is unmeasured."
+  }
+}
