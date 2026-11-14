@@ -1,0 +1,85 @@
+{
+  "checkedAt": "2026-11-14T18:32:51.553Z",
+  "checks": [
+    {
+      "name": "Fork stroke requires forty finite pixels rather than a click or short drag",
+      "passed": true
+    },
+    {
+      "name": "Fork spring preserves equilibrium, finite output, and zero-time state",
+      "passed": true
+    },
+    {
+      "name": "Fork spring is damped, bounded, and converges across representative frame cadences",
+      "passed": true
+    },
+    {
+      "name": "Fork spring clamps extreme targets and frame gaps without changing ordinary cadence",
+      "passed": true
+    },
+    {
+      "name": "Travel readiness preserves every interaction and ceremony hold",
+      "passed": true
+    },
+    {
+      "name": "Scroll destinations preserve the forward story and approved branch returns",
+      "passed": true
+    },
+    {
+      "name": "Fresh travel requires finished content, readiness, a new downward burst, and settled entry",
+      "passed": true
+    },
+    {
+      "name": "Approved Merge markers retain flash/cut overlap, complete silence, and the eight-second Fork",
+      "passed": true
+    },
+    {
+      "name": "Cut fields use finite non-collapsed affine instances and bounded particle attributes",
+      "passed": true
+    },
+    {
+      "name": "Authored full swords stay in Pursuit/Merge and Fork chains stay on the chains half",
+      "passed": true
+    },
+    {
+      "name": "Rejected-half collapse seeds cover both half surfaces without crossing their pivot",
+      "passed": true
+    },
+    {
+      "name": "Cut architecture and collapse fields are deterministic with varied normalized seeds",
+      "passed": true
+    },
+    {
+      "name": "Cut visuals consume the shared heartbeat, palette, and existing global grade",
+      "passed": true
+    }
+  ],
+  "geometryCounts": [
+    {
+      "scene": "PURSUIT",
+      "bars": 68,
+      "particles": 384
+    },
+    {
+      "scene": "MERGE",
+      "bars": 33,
+      "particles": 192
+    },
+    {
+      "scene": "FORK",
+      "bars": 142,
+      "particles": 512
+    },
+    {
+      "scene": "CHAINS_HOLD",
+      "bars": 177,
+      "particles": 128
+    }
+  ],
+  "limitations": [
+    "Math/source checks do not prove GPU shader compilation, cursor/touch capture, keyboard operation, native scrolling, stage-travel freshness, or visual/emotional quality.",
+    "Exactly-once branch commitment, rejected-half appearance, Chains Hold return/reset, resource lifecycle, and contextual palette permissions require browser/source review.",
+    "Locked constants are not observed playback timing; actual Merge timing, all-audio silence, Fork interactivity, and native callback ownership require separate evidence.",
+    "No GPU presented FPS, physical phone acceptance, production media provenance, or public deployment is inferred."
+  ]
+}

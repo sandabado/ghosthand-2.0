@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'rea
 import { TIMING } from '@/core/config';
 import { drainAudit } from '@/core/fixtures';
 import { useJourney } from '@/core/world';
-import { advanceJourney, releaseDrain, selectDrainAudit, updateDrainGesture } from '@/core/director';
+import { releaseDrain, selectDrainAudit, updateDrainGesture } from '@/core/director';
+import ScrollCue from './ScrollCue';
 
 type GestureOrigin = { pointer: number; x: number; y: number };
 
@@ -124,6 +125,6 @@ export default function DrainScene() {
         </> : <div className="drain-free-space"><span aria-hidden="true">手</span><p>Less pulling.<br/>More room to make.</p><small>THE NEXT MOVE IS YOURS.</small></div>}
       </aside>
     </div>
-    <div className="drain-v4-bottom"><p>{settled ? 'THE WAY IS OPEN.' : released ? 'STAY WITH THE DAWN.' : 'ILLUSTRATIVE BURDENS. NOT YOUR ACCOUNT DATA.'}</p><button type="button" className="journey-next drain-next" disabled={!settled} onClick={advanceJourney}>{settled ? 'Pass into the craft' : released ? 'The dawn is settling' : 'First, release the threads'}<span aria-hidden="true">↓</span></button></div>
+    <div className="drain-v4-bottom"><p>{settled ? 'THE WAY IS OPEN.' : released ? 'STAY WITH THE DAWN.' : 'ILLUSTRATIVE BURDENS. NOT YOUR ACCOUNT DATA.'}</p><ScrollCue ready={settled} label="Scroll into the craft" waiting={released?'Stay with the dawn':'First, release the threads'}/></div>
   </div>;
 }

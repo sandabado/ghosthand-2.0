@@ -3,11 +3,12 @@ import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
-import { BlendFunction, ChromaticAberrationEffect } from 'postprocessing';
+import { BlendFunction, ChromaticAberrationEffect,type BloomEffect } from 'postprocessing';
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Group, Material, Mesh, ShaderMaterial, Vector2 } from 'three';
 import { InkStroke } from '../systems/InkStroke';
 import DrainField from '../systems/drain/DrainField';
 import GatesField from '../systems/gates/GatesField';
+import CutField from '../systems/cut/CutField';
 import { svgToStrokes } from '../systems/ink/geometry';
 import { HAND_SVG,SIGIL_SVG,SLASH_SVG } from '../systems/ink/sources';
 import { PALETTE, SCENES, type SceneId } from '../core/config';
@@ -120,15 +121,6 @@ function Torii({z=0}:{z?:number}) {
   </group>;
 }
 
-function ChainsRoom() {
-  return <group>
-    <mesh position={[1,0,-10]}><boxGeometry args={[20,12,.3]}/><meshStandardMaterial color={PALETTE.smoke} roughness={1}/></mesh>
-    <mesh rotation={[-Math.PI/2,0,0]} position={[0,-3,-2]}><planeGeometry args={[45,40]}/><meshStandardMaterial color={PALETTE.smoke} roughness={.85}/></mesh>
-    {[-6,-3,4.8,7.8].map((x,i)=><group key={x} position={[x,-.3,-5-(i%2)*2]}><mesh><boxGeometry args={[1.5,5.4,2]}/><meshStandardMaterial color={PALETTE.void} metalness={.4} roughness={.8}/></mesh>{Array.from({length:8},(_,j)=><mesh key={j} position={[0,j*.5-1.6,1.01]}><boxGeometry args={[1.2,.025,.01]}/><meshBasicMaterial color={PALETTE.enemy}/></mesh>)}</group>)}
-    <group position={[1.2,-.5,-9.8]}><mesh><boxGeometry args={[2.2,5.1,.1]}/><meshBasicMaterial color={PALETTE.void}/></mesh><Line points={[[-1.1,-2.55,.08],[-1.1,2.55,.08],[1.1,2.55,.08],[1.1,-2.55,.08]]} color={PALETTE.candle} lineWidth={1.5}/><pointLight position={[0,0,1]} color={PALETTE.candle} intensity={4} distance={10}/></group>
-  </group>;
-}
-
 function ShaderScroll({index,position}:{index:number;position:[number,number,number]}) {
   const selected=useJourney(state=>state.selectedMember);
   const material=useMemo(()=>{const m=new ShaderMaterial({uniforms:worldUniforms(),vertexShader:atmosphereVertex,fragmentShader:scrollFragment,transparent:true});m.uniforms.uVariant.value=index;return m;},[index]);
@@ -170,13 +162,13 @@ function SceneGeometry({scene,previous=false}:{scene:SceneId;previous?:boolean})
   },-5);
   let content:ReactNode=null;
   switch(scene){
-    case 'THRESHOLD':case 'MERGE': content=<><GhostHand settled={previous}/><InkAccents previous={previous}/>{!previous&&<Sword/>}</>;break;
+    case 'THRESHOLD': content=<><GhostHand settled={previous}/><InkAccents previous={previous}/>{!previous&&<Sword/>}</>;break;
     case 'LEGEND': content=<><InkAccents previous={previous} legend/><group position={[2,0,-6]}>{[-1,1].map(x=><group key={x} position={[x*1.35,0,0]}><mesh><boxGeometry args={[2.2,3.7,.12]}/><meshStandardMaterial color={PALETTE.void} emissive={PALETTE.candleDim} emissiveIntensity={.12}/></mesh><Line points={[[-1.1,-1.85,.08],[-1.1,1.85,.08],[1.1,1.85,.08],[1.1,-1.85,.08]]} color={PALETTE.candleDim} lineWidth={.5}/></group>)}<Line points={[[0,-2.4,.1],[0,2.4,.1]]} color={PALETTE.candle} lineWidth={.8}/></group></>;break;
     case 'DRAIN':content=<DrainField previous={previous}/>;break;
     case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<GatesField gate={Number(scene.at(-1))} previous={previous}/>;break;
-    case 'PURSUIT':content=<>{[-14,-29,-44].map(z=><Torii key={z} z={z}/>)}{!previous&&<Sword/>}</>;break;
-    case 'FORK':content=<group position={[0,0,-8]}><Line points={[[0,-5,0],[0,5,0]]} color={PALETTE.candle} lineWidth={1}/><mesh position={[-5,0,-1]}><planeGeometry args={[9,14]}/><meshBasicMaterial color={PALETTE.candleDim} transparent opacity={.045}/></mesh><mesh position={[5,0,-1]}><planeGeometry args={[9,14]}/><meshBasicMaterial color={PALETTE.enemy} transparent opacity={.16}/></mesh></group>;break;
-    case 'CHAINS_HOLD':content=<ChainsRoom/>;break;
+    case 'PURSUIT':content=<CutField scene={scene} previous={previous}/>;break;
+    case 'MERGE':content=<><GhostHand settled={previous}/><InkAccents previous={previous}/><CutField scene={scene} previous={previous}/></>;break;
+    case 'FORK':case 'CHAINS_HOLD':content=<CutField scene={scene} previous={previous}/>;break;
     case 'DOJO':content=<DojoRoom/>;break;
     case 'COMMISSION':content=<><mesh position={[2,-2.1,-5]}><boxGeometry args={[4.5,.6,3]}/><meshStandardMaterial color={PALETTE.smoke} roughness={.95}/></mesh><mesh position={[2,-.4,-6]}><planeGeometry args={[3.8,3.2]}/><meshStandardMaterial color={PALETTE.bone} roughness={1}/></mesh>{!previous&&<Sword handover/>}</>;break;
     case 'OATH':content=<><mesh position={[2,-1.9,-5]}><boxGeometry args={[4,.18,1.6]}/><meshStandardMaterial color={PALETTE.smoke} roughness={.8}/></mesh>{!previous&&<Sword sheathed/>}</>;break;
@@ -201,11 +193,16 @@ function CameraAdapter() {
 }
 
 function GlobalGrade() {
-  const chroma=useRef<ChromaticAberrationEffect>(null);const offset=useMemo(()=>new Vector2(),[]);
+  const chroma=useRef<ChromaticAberrationEffect>(null),bloom=useRef<BloomEffect>(null);const offset=useMemo(()=>new Vector2(),[]);
   useEffect(()=>{runtime.composerMounts++;return()=>{runtime.composerMounts--;};},[]);
-  useFrame(()=>{const p=useJourney.getState().params;chroma.current?.offset.set(p.chromaOffset,p.chromaOffset*.45);},-2);
+  useFrame(()=>{
+    const s=useJourney.getState(),p=s.params,flare=s.scene==='MERGE'&&!s.reducedMotion?p.flash:0;
+    const intensity=.75+flare*1.45,shift=p.chromaOffset+flare*.0012;
+    if(bloom.current)bloom.current.intensity=intensity;
+    chroma.current?.offset.set(shift,shift*.45);runtime.grade.bloom=intensity;runtime.grade.chroma=shift;
+  },-2);
   return <EffectComposer multisampling={2} enableNormalPass={false}>
-    <Bloom luminanceThreshold={.6} luminanceSmoothing={.4} intensity={.75} mipmapBlur/>
+    <Bloom ref={bloom} luminanceThreshold={.6} luminanceSmoothing={.4} intensity={.75} mipmapBlur/>
     <Vignette eskil={false} offset={.25} darkness={.75}/>
     <Noise opacity={.035} blendFunction={BlendFunction.SOFT_LIGHT}/>
     <ChromaticAberration ref={chroma} offset={offset} radialModulation={false} modulationOffset={.15}/>

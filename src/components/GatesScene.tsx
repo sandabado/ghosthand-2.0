@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent, type RefObject, type ReactNode } from 'react';
 import { useJourney } from '@/core/world';
 import { useParam } from '@/core/params';
-import { advanceJourney } from '@/core/director';
+import ScrollCue from './ScrollCue';
 import { FORGE_HOME, FORGE_TARGETS, OWN_TARGET, OWN_RADIUS, pointFromClient, normalizeTrainingSeed, type Point, type Size } from '@/core/gates';
 import { beginGateDrag, moveGateDrag, cancelGateDrag, releaseForge, seatForge, startTraining, releaseOwn, claimOwn, releaseFleet, dispatchFleet } from '@/core/gate-director';
 
@@ -204,6 +204,6 @@ export default function GatesScene({ gate }: { gate: number }) {
       <div className="gate5-story"><span className="gate5-overline">{definition.overline}</span><h2 className="gate5-title">{definition.first}<br/><em>{definition.last}</em></h2><p className="gate5-lede">{completed ? definition.result : definition.body}</p><div className="gate5-instruction"><span aria-hidden="true">{definition.glyph}</span><p>{definition.instruction}</p></div><div className="gate5-sequence" aria-label={`Craft gate ${gate} of four`}>{GATES.map((entry, index) => <span key={entry.name} aria-current={gate === index + 1 ? 'step' : undefined}><i aria-hidden="true">{entry.glyph}</i><b>{entry.name}</b></span>)}</div></div>
       {gate === 1 ? <ForgeBoard/> : gate === 2 ? <TrainingBoard/> : gate === 3 ? <OwnBoard/> : <FleetBoard/>}
     </div>
-    <div className="gate5-footer"><p role="status">{completed ? 'THE RITE IS COMPLETE. THE NEXT MOVE IS YOURS.' : 'COMPLETE THE RITE TO OPEN THE WAY.'}</p><button type="button" className="journey-next gate5-next" disabled={!completed} onClick={advanceJourney}>{completed ? gate === 4 ? 'Follow what comes next' : 'Pass through the gate' : 'First, complete the rite'}<span aria-hidden="true">↓</span></button></div>
+    <div className="gate5-footer"><p role="status">{completed ? 'THE RITE IS COMPLETE. THE NEXT MOVE IS YOURS.' : 'COMPLETE THE RITE TO OPEN THE WAY.'}</p><ScrollCue ready={completed} label={gate===4?'Scroll. Follow the blade.':'Scroll through the gate'} waiting="First, complete the rite"/></div>
   </div>;
 }

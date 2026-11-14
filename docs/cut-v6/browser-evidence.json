@@ -1,0 +1,853 @@
+{
+  "schema": "ghosthand.cut-v6.browser-receipt.v1",
+  "date": "2026-11-14",
+  "preview": "http://localhost:4174/?v=cut-v6",
+  "conditions": {
+    "browser": "Playwright Chromium",
+    "desktop": [
+      1440,
+      1000
+    ],
+    "narrow": [
+      390,
+      844
+    ],
+    "minimumOverflowCheck": [
+      320,
+      740
+    ],
+    "touch": "CDP touch emulation; not physical hardware",
+    "gpuFPS": "unmeasured",
+    "sourceLimit": "Geometry and ink/audio remain authored local fixtures"
+  },
+  "observations": {
+    "v6_first_scroll": {
+      "before": {
+        "scene": "THRESHOLD",
+        "ready": false,
+        "progress": 1,
+        "travel": {
+          "ready": false,
+          "readyBurst": 0,
+          "burst": 1,
+          "serial": 3,
+          "consumedSerial": 0
+        }
+      },
+      "held": {
+        "scene": "THRESHOLD",
+        "ready": true,
+        "progress": 1,
+        "travel": {
+          "ready": true,
+          "readyBurst": 1,
+          "burst": 1,
+          "serial": 3,
+          "consumedSerial": 3
+        }
+      },
+      "after": {
+        "scene": "LEGEND",
+        "progress": 0.5866078810573553,
+        "travel": {
+          "ready": true,
+          "readyBurst": 2,
+          "burst": 2,
+          "serial": 4,
+          "consumedSerial": 4
+        },
+        "events": [
+          {
+            "from": "THRESHOLD",
+            "to": "LEGEND",
+            "input": "wheel",
+            "at": 8339.90000000596,
+            "burst": 2
+          }
+        ]
+      },
+      "nextButtons": 0,
+      "layout": {
+        "top": 0,
+        "height": 738,
+        "scroll": 850
+      },
+      "gl": []
+    },
+    "v6_fork_mouse_key": {
+      "click": null,
+      "short": null,
+      "reversed": null,
+      "cancel": null,
+      "blur": null,
+      "escape": null,
+      "scroll": {
+        "scene": "FORK",
+        "choice": null
+      },
+      "leanRight": 0.9282839720702545,
+      "leanLeft": -0.9689125376654857,
+      "collapsing": {
+        "scene": "FORK",
+        "choice": "CHAINS_HOLD",
+        "collapse": 0.132193,
+        "events": [
+          {
+            "event": "commit",
+            "branch": "CHAINS_HOLD",
+            "at": 368591.90000000596,
+            "input": "pointer"
+          }
+        ],
+        "disabled": true
+      },
+      "hold": {
+        "scene": "CHAINS_HOLD",
+        "nav": true,
+        "cut": {
+          "meshes": 2,
+          "particles": 128,
+          "uniformUploads": 58014,
+          "scene": "CHAINS_HOLD",
+          "spill": 0
+        },
+        "shing": 3,
+        "swords": [
+          "opening-glint",
+          "pursuit",
+          "merge"
+        ]
+      },
+      "returned": {
+        "scene": "FORK",
+        "choice": null,
+        "collapse": 0,
+        "commits": 1,
+        "ceremonies": 8,
+        "shing": 3
+      },
+      "bareEnter": null,
+      "reversedKey": null,
+      "keyboardRoute": "CHAINS_HOLD",
+      "gl": []
+    },
+    "v6_final_linear": {
+      "earlyDrain": {
+        "scene": "DRAIN",
+        "released": false
+      },
+      "now": "CRAFT_F4",
+      "travel": [
+        {
+          "from": "THRESHOLD",
+          "to": "LEGEND",
+          "input": "wheel",
+          "at": 24941.5,
+          "burst": 2
+        },
+        {
+          "from": "LEGEND",
+          "to": "DRAIN",
+          "input": "wheel",
+          "at": 26174.70000000298,
+          "burst": 4
+        },
+        {
+          "from": "DRAIN",
+          "to": "CRAFT_F1",
+          "input": "wheel",
+          "at": 32671.39999999106,
+          "burst": 14
+        },
+        {
+          "from": "CRAFT_F1",
+          "to": "CRAFT_F2",
+          "input": "wheel",
+          "at": 34212.89999999106,
+          "burst": 15
+        },
+        {
+          "from": "CRAFT_F2",
+          "to": "CRAFT_F3",
+          "input": "wheel",
+          "at": 38141.20000000298,
+          "burst": 17
+        },
+        {
+          "from": "CRAFT_F3",
+          "to": "CRAFT_F4",
+          "input": "wheel",
+          "at": 40441.09999999404,
+          "burst": 19
+        }
+      ],
+      "nextButtons": 0
+    },
+    "v6_final_ceremony": {
+      "pursuit": {
+        "p": 0.457749,
+        "cut": 0
+      },
+      "merge": {
+        "time": 5.258,
+        "spill": 0.5635369,
+        "hand": 1,
+        "sword": 0.486514
+      },
+      "silence": {
+        "time": 7.057,
+        "audio": {
+          "silent": true,
+          "connected": false,
+          "masterGain": 0,
+          "contextState": "running"
+        },
+        "flash": 0.686,
+        "grade": {
+          "bloom": 1.7447,
+          "chroma": 0.0011232
+        },
+        "nav": false
+      },
+      "fork": {
+        "nav": true,
+        "time": 0,
+        "events": [
+          {
+            "event": "summon",
+            "scheduled": 0.4,
+            "observed": 0.40799999999998704,
+            "wallSeconds": 0.4080999999940395
+          },
+          {
+            "event": "hand-start",
+            "scheduled": 1.6,
+            "observed": 1.608000000000004,
+            "wallSeconds": 1.6080999999940395
+          },
+          {
+            "event": "sword-start",
+            "scheduled": 3.8,
+            "observed": 3.799999999999983,
+            "wallSeconds": 3.7997999999970196
+          },
+          {
+            "event": "flash-start",
+            "scheduled": 6.9,
+            "observed": 6.900000000000375,
+            "wallSeconds": 6.899699999988079
+          },
+          {
+            "event": "cut-start",
+            "scheduled": 7,
+            "observed": 7.007000000000431,
+            "wallSeconds": 7.00709999999404
+          },
+          {
+            "event": "cut-end",
+            "scheduled": 7.35,
+            "observed": 7.350000000000421,
+            "wallSeconds": 7.349699999988079
+          },
+          {
+            "event": "flash-end",
+            "scheduled": 7.4,
+            "observed": 7.408000000000413,
+            "wallSeconds": 7.408
+          },
+          {
+            "event": "fork-interactive",
+            "scheduled": 8,
+            "observed": 8.000000000000426,
+            "wallSeconds": 7.999699999988079
+          }
+        ],
+        "violations": 0,
+        "swords": [
+          "opening-glint",
+          "pursuit",
+          "merge"
+        ],
+        "shing": 3,
+        "travel": [
+          {
+            "from": "THRESHOLD",
+            "to": "LEGEND",
+            "input": "wheel",
+            "at": 24941.5,
+            "burst": 2
+          },
+          {
+            "from": "LEGEND",
+            "to": "DRAIN",
+            "input": "wheel",
+            "at": 26174.70000000298,
+            "burst": 4
+          },
+          {
+            "from": "DRAIN",
+            "to": "CRAFT_F1",
+            "input": "wheel",
+            "at": 32671.39999999106,
+            "burst": 14
+          },
+          {
+            "from": "CRAFT_F1",
+            "to": "CRAFT_F2",
+            "input": "wheel",
+            "at": 34212.89999999106,
+            "burst": 15
+          },
+          {
+            "from": "CRAFT_F2",
+            "to": "CRAFT_F3",
+            "input": "wheel",
+            "at": 38141.20000000298,
+            "burst": 17
+          },
+          {
+            "from": "CRAFT_F3",
+            "to": "CRAFT_F4",
+            "input": "wheel",
+            "at": 40441.09999999404,
+            "burst": 19
+          },
+          {
+            "from": "CRAFT_F4",
+            "to": "PURSUIT",
+            "input": "wheel",
+            "at": 132007.70000000298,
+            "burst": 21
+          }
+        ]
+      },
+      "gl": []
+    },
+    "v6_final_portal": {
+      "collapse": 0.500789,
+      "desktop": {
+        "rect": {
+          "x": 964.671875,
+          "y": 332,
+          "width": 178,
+          "height": 310,
+          "top": 332,
+          "right": 1142.671875,
+          "bottom": 642,
+          "left": 964.671875
+        },
+        "border": "rgba(0, 0, 0, 0)"
+      },
+      "portal": {
+        "center": [
+          0.4788377192982456,
+          0.026000000000000023
+        ],
+        "extent": [
+          0.24982456140350878,
+          0.62
+        ],
+        "counts": {
+          "meshes": 2,
+          "particles": 128,
+          "uniformUploads": 9238,
+          "scene": "CHAINS_HOLD",
+          "spill": 0
+        },
+        "events": [
+          {
+            "event": "commit",
+            "branch": "CHAINS_HOLD",
+            "at": 165631.20000000298,
+            "input": "keyboard"
+          },
+          {
+            "event": "route",
+            "branch": "CHAINS_HOLD",
+            "at": 166537.09999999404,
+            "input": "keyboard"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 375,
+        "door": {
+          "x": 140,
+          "y": 453.1953125,
+          "width": 151,
+          "height": 265
+        }
+      }
+    },
+    "v6_touch_return": {
+      "scene": "FORK",
+      "choice": null,
+      "shing": 3,
+      "swords": 3,
+      "travel": [
+        {
+          "from": "CHAINS_HOLD",
+          "to": "FORK",
+          "input": "touch",
+          "at": 190712.59999999404,
+          "burst": 24
+        }
+      ],
+      "overflow": {
+        "viewport": 390,
+        "doc": 375
+      },
+      "grips": [
+        {
+          "rect": {
+            "x": 58,
+            "y": 637.953125,
+            "width": 108,
+            "height": 60.1875,
+            "top": 637.953125,
+            "right": 166,
+            "bottom": 698.140625,
+            "left": 58
+          },
+          "touch": "none"
+        },
+        {
+          "rect": {
+            "x": 190,
+            "y": 637.953125,
+            "width": 108,
+            "height": 60.1875,
+            "top": 637.953125,
+            "right": 298,
+            "bottom": 698.140625,
+            "left": 190
+          },
+          "touch": "none"
+        }
+      ]
+    },
+    "v6_touch_dojo_keyboard": {
+      "cancelled": null,
+      "oath": {
+        "scene": "OATH",
+        "seal": false,
+        "shing": 3,
+        "swords": [
+          "opening-glint",
+          "pursuit",
+          "merge",
+          "sheathed-oath"
+        ],
+        "travel": [
+          {
+            "from": "CHAINS_HOLD",
+            "to": "FORK",
+            "input": "touch",
+            "at": 190712.59999999404,
+            "burst": 24
+          },
+          {
+            "from": "DOJO",
+            "to": "OATH",
+            "input": "keyboard",
+            "at": 216412.70000000298,
+            "burst": 27
+          }
+        ],
+        "fork": [
+          {
+            "event": "commit",
+            "branch": "DOJO",
+            "at": 214147.20000000298,
+            "input": "pointer"
+          },
+          {
+            "event": "route",
+            "branch": "DOJO",
+            "at": 214995.5,
+            "input": "pointer"
+          }
+        ]
+      },
+      "width320": {
+        "doc": 305,
+        "viewport": 320
+      },
+      "nav": 0,
+      "gl": []
+    },
+    "v6_commission_replay": {
+      "before": [
+        "Sound :: 響 ON",
+        "Begin a new journey · resets all marks and counters",
+        "道 Dojo",
+        "代 Commission"
+      ],
+      "commission": {
+        "scene": "OATH",
+        "seal": false,
+        "swords": [
+          "opening-glint",
+          "pursuit",
+          "merge",
+          "sheathed-oath",
+          "commission-handover"
+        ],
+        "shing": 3,
+        "event": [
+          {
+            "from": "COMMISSION",
+            "to": "OATH",
+            "input": "keyboard",
+            "at": 246529.20000000298,
+            "burst": 30
+          }
+        ]
+      },
+      "reduced": {
+        "scene": "THRESHOLD",
+        "reduced": true,
+        "swords": [
+          "opening-glint"
+        ],
+        "choice": null,
+        "owners": 1,
+        "canvas": 1,
+        "composer": 1
+      },
+      "buttons": [
+        "Sound :: 響 ON"
+      ]
+    },
+    "v6_reduced_final": {
+      "scene": "FORK",
+      "reduced": true,
+      "events": [
+        {
+          "from": "THRESHOLD",
+          "to": "LEGEND",
+          "input": "keyboard",
+          "at": 280121,
+          "burst": 31
+        },
+        {
+          "from": "LEGEND",
+          "to": "DRAIN",
+          "input": "keyboard",
+          "at": 280995.89999999106,
+          "burst": 32
+        },
+        {
+          "from": "DRAIN",
+          "to": "CRAFT_F1",
+          "input": "keyboard",
+          "at": 281929.299999997,
+          "burst": 34
+        },
+        {
+          "from": "CRAFT_F1",
+          "to": "CRAFT_F2",
+          "input": "keyboard",
+          "at": 282879.09999999404,
+          "burst": 35
+        },
+        {
+          "from": "CRAFT_F2",
+          "to": "CRAFT_F3",
+          "input": "keyboard",
+          "at": 283812.39999999106,
+          "burst": 36
+        },
+        {
+          "from": "CRAFT_F3",
+          "to": "CRAFT_F4",
+          "input": "keyboard",
+          "at": 284703.200000003,
+          "burst": 37
+        },
+        {
+          "from": "CRAFT_F4",
+          "to": "PURSUIT",
+          "input": "keyboard",
+          "at": 285670.700000003,
+          "burst": 38
+        }
+      ],
+      "owners": [
+        1,
+        1,
+        1
+      ],
+      "next": 0,
+      "storyboard": 0,
+      "storyboardText": [
+        "THE STILL PATH / THE SAME JOURNEY, WITHOUT MOTIONScroll through the chapters at your pace. Complete each interaction to open the next. The ceremony has the same approved markers; camera and atmospheric motion are still.手01 / The thresholdSummon. The hand arrives. The opening glint gives way to the descent.刃02 / The hands behind the workChris Kyser and Jesse Gawlik. Different instincts in one practice.縛03 / The things that own youAudit the borrowed threads. Deliberately look up to release them.鍛04.1 / Forge鍛 Forge — connect the lattice.修04.2 / Train修 Train — begin with three keystrokes.主04.3 / Own主 Own — place the tool in your circle.霊04.4 / Fleet霊 Fleet — dispatch the hands.刃05 / Follow the bladeThe single pursuit follows the sword toward the hand.手06 / The mergeSummon and ink. The sword descends. Flash and cut overlap. The Fork is ready at eight seconds.選07 / Two destinies主 leads to Dojo. 縛 leads to the holding room. A stroke commits either choice.道08 / The dojoExplore six build fixtures and the hanko mark. Continue to Oath.代09 / CommissionThe separate 代 path offers a fixture catalog and 委 seal, then Oath.縛10 / The holding roomOne physical green doorway returns to the Fork. Persistent path navigation remains available.手11 / The oathThe sheathed sword rests. Greetings become 手. Begin again only by explicit reset."
+      ],
+      "canvas": 1,
+      "worldHidden": "block",
+      "overflow": {
+        "doc": 375,
+        "view": 390
+      },
+      "ceremony": [
+        {
+          "event": "summon",
+          "scheduled": 0.4,
+          "observed": 0.40099999999983993,
+          "wallSeconds": 0.40059999999403956
+        },
+        {
+          "event": "hand-start",
+          "scheduled": 1.6,
+          "observed": 1.5999999999988859,
+          "wallSeconds": 1.5997000000029802
+        },
+        {
+          "event": "sword-start",
+          "scheduled": 3.8,
+          "observed": 3.800999999997771,
+          "wallSeconds": 3.800899999991059
+        },
+        {
+          "event": "flash-start",
+          "scheduled": 6.9,
+          "observed": 6.899999999996226,
+          "wallSeconds": 6.89970000000298
+        },
+        {
+          "event": "cut-start",
+          "scheduled": 7,
+          "observed": 6.999999999996135,
+          "wallSeconds": 6.99979999999702
+        },
+        {
+          "event": "cut-end",
+          "scheduled": 7.35,
+          "observed": 7.349999999995987,
+          "wallSeconds": 7.349799999997019
+        },
+        {
+          "event": "flash-end",
+          "scheduled": 7.4,
+          "observed": 7.400999999995975,
+          "wallSeconds": 7.4007999999970195
+        },
+        {
+          "event": "fork-interactive",
+          "scheduled": 8,
+          "observed": 7.999999999995737,
+          "wallSeconds": 7.99979999999702
+        }
+      ]
+    },
+    "v6_reduced_hold_navcancel": {
+      "reduced": {
+        "choice": "CHAINS_HOLD",
+        "door": {
+          "border": "color(srgb 0.247059 1 0.619608 / 0.62)",
+          "rect": {
+            "x": 151,
+            "y": 453.1953125,
+            "width": 151,
+            "height": 265,
+            "top": 453.1953125,
+            "right": 302,
+            "bottom": 718.1953125,
+            "left": 151
+          }
+        },
+        "world": [
+          {
+            "display": "block",
+            "opacity": "1",
+            "visibility": "hidden"
+          },
+          {
+            "display": "block",
+            "opacity": "1",
+            "visibility": "hidden"
+          }
+        ],
+        "storyboard": 14
+      },
+      "cancelled": {
+        "scene": "COMMISSION",
+        "events": [
+          {
+            "event": "commit",
+            "branch": "CHAINS_HOLD",
+            "at": 327556.200000003,
+            "input": "keyboard"
+          },
+          {
+            "event": "route",
+            "branch": "CHAINS_HOLD",
+            "at": 327556.299999997,
+            "input": "keyboard"
+          },
+          {
+            "event": "commit",
+            "branch": "CHAINS_HOLD",
+            "at": 329624.700000003,
+            "input": "keyboard"
+          }
+        ],
+        "owners": [
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    "v6_initial_reduced_livepreference": {
+      "initial": {
+        "scene": "FORK",
+        "reduced": true,
+        "travel": 7,
+        "owners": [
+          1,
+          1,
+          1
+        ]
+      },
+      "unaccepted": {
+        "scene": "FORK",
+        "choice": null
+      },
+      "accepted": {
+        "scene": "DOJO",
+        "events": [
+          {
+            "event": "commit",
+            "branch": "DOJO",
+            "at": 50358.19999998808,
+            "input": "keyboard"
+          },
+          {
+            "event": "commit-static",
+            "branch": "DOJO",
+            "at": 50370.5,
+            "input": "reduced-motion"
+          }
+        ],
+        "owners": [
+          1,
+          1,
+          1
+        ]
+      },
+      "gl": []
+    },
+    "v6_native_final": {
+      "scene": "LEGEND",
+      "reduced": false,
+      "owners": [
+        1,
+        1,
+        1
+      ],
+      "before": {
+        "counts": {
+          "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0": 4450,
+          "function t(){return tA&&requestAnimationFrame(t)}": 6,
+          "function(){return t===eR&&eD(!0)}": 3,
+          "() => {\n              if (aborted)\n                return;\n              try {\n                const success = predicate();\n                if (success) {\n                  fulfill": 38,
+          "()=>{this._preventNextNativeScrollEvent=!1}": 1,
+          "()=>{this.dispatchScrollendEvent()}": 1
+        },
+        "active": 1,
+        "max": 4,
+        "intervals": 0
+      },
+      "after": {
+        "counts": {
+          "function t(e){var r,i,n,o,y=f()-p,T=!0===e;if((y>l||y<0)&&(d+=y-c),p+=y,((r=(n=p-d)-v)>0||T)&&(o=++u.frame,h=n-1e3*u.time,u.time=n/=1e3,v+=r+(r>=m?0:m-r),i=1),T||(s=a(t)),i)for(_=0": 4631,
+          "function t(){return tA&&requestAnimationFrame(t)}": 6,
+          "function(){return t===eR&&eD(!0)}": 3,
+          "() => {\n              if (aborted)\n                return;\n              try {\n                const success = predicate();\n                if (success) {\n                  fulfill": 38,
+          "()=>{this._preventNextNativeScrollEvent=!1}": 1,
+          "()=>{this.dispatchScrollendEvent()}": 1
+        },
+        "active": 1,
+        "max": 4,
+        "intervals": 0
+      },
+      "travel": [
+        {
+          "from": "THRESHOLD",
+          "to": "LEGEND",
+          "input": "wheel",
+          "at": 36114.5,
+          "burst": 2
+        }
+      ],
+      "canvas": 1,
+      "requests": [
+        "http://localhost:4174/_next/static/css/50ef446fc90bda4d.css",
+        "http://localhost:4174/_next/static/chunks/webpack-fd00a6b302617803.js",
+        "http://localhost:4174/_next/static/chunks/main-app-b2dd5721388df57d.js",
+        "http://localhost:4174/_next/static/chunks/c15bf2b0-c080c4e45c5fb392.js",
+        "http://localhost:4174/_next/static/chunks/4bd1b696-c7408084347438ae.js",
+        "http://localhost:4174/_next/static/chunks/794-96ab5d7caefc5d69.js",
+        "http://localhost:4174/_next/static/chunks/bd904a5c-56e65ed4abb36c15.js",
+        "http://localhost:4174/_next/static/chunks/138-a82c01f12080d6fe.js",
+        "http://localhost:4174/_next/static/chunks/app/page-c28f0460dde6df31.js",
+        "http://localhost:4174/foundation-receipt.json",
+        "http://localhost:4174/_next/static/chunks/b536a0f1.f06e169bf8dc9367.js",
+        "http://localhost:4174/_next/static/chunks/a3cd4a83.f8720b64a454b80c.js",
+        "http://localhost:4174/_next/static/chunks/f6211eb1.daf52cd3c0634b2c.js",
+        "http://localhost:4174/_next/static/chunks/e49654ac.001c6ece8cf3ce4d.js",
+        "http://localhost:4174/_next/static/chunks/377.43afac7a7f90bbc5.js",
+        "http://localhost:4174/_next/static/chunks/334.17f48fca7f442cc7.js"
+      ],
+      "gl": []
+    }
+  },
+  "failuresAndCorrections": [
+    {
+      "kind": "visual",
+      "observed": "First Hold displayed both DOM and World portal frames.",
+      "correction": "Project one World frame onto the measured DOM doorway; hide normal DOM frame, retain reduced static frame.",
+      "proof": [
+        "v6-hold-first.png",
+        "v6-hold-final.png",
+        "v6-hold-mobile.png"
+      ]
+    },
+    {
+      "kind": "clock",
+      "observed": "Settled probe after first v6 export saw1 active ST sync interval, with a slow ST update callback recurring in addition to GSAP.",
+      "cause": "Redundant startup ScrollTrigger.enable before makeSpine.enable lost the first interval handle.",
+      "correction": "Removed redundant startup enable; fresh export and repeated preference toggles now show0 intervals and GSAP-only recurring callbacks.",
+      "proof": "v6_native_final"
+    },
+    {
+      "kind": "automation",
+      "observed": "One ceremony wait assumed a single wheel would exhaust Fleet's inner content and outer progress; it correctly remained Fleet at progress0.855.",
+      "resolution": "Fresh second downward wheel completed progress; ceremony then verified."
+    },
+    {
+      "kind": "automation",
+      "observed": "Reduced final extraction used world-canvas locator that matched outer+inner wrappers.",
+      "resolution": "Scoped wrapper or evaluateAll; one actual canvas verified. All seven reduced keyboard passages had completed."
+    }
+  ],
+  "captures": [
+    "v6-pursuit-final.png",
+    "v6-merge-final.png",
+    "v6-fork-final.png",
+    "v6-collapse-final.png",
+    "v6-hold-first.png",
+    "v6-hold-final.png",
+    "v6-hold-mobile.png",
+    "v6-fork-mobile.png",
+    "v6-fork-reduced.png",
+    "v6-hold-reduced.png"
+  ],
+  "console": {
+    "errors": 0,
+    "warnings": [
+      "Inherited THREE.Clock deprecation inside installed R3F/Three client bundle."
+    ]
+  }
+}

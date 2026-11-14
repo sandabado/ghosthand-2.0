@@ -1,0 +1,227 @@
+{
+  "checkedAt": "2026-11-14T18:32:52.045Z",
+  "exportRoot": {
+    "path": "out/index.html",
+    "modifiedAt": "2026-11-14T18:28:55.929Z",
+    "bytes": 15164,
+    "sha256": "954c87435d48fc97aa23320a6644164f78980962dd9411848323f267ecd08dcc"
+  },
+  "commands": [
+    {
+      "command": "npm run check",
+      "startedAt": "2026-11-14T18:32:50.786Z",
+      "exitCode": 0,
+      "source": "docs/foundation/static-checks.json",
+      "note": "Includes npm run typecheck; no build.",
+      "checkedAt": "2026-11-14T18:32:51.342Z",
+      "checks": 13,
+      "passed": 13,
+      "artifact": "docs/cut-v6/static-checks.json"
+    },
+    {
+      "command": "npm run verify:cut",
+      "startedAt": "2026-11-14T18:32:51.352Z",
+      "exitCode": 0,
+      "source": "docs/cut-v6/geometry-checks.json",
+      "checkedAt": "2026-11-14T18:32:51.553Z",
+      "checks": 13,
+      "passed": 13,
+      "artifact": "docs/cut-v6/geometry-checks.json"
+    },
+    {
+      "command": "node scripts/verify-ink.mjs",
+      "startedAt": "2026-11-14T18:32:51.563Z",
+      "exitCode": 0,
+      "source": "docs/ink-v3/geometry-checks.json",
+      "checkedAt": "2026-11-14T18:32:51.653Z",
+      "checks": 9,
+      "passed": 9,
+      "artifact": "docs/cut-v6/ink-regression-checks.json"
+    },
+    {
+      "command": "node scripts/verify-drain.mjs",
+      "startedAt": "2026-11-14T18:32:51.678Z",
+      "exitCode": 0,
+      "source": "docs/drain-v4/geometry-checks.json",
+      "checkedAt": "2026-11-14T18:32:51.776Z",
+      "checks": 9,
+      "passed": 9,
+      "artifact": "docs/cut-v6/drain-regression-checks.json"
+    },
+    {
+      "command": "npm run verify:gates",
+      "startedAt": "2026-11-14T18:32:51.799Z",
+      "exitCode": 0,
+      "source": "docs/gates-v5/geometry-checks.json",
+      "checkedAt": "2026-11-14T18:32:51.995Z",
+      "checks": 12,
+      "passed": 12,
+      "artifact": "docs/cut-v6/gates-regression-checks.json"
+    }
+  ],
+  "allPassed": true,
+  "totalChecks": 56,
+  "passedChecks": 56,
+  "whitespaceCheck": {
+    "command": "git diff --check",
+    "exitCode": 0,
+    "output": ""
+  },
+  "payload": {
+    "measuredAt": "2026-11-14T18:32:51.327Z",
+    "targetBytes": 4000000,
+    "rootHtmlBytes": 15164,
+    "initialReferencedRawBytes": 1302404,
+    "initialReferencedGzipBytes": 381829,
+    "conservativeClientRawBytes": 2465136,
+    "conservativeClientGzipBytes": 753139,
+    "receiptRawBytes": 584,
+    "receiptGzipBytes": 368,
+    "conservativeAppLoadRawBytes": 2465720,
+    "conservativeAppLoadGzipBytes": 753507,
+    "totalExportBytes": 2511167,
+    "exportedFileCount": 41
+  },
+  "historicalFilesRestored": [
+    {
+      "path": "docs/ink-v3/geometry-checks.json",
+      "source": "git HEAD",
+      "sha256": "d8451dd80fb7728340c49c7a4442f8d5e9388c5d609eb472e176b1fb74a0ea24",
+      "matchesHead": true
+    },
+    {
+      "path": "docs/drain-v4/geometry-checks.json",
+      "source": "git HEAD",
+      "sha256": "6708d3656e80ce5ddd022fbda184e9545a6ecbd109b2b75b308a353acc20b326",
+      "matchesHead": true
+    },
+    {
+      "path": "docs/gates-v5/geometry-checks.json",
+      "source": "git HEAD",
+      "sha256": "ec855255badbe41dbaa8398cc71c6bdbf07be00d67b0f90865c5e2e2c280edde",
+      "matchesHead": true
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/cut-v6/geometry-checks.json",
+      "bytes": 2790,
+      "sha256": "8a563d1552ae9a427c61214ea7914e0f0d153505a30ab6c976873cfd6b555c3c"
+    },
+    {
+      "path": "docs/cut-v6/ink-regression-checks.json",
+      "bytes": 1222,
+      "sha256": "7e56054237ecb893df68273c19a1acb75de93514b6be46cba153a1287fbd4990"
+    },
+    {
+      "path": "docs/cut-v6/drain-regression-checks.json",
+      "bytes": 1707,
+      "sha256": "380cdf5bcbb5eb3f6468f60e6e3a1e3b46c1b282e2a1acaa695b9a762902a8b4"
+    },
+    {
+      "path": "docs/cut-v6/gates-regression-checks.json",
+      "bytes": 2741,
+      "sha256": "3eee175ace54c87a91a08b35999388646910a7ddadbd0b222ed65f7250609916"
+    },
+    {
+      "path": "docs/cut-v6/static-checks.json",
+      "bytes": 9309,
+      "sha256": "4aebbb0de6ecb64d0963d453dc078df68a94d2661e0975bd97e5e152ee18ab8a"
+    },
+    {
+      "path": "docs/cut-v6/payload.json",
+      "bytes": 6058,
+      "sha256": "8e3e03f61a5e63c382f8ac04d0ea8aca94fcf32af4d81c17e348da23a0590d71"
+    },
+    {
+      "path": "docs/cut-v6/foundation-receipt.json",
+      "bytes": 584,
+      "sha256": "c34db7970447df3a2e2b6efe5ca64b9a6e561d77073e7ffb1323fc58cd887d8c"
+    },
+    {
+      "path": "docs/cut-v6/export-foundation-receipt.json",
+      "bytes": 584,
+      "sha256": "c34db7970447df3a2e2b6efe5ca64b9a6e561d77073e7ffb1323fc58cd887d8c"
+    }
+  ],
+  "geometry": {
+    "cut": [
+      {
+        "scene": "PURSUIT",
+        "bars": 68,
+        "particles": 384
+      },
+      {
+        "scene": "MERGE",
+        "bars": 33,
+        "particles": 192
+      },
+      {
+        "scene": "FORK",
+        "bars": 142,
+        "particles": 512
+      },
+      {
+        "scene": "CHAINS_HOLD",
+        "bars": 177,
+        "particles": 128
+      }
+    ],
+    "drain": {
+      "strands": 28,
+      "segmentsPerStrand": 32,
+      "instances": 896,
+      "auditFixtures": 14,
+      "particles": 672
+    },
+    "gates": {
+      "contracts": {
+        "forgeStrands": 3,
+        "fleetHands": 3,
+        "trainingSeedCodePoints": 3,
+        "testedBoardSizes": [
+          {
+            "width": 640,
+            "height": 400
+          },
+          {
+            "width": 320,
+            "height": 360
+          },
+          {
+            "width": 260,
+            "height": 290
+          }
+        ]
+      },
+      "counts": [
+        {
+          "gate": 1,
+          "bars": 60,
+          "particles": 384
+        },
+        {
+          "gate": 2,
+          "bars": 87,
+          "particles": 192
+        },
+        {
+          "gate": 3,
+          "bars": 125,
+          "particles": 192
+        },
+        {
+          "gate": 4,
+          "bars": 61,
+          "particles": 384
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "No build was run by the verifier: payload describes the completed root-owned clock-fix static export identified above.",
+    "Checks do not replace GPU compilation, real input, playback/silence timing, visual review, native callback ownership, or physical-device acceptance.",
+    "Native callback evidence is owned by the root browser audit; it is not inferred from these source checks.",
+    "No deployment or push was performed."
+  ]
+}

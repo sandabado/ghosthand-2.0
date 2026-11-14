@@ -13,6 +13,8 @@ export function worldUniforms() {
     uForge0:{value:0},uForge1:{value:0},uForge2:{value:0},uGateActive:{value:-1},uGateDragX:{value:0},uGateDragY:{value:0},
     uTrainReveal:{value:0},uTrainCompile:{value:0},uOwnX:{value:.18},uOwnY:{value:.74},uOwnLock:{value:0},
     uFleet0:{value:0},uFleet1:{value:0},uFleet2:{value:0},uGatePulse:{value:0},
+    uForkLean:{value:0},uForkVelocity:{value:0},uForkChoice:{value:0},uForkCollapse:{value:0},uForkStroke:{value:0},uForkReveal:{value:1},
+    uHoldDoorX:{value:.45},uHoldDoorY:{value:0},uHoldDoorWidth:{value:.25},uHoldDoorHeight:{value:.6},
     uBone:{value:new Color(PALETTE.bone)},uVoid:{value:new Color(PALETTE.void)},
   };
 }

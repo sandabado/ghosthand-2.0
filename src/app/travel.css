@@ -1,0 +1,8 @@
+.world-header{position:fixed;background:linear-gradient(180deg,color-mix(in srgb,var(--void) 94%,transparent),color-mix(in srgb,var(--void) 42%,transparent))}
+.scroll-cue{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:9px 24px;min-width:240px;max-width:360px;padding:18px 0 10px;border-top:1px solid color-mix(in srgb,var(--bone) 16%,transparent);color:color-mix(in srgb,var(--bone) 40%,transparent);font:9px/1.7 var(--mono);cursor:default}
+.scroll-cue>i{font:20px/1 var(--mono);font-style:normal;color:inherit}.scroll-cue>b{height:1px;position:absolute;top:-1px;left:0;right:0;background:var(--candle);transform:scaleX(var(--progress,0));transform-origin:left}
+.scroll-cue>small{grid-column:1/-1;font:6px/1.8 var(--mono);letter-spacing:.09em;opacity:.55}.scroll-cue[data-ready=true]{color:var(--candle);border-color:color-mix(in srgb,var(--candle) 35%,transparent)}
+.drain-v4-bottom .scroll-cue,.gate5-footer .scroll-cue{min-width:240px}.threshold-action .scroll-cue{width:290px}.dojo-offering+.scroll-cue,.commission-layout+.scroll-cue{margin-top:30px}
+[data-reduced=false] .cut6-hold-door{border-color:transparent;background:none;box-shadow:none}
+[data-reduced=false] .cut6-hold-door:before,[data-reduced=false] .cut6-hold-door:after{opacity:0}
+@media(max-width:760px){.scroll-cue{width:100%;min-width:0;max-width:340px;padding-top:17px;font-size:8px}.drain-v4-bottom .scroll-cue,.gate5-footer .scroll-cue{min-width:0}.scroll-cue>small{font-size:5px}}

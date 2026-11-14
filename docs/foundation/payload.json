@@ -1,24 +1,24 @@
 {
-  "measuredAt": "2026-11-14T17:07:59.371Z",
+  "measuredAt": "2026-11-14T18:32:51.327Z",
   "method": "Filesystem byte measurement of static export. Root HTML references are a lower-bound entry set; all exported JS/CSS/font/image assets plus root HTML are a conservative client-asset upper bound including lazy and not-found chunks. The small eagerly fetched measurement receipt is counted separately in conservativeAppLoadRawBytes. Gzip is estimated with node:zlib, not measured network transfer.",
   "targetBytes": 4000000,
-  "rootHtmlBytes": 14906,
-  "initialReferencedRawBytes": 1274563,
-  "initialReferencedGzipBytes": 375724,
-  "conservativeClientRawBytes": 2424424,
-  "conservativeClientGzipBytes": 743782,
-  "totalExportBytes": 2470455,
+  "rootHtmlBytes": 15164,
+  "initialReferencedRawBytes": 1302404,
+  "initialReferencedGzipBytes": 381829,
+  "conservativeClientRawBytes": 2465136,
+  "conservativeClientGzipBytes": 753139,
+  "totalExportBytes": 2511167,
   "exportedFileCount": 41,
   "referencedResources": [
     {
-      "path": "/_next/static/css/3dcbec17a269e679.css",
-      "rawBytes": 84032,
-      "gzipBytes": 15974
+      "path": "/_next/static/css/50ef446fc90bda4d.css",
+      "rawBytes": 99270,
+      "gzipBytes": 18460
     },
     {
-      "path": "/_next/static/chunks/webpack-ee76ec7bc4cb9808.js",
+      "path": "/_next/static/chunks/webpack-fd00a6b302617803.js",
       "rawBytes": 3567,
-      "gzipBytes": 1850
+      "gzipBytes": 1849
     },
     {
       "path": "/_next/static/chunks/4bd1b696-c7408084347438ae.js",
@@ -51,9 +51,9 @@
       "gzipBytes": 31645
     },
     {
-      "path": "/_next/static/chunks/app/page-faecf9e86672f586.js",
-      "rawBytes": 89820,
-      "gzipBytes": 27982
+      "path": "/_next/static/chunks/app/page-c28f0460dde6df31.js",
+      "rawBytes": 102165,
+      "gzipBytes": 31528
     },
     {
       "path": "/_next/static/chunks/polyfills-42372ed130431b0a.js",
@@ -63,14 +63,24 @@
   ],
   "clientAssets": [
     {
+      "path": "_next/static/JaVmWn0o05nleFRxP2gGc/_buildManifest.js",
+      "rawBytes": 440,
+      "gzipBytes": 236
+    },
+    {
+      "path": "_next/static/JaVmWn0o05nleFRxP2gGc/_ssgManifest.js",
+      "rawBytes": 80,
+      "gzipBytes": 64
+    },
+    {
       "path": "_next/static/chunks/138-a82c01f12080d6fe.js",
       "rawBytes": 85264,
       "gzipBytes": 31645
     },
     {
-      "path": "_next/static/chunks/178.534965960da5aa3a.js",
-      "rawBytes": 47358,
-      "gzipBytes": 14592
+      "path": "_next/static/chunks/334.17f48fca7f442cc7.js",
+      "rawBytes": 60117,
+      "gzipBytes": 17829
     },
     {
       "path": "_next/static/chunks/377.43afac7a7f90bbc5.js",
@@ -103,14 +113,14 @@
       "gzipBytes": 999
     },
     {
-      "path": "_next/static/chunks/app/layout-3442f46fd5abd099.js",
-      "rawBytes": 417,
-      "gzipBytes": 208
+      "path": "_next/static/chunks/app/layout-db2f750a49243db3.js",
+      "rawBytes": 529,
+      "gzipBytes": 223
     },
     {
-      "path": "_next/static/chunks/app/page-faecf9e86672f586.js",
-      "rawBytes": 89820,
-      "gzipBytes": 27982
+      "path": "_next/static/chunks/app/page-c28f0460dde6df31.js",
+      "rawBytes": 102165,
+      "gzipBytes": 31528
     },
     {
       "path": "_next/static/chunks/b536a0f1.f06e169bf8dc9367.js",
@@ -183,30 +193,20 @@
       "gzipBytes": 39473
     },
     {
-      "path": "_next/static/chunks/webpack-ee76ec7bc4cb9808.js",
+      "path": "_next/static/chunks/webpack-fd00a6b302617803.js",
       "rawBytes": 3567,
-      "gzipBytes": 1850
+      "gzipBytes": 1849
     },
     {
-      "path": "_next/static/css/3dcbec17a269e679.css",
-      "rawBytes": 84032,
-      "gzipBytes": 15974
-    },
-    {
-      "path": "_next/static/qRKBc6iLVYEjQvcWFA2kl/_buildManifest.js",
-      "rawBytes": 440,
-      "gzipBytes": 236
-    },
-    {
-      "path": "_next/static/qRKBc6iLVYEjQvcWFA2kl/_ssgManifest.js",
-      "rawBytes": 80,
-      "gzipBytes": 64
+      "path": "_next/static/css/50ef446fc90bda4d.css",
+      "rawBytes": 99270,
+      "gzipBytes": 18460
     }
   ],
   "runtimeFps": "Unmeasured by this script",
   "runtimeDevice": "Unmeasured by this script",
   "receiptRawBytes": 584,
-  "receiptGzipBytes": 367,
-  "conservativeAppLoadRawBytes": 2425008,
-  "conservativeAppLoadGzipBytes": 744149
+  "receiptGzipBytes": 368,
+  "conservativeAppLoadRawBytes": 2465720,
+  "conservativeAppLoadGzipBytes": 753507
 }
