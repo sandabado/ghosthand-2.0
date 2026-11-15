@@ -1,33 +1,77 @@
 'use client';
-import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { Component,useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
-import { BlendFunction, ChromaticAberrationEffect,type BloomEffect } from 'postprocessing';
-import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Group, Material, Mesh, ShaderMaterial, Vector2 } from 'three';
+import { BlendFunction, ChromaticAberrationEffect,LuminanceMaterial,type BloomEffect } from 'postprocessing';
+import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Group, Material, Mesh, PCFShadowMap, ShaderMaterial, Vector2 } from 'three';
 import { InkStroke } from '../systems/InkStroke';
+import ReferenceHand from '../systems/ink/ReferenceHand';
+import SummonHand from '../systems/ink/SummonHand';
+import ToriiPassage from '../systems/ink/ToriiPassage';
 import DrainField from '../systems/drain/DrainField';
 import GatesField from '../systems/gates/GatesField';
 import CutField from '../systems/cut/CutField';
+import MergeCeremony from '../systems/cut/MergeCeremony';
+import { PageSliceEffect } from '../systems/cut/PageSliceEffect';
+import { releaseCeremonyStudio } from '../systems/cut/sword-materials';
+import DojoField from '../systems/dojo/DojoField';
+import SmithyField from '../systems/smithy/SmithyField';
+import AtmosphericSmoke from '../systems/smithy/AtmosphericSmoke';
+import LightShafts from '../systems/smithy/LightShafts';
+import FloatingRelics from '../systems/smithy/FloatingRelics';
 import { svgToStrokes } from '../systems/ink/geometry';
-import { HAND_SVG,SIGIL_SVG,SLASH_SVG } from '../systems/ink/sources';
+import { SIGIL_SVG,SLASH_SVG } from '../systems/ink/sources';
 import { PALETTE, SCENES, type SceneId } from '../core/config';
 import { runtime, useJourney } from '../core/world';
-import { atmosphereFragment, atmosphereVertex, fogFragment, fogVertex, scrollFragment, uploadUniforms, worldUniforms } from './shaders';
+import { cleanupMeasuredRenderer,renderMeasured } from '../core/performance';
+import { getRenderQuality,renderQualityState } from '../core/render-quality';
+import { atmosphereFragment, atmosphereVertex, fogFragment, fogVertex, uploadUniforms, worldUniforms } from './shaders';
 
 type Advance=(timeSeconds:number)=>void;
 interface Props { onAdvanceReady:(advance:Advance)=>void; }
 
+function WorldFallback(){
+  useEffect(()=>{document.documentElement.dataset.renderFailed='true';runtime.webgl=false;},[]);
+  return <div className="webgl-fallback">The story remains. The atmosphere rests.</div>;
+}
+class RenderBoundary extends Component<{children:ReactNode},{failed:boolean}>{
+  state={failed:false};
+  static getDerivedStateFromError(){return {failed:true};}
+  render(){return this.state.failed?<WorldFallback/>:this.props.children;}
+}
+
 function WorldClock({onAdvanceReady}:Props) {
-  const advance=useThree(state=>state.advance);
+  const advance=useThree(state=>state.advance),renderer=useThree(state=>state.gl);
   useEffect(()=>{
-    onAdvanceReady(time=>advance(time,true));
-    return()=>onAdvanceReady(()=>{});
-  },[advance,onAdvanceReady]);
+    onAdvanceReady(time=>renderMeasured(renderer,()=>advance(time,true)));
+    return()=>{onAdvanceReady(()=>{});cleanupMeasuredRenderer(renderer);};
+  },[advance,onAdvanceReady,renderer]);
+  useEffect(()=>{
+    const canvas=renderer.domElement;
+    const lost=()=>{document.documentElement.dataset.renderFailed='true';runtime.webgl=false;};
+    const restored=()=>{document.documentElement.dataset.renderFailed='false';runtime.webgl=true;};
+    canvas.addEventListener('webglcontextlost',lost);canvas.addEventListener('webglcontextrestored',restored);
+    return()=>{canvas.removeEventListener('webglcontextlost',lost);canvas.removeEventListener('webglcontextrestored',restored);};
+  },[renderer]);
+  return null;
+}
+
+function RenderQualityAdapter(){
+  const renderer=useThree(state=>state.gl),setDpr=useThree(state=>state.setDpr),size=useThree(state=>state.size);
+  const applied=useRef({tier:'',width:0,height:0,native:0});
+  useFrame(()=>{
+    const tier=renderQualityState.tier,native=window.devicePixelRatio||1,last=applied.current;
+    if(last.tier===tier&&last.width===size.width&&last.height===size.height&&last.native===native)return;
+    const profile=getRenderQuality(tier,size.width<760,native,size.width,size.height);
+    renderQualityState.current=profile;setDpr(profile.dpr);renderer.transmissionResolutionScale=profile.transmissionScale;renderer.shadowMap.enabled=profile.shadow;
+    Object.assign(last,{tier,width:size.width,height:size.height,native});
+  },-30);
   return null;
 }
 
 function SharedAtmosphere() {
+  const shadowTone=useMemo(()=>new Color(PALETTE.void),[]);
   const material=useMemo(()=>new ShaderMaterial({vertexShader:atmosphereVertex,fragmentShader:atmosphereFragment,uniforms:worldUniforms(),depthWrite:false,depthTest:false}),[]);
   useFrame(()=>{
     const state=useJourney.getState();
@@ -35,6 +79,9 @@ function SharedAtmosphere() {
     if(state.reducedMotion) material.uniforms.uTime.value=0;
     const drainMix=state.scene==='DRAIN'?1:state.previousScene==='DRAIN'?1-state.params.sceneMix:0;
     material.uniforms.uColor.value.set(state.scene==='CHAINS_HOLD'?PALETTE.smoke:PALETTE.candle);
+    if(state.scene==='THRESHOLD'||state.scene==='MERGE')material.uniforms.uColor.value.lerp(shadowTone,state.scene==='THRESHOLD'?.78:.64);
+    if(state.scene==='DOJO')material.uniforms.uColor.value.lerp(shadowTone,.82);
+    if(state.scene==='CRAFT_F4')material.uniforms.uColor.value.set(PALETTE.blood).lerp(shadowTone,.87);
     material.uniforms.uDrainMix.value=drainMix;material.uniforms.uDrainDawn.value=state.params.drainDawn*drainMix;
   },-20);
   useEffect(()=>()=>material.dispose(),[material]);
@@ -44,25 +91,28 @@ function SharedAtmosphere() {
 export function ParticleSystem() {
   const dawnTint=useMemo(()=>new Color(PALETTE.candleDim),[]);
   const geometry=useMemo(()=>{
-    const geo=new BufferGeometry();const positions=new Float32Array(540*3);const seeds=new Float32Array(540);
-    for(let i=0;i<540;i++){
-      const seed=((i*16807+13)%2147483647)/2147483647;
-      positions[i*3]=Math.sin(i*12.9898)*14;
-      positions[i*3+1]=Math.sin(i*4.1414)*6;
-      positions[i*3+2]=-2-Math.abs(Math.cos(i*1.718))*26;
-      seeds[i]=(seed*9131)%1;
+    const lanes=8,samples=144,count=lanes*samples;
+    const geo=new BufferGeometry(),positions=new Float32Array(count*3),seeds=new Float32Array(count),along=new Float32Array(count),lane=new Float32Array(count);
+    for(let i=0;i<count;i++){
+      const row=Math.floor(i/samples),t=(i%samples)/(samples-1),phase=row/(lanes-1);
+      positions[i*3]=(t-.5)*20;
+      positions[i*3+1]=-2.25+Math.sin(t*Math.PI*1.7+phase*.6)*.48+phase*.12;
+      positions[i*3+2]=-6.5-phase*5+Math.sin(t*Math.PI*2)*.25;
+      seeds[i]=((i*16807+13)%997)/997;along[i]=t;lane[i]=phase;
     }
-    geo.setAttribute('position',new BufferAttribute(positions,3));geo.setAttribute('aSeed',new BufferAttribute(seeds,1));return geo;
+    geo.setAttribute('position',new BufferAttribute(positions,3));geo.setAttribute('aSeed',new BufferAttribute(seeds,1));geo.setAttribute('aAlong',new BufferAttribute(along,1));geo.setAttribute('aLane',new BufferAttribute(lane,1));return geo;
   },[]);
-  const material=useMemo(()=>new ShaderMaterial({uniforms:worldUniforms(),vertexShader:fogVertex,fragmentShader:fogFragment,transparent:true,depthWrite:false,blending:AdditiveBlending}),[]);
+  const material=useMemo(()=>new ShaderMaterial({uniforms:{...worldUniforms(),uMoteStrength:{value:.3}},vertexShader:fogVertex,fragmentShader:fogFragment,transparent:true,depthWrite:false,blending:AdditiveBlending}),[]);
   useFrame(()=>{
     const state=useJourney.getState();uploadUniforms(material,state.params);
+    geometry.setDrawRange(0,Math.floor(1152*renderQualityState.current.particleFraction));
     if(state.reducedMotion)material.uniforms.uTime.value=0;
     const inDrain=state.scene==='DRAIN'||state.previousScene==='DRAIN';
     if(inDrain)material.uniforms.uColor.value.set(PALETTE.smoke).lerp(dawnTint,state.params.drainDawn);
     else material.uniforms.uColor.value.set(state.scene==='CHAINS_HOLD'?PALETTE.smoke:PALETTE.candleDim);
+    material.uniforms.uMoteStrength.value=state.scene==='OATH'?.13:state.scene==='THRESHOLD'?.24:state.scene==='MERGE'?.4:.3;
   },-19);
-  useEffect(()=>()=>{geometry.dispose();material.dispose();},[geometry,material]);
+  useEffect(()=>()=>geometry.dispose(),[geometry]);useEffect(()=>()=>material.dispose(),[material]);
   return <points geometry={geometry} material={material} frustumCulled={false}/>;
 }
 
@@ -79,37 +129,11 @@ function InkDrawing({source,drawParam='hand',opacity=1,settled=false}:{source:st
   },[source,strokes]);
   return <>{strokes.map(stroke=><InkStroke key={stroke.id} path={stroke.points} width={stroke.width} pressure={stroke.pressure} seed={stroke.seed} start={stroke.start} span={stroke.span} drawParam={drawParam} opacity={opacity} settled={settled}/>)}</>;
 }
-function GhostHand({settled=false}:{settled?:boolean}) {
-  const group=useRef<Group>(null);
-  const compact=useThree(state=>state.size.width<760);
-  useFrame(()=>{if(group.current)group.current.visible=settled||useJourney.getState().params.hand>0;},-17);
-  return <group ref={group} position={compact?[0.7,-1.8,-6]:[3.05,-0.3,-5]} scale={compact?1.05:1.45}>
-    <InkDrawing source={HAND_SVG} settled={settled}/>
-  </group>;
-}
 function InkAccents({previous=false,legend=false}:{previous?:boolean;legend?:boolean}) {
   const compact=useThree(state=>state.size.width<760);
   return <group>
     {!legend&&<group position={compact?[1.6,-3.7,-4.5]:[4.4,-2.9,-4.5]} scale={compact?0.16:0.23}><InkDrawing source={SIGIL_SVG} opacity={0.62} settled={previous}/></group>}
     {!compact&&<group position={legend?[-1.9,1.05,-4.5]:[-2.25,-0.3,-4.5]} scale={0.14}><InkDrawing source={SLASH_SVG} drawParam={legend?'sceneMix':'hand'} opacity={0.65} settled={previous}/></group>}
-  </group>;
-}
-
-function Sword({sheathed=false,handover=false}:{sheathed?:boolean;handover?:boolean}) {
-  const ref=useRef<Group>(null);
-  useFrame(()=>{
-    if(!ref.current)return;const {scene,params:p}=useJourney.getState();
-    ref.current.visible=scene==='PURSUIT'||scene==='COMMISSION'||scene==='OATH'||p.sword>0;
-    ref.current.position.set(scene==='PURSUIT'?Math.sin(p.pursuit*Math.PI)*2:2.4,scene==='MERGE'?4.5-p.sword*6:scene==='THRESHOLD'?1.7:0,-5);
-    ref.current.rotation.set(handover?Math.PI/2.5:0,0,sheathed?-Math.PI/2.25:scene==='PURSUIT'?-1.05:-0.12);
-    ref.current.scale.setScalar(scene==='THRESHOLD'?0.46:1);
-  },-14);
-  return <group ref={ref}>
-    <mesh position={[0,0.15,0]}><boxGeometry args={[sheathed?0.105:0.038,2.8,sheathed?0.11:0.022]}/><meshStandardMaterial color={sheathed?PALETTE.candleDim:PALETTE.bone} emissive={sheathed?PALETTE.void:PALETTE.candle} emissiveIntensity={sheathed?0:0.65} metalness={0.8} roughness={0.3}/></mesh>
-    {!sheathed&&<mesh position={[0.027,0.15,0.018]}><boxGeometry args={[0.007,2.8,0.01]}/><meshBasicMaterial color={PALETTE.candle} toneMapped={false}/></mesh>}
-    <mesh position={[0,-1.35,0]}><boxGeometry args={[0.46,0.06,0.14]}/><meshStandardMaterial color={PALETTE.bone} metalness={0.9} roughness={0.6}/></mesh>
-    <mesh position={[0,-1.78,0]}><boxGeometry args={[0.105,0.75,0.1]}/><meshStandardMaterial color={PALETTE.smoke} roughness={0.9}/></mesh>
-    {Array.from({length:7},(_,i)=><mesh key={i} position={[0,-1.48-i*0.095,0.052]} rotation={[0,0,0.4]}><boxGeometry args={[0.115,0.025,0.015]}/><meshBasicMaterial color={PALETTE.candleDim}/></mesh>)}
   </group>;
 }
 
@@ -121,57 +145,38 @@ function Torii({z=0}:{z?:number}) {
   </group>;
 }
 
-function ShaderScroll({index,position}:{index:number;position:[number,number,number]}) {
-  const selected=useJourney(state=>state.selectedMember);
-  const material=useMemo(()=>{const m=new ShaderMaterial({uniforms:worldUniforms(),vertexShader:atmosphereVertex,fragmentShader:scrollFragment,transparent:true});m.uniforms.uVariant.value=index;return m;},[index]);
-  useFrame(()=>{const state=useJourney.getState();uploadUniforms(material,state.params);if(state.reducedMotion)material.uniforms.uTime.value=0;},-15);
-  useEffect(()=>()=>material.dispose(),[material]);
-  return <group position={position}>
-    <mesh position={[0,1.9,0]}><boxGeometry args={[2.05,.07,.12]}/><meshStandardMaterial color={PALETTE.bone} roughness={.8}/></mesh>
-    <mesh material={material}><planeGeometry args={[1.95,3.6]}/></mesh>
-    <mesh position={[0,-1.9,0]}><boxGeometry args={[2.05,.09,.14]}/><meshStandardMaterial color={PALETTE.bone}/></mesh>
-    <Line points={[[-.78,1.94,0],[-.78,4,0],[.78,4,0],[.78,1.94,0]]} color={PALETTE.candleDim} lineWidth={.5}/>
-    {selected===index&&<pointLight position={[0,0,1]} color={PALETTE.candle} intensity={1} distance={5}/>}
-  </group>;
-}
-
-function DojoRoom() {
-  return <group>
-    <gridHelper args={[40,40,PALETTE.candleDim,PALETTE.smoke]} position={[0,-2.6,-6]}/>
-    <mesh rotation={[-Math.PI/2,0,0]} position={[0,-2.65,-6]}><planeGeometry args={[40,40]}/><meshStandardMaterial color={PALETTE.void} metalness={.3} roughness={.85}/></mesh>
-    {Array.from({length:6},(_,i)=><ShaderScroll key={i} index={i} position={[(i%3-1)*3.25,(i<3?0:.4),i<3?-5.5:-12]}/>)}
-    <Torii z={-18}/>
-    <mesh position={[0,-2,-1]}><cylinderGeometry args={[1.1,1.25,.4,8]}/><meshStandardMaterial color={PALETTE.smoke} roughness={.95}/></mesh>
-  </group>;
-}
-
 function SceneGeometry({scene,previous=false}:{scene:SceneId;previous?:boolean}) {
-  const group=useRef<Group>(null);const baseOpacity=useRef(new WeakMap<Material,number>());
+  const commissionExploring=useJourney(state=>state.commissionExploring);
+  const practiceExploring=useJourney(state=>state.practiceExploring);
+  const group=useRef<Group>(null),materials=useRef<{material:Material;baseOpacity:number}[]>([]);
+  useLayoutEffect(()=>{
+    const unique=new Set<Material>();
+    group.current?.traverse(object=>{
+      const material=(object as Mesh).material;if(!material)return;
+      for(const entry of Array.isArray(material)?material:[material])unique.add(entry);
+    });
+    materials.current=Array.from(unique,material=>({material,baseOpacity:material.opacity}));
+  },[scene]);
   useFrame(()=>{
     if(!group.current)return;const p=useJourney.getState().params;const mix=previous?1-p.sceneMix:p.sceneMix;
     group.current.visible=mix>.005;
-    group.current.traverse(object=>{
-      const mesh=object as Mesh;if(!mesh.material)return;
-      const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
-      materials.forEach(material=>{
-        if(material instanceof ShaderMaterial){if(material.uniforms.uSceneMix)material.uniforms.uSceneMix.value=mix;return;}
-        if(!baseOpacity.current.has(material))baseOpacity.current.set(material,material.opacity);
-        material.transparent=true;material.opacity=(baseOpacity.current.get(material)??1)*mix;
-      });
-    });
+    for(const {material,baseOpacity} of materials.current){
+      if(material instanceof ShaderMaterial){if(material.uniforms.uSceneMix)material.uniforms.uSceneMix.value=mix;continue;}
+      material.transparent=true;material.opacity=baseOpacity*mix;
+    }
   },-5);
   let content:ReactNode=null;
   switch(scene){
-    case 'THRESHOLD': content=<><GhostHand settled={previous}/><InkAccents previous={previous}/>{!previous&&<Sword/>}</>;break;
-    case 'LEGEND': content=<><InkAccents previous={previous} legend/><group position={[2,0,-6]}>{[-1,1].map(x=><group key={x} position={[x*1.35,0,0]}><mesh><boxGeometry args={[2.2,3.7,.12]}/><meshStandardMaterial color={PALETTE.void} emissive={PALETTE.candleDim} emissiveIntensity={.12}/></mesh><Line points={[[-1.1,-1.85,.08],[-1.1,1.85,.08],[1.1,1.85,.08],[1.1,-1.85,.08]]} color={PALETTE.candleDim} lineWidth={.5}/></group>)}<Line points={[[0,-2.4,.1],[0,2.4,.1]]} color={PALETTE.candle} lineWidth={.8}/></group></>;break;
-    case 'DRAIN':content=<DrainField previous={previous}/>;break;
-    case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=<GatesField gate={Number(scene.at(-1))} previous={previous}/>;break;
+    case 'THRESHOLD': content=<><SummonHand previous={previous}/><MergeCeremony scene={scene} previous={previous}/><ToriiPassage previous={previous}/></>;break;
+    case 'LEGEND': content=<><ToriiPassage previous={previous} passage/><MergeCeremony scene="THRESHOLD" previous={previous} carried/></>;break;
+    case 'DRAIN':content=practiceExploring?<DrainField previous={previous}/>:null;break;
+    case 'CRAFT_F1':case 'CRAFT_F2':case 'CRAFT_F3':case 'CRAFT_F4':content=practiceExploring?<GatesField gate={Number(scene.at(-1))} previous={previous}/>:null;break;
     case 'PURSUIT':content=<CutField scene={scene} previous={previous}/>;break;
-    case 'MERGE':content=<><GhostHand settled={previous}/><InkAccents previous={previous}/><CutField scene={scene} previous={previous}/></>;break;
+    case 'MERGE':content=<><ReferenceHand scene={scene} previous={previous}/><MergeCeremony previous={previous}/></>;break;
     case 'FORK':case 'CHAINS_HOLD':content=<CutField scene={scene} previous={previous}/>;break;
-    case 'DOJO':content=<DojoRoom/>;break;
-    case 'COMMISSION':content=<><mesh position={[2,-2.1,-5]}><boxGeometry args={[4.5,.6,3]}/><meshStandardMaterial color={PALETTE.smoke} roughness={.95}/></mesh><mesh position={[2,-.4,-6]}><planeGeometry args={[3.8,3.2]}/><meshStandardMaterial color={PALETTE.bone} roughness={1}/></mesh>{!previous&&<Sword handover/>}</>;break;
-    case 'OATH':content=<><mesh position={[2,-1.9,-5]}><boxGeometry args={[4,.18,1.6]}/><meshStandardMaterial color={PALETTE.smoke} roughness={.8}/></mesh>{!previous&&<Sword sheathed/>}</>;break;
+    case 'DOJO':content=<DojoField previous={previous}/>;break;
+    case 'COMMISSION':content=<><SmithyField scene={scene} previous={previous}/>{commissionExploring&&<FloatingRelics previous={previous}/>}</>;break;
+    case 'OATH':content=<SmithyField scene={scene} previous={previous}/>;break;
   }
   return <group ref={group}>{content}</group>;
 }
@@ -183,7 +188,7 @@ function CameraAdapter() {
     const state=useJourney.getState();const p=state.params;const verb=SCENES[state.scene].verb;
     camera.rotation.set(0,0,0);
     if(verb==='FALL')camera.position.set(0,-(p.depth+p.fall)*.025,8);
-    else if(verb==='ENTER'){camera.position.set(p.cameraX,.15,8+p.cameraZ);camera.rotation.y=p.pointerX*.05;}
+    else if(verb==='ENTER'){camera.position.set(p.cameraX,.15+(state.reducedMotion?0:Math.sin(p.time*8)*p.dojoWalk*.018+p.hankoImpact*.025),8+p.cameraZ);camera.rotation.set(p.dojoPitch,p.dojoYaw,0);}
     else if(state.scene==='PURSUIT'){camera.position.set(Math.sin(p.pursuit*Math.PI)*.55,0,8-p.pursuit*5);camera.rotation.z=Math.sin(p.pursuit*Math.PI)*.035;}
     else camera.position.set(0,0,8-Math.max(p.progress,p.pass)*(state.scene.startsWith('CRAFT')?4:0));
     runtime.cameraRotation=[camera.rotation.x,camera.rotation.y,camera.rotation.z];
@@ -194,30 +199,48 @@ function CameraAdapter() {
 
 function GlobalGrade() {
   const chroma=useRef<ChromaticAberrationEffect>(null),bloom=useRef<BloomEffect>(null);const offset=useMemo(()=>new Vector2(),[]);
+  const pageSlice=useMemo(()=>new PageSliceEffect(),[]);
+  const renderer=useThree(state=>state.gl),size=useThree(state=>state.size),dpr=useThree(state=>state.viewport.dpr);
+  const bloomSize=useRef({width:0,height:0,scale:0}),bufferSize=useMemo(()=>new Vector2(),[]);
+  useEffect(()=>{bloomSize.current.scale=0;},[size.width,size.height,dpr]);
   useEffect(()=>{runtime.composerMounts++;return()=>{runtime.composerMounts--;};},[]);
+  useEffect(()=>()=>pageSlice.dispose(),[pageSlice]);
   useFrame(()=>{
     const s=useJourney.getState(),p=s.params,flare=s.scene==='MERGE'&&!s.reducedMotion?p.flash:0;
-    const intensity=.75+flare*1.45,shift=p.chromaOffset+flare*.0012;
-    if(bloom.current)bloom.current.intensity=intensity;
+    const profile=s.scene==='DOJO'?[.29,.9]:s.scene==='OATH'?[.2,.94]:s.scene==='COMMISSION'?[.32,.88]:s.scene==='DRAIN'?[.48+p.drainDawn*.13,.73]:s.scene==='MERGE'?[.65,.65]:s.scene==='PURSUIT'?[.6,.68]:[.4,.79];
+    const intensity=profile[0]+flare*1.55,shift=p.chromaOffset*(s.scene==='MERGE'?1:.32)+flare*.0012;
+    if(bloom.current){
+      bloom.current.intensity=intensity;const luminance=bloom.current.luminancePass.fullscreenMaterial as LuminanceMaterial;luminance.threshold=profile[1]-flare*.1;luminance.smoothing=.24;
+      renderer.getDrawingBufferSize(bufferSize);const scale=renderQualityState.current.bloomResolution,last=bloomSize.current;
+      if(last.width!==bufferSize.x||last.height!==bufferSize.y||last.scale!==scale){
+        const width=Math.max(1,Math.round(bufferSize.x*scale)),height=Math.max(1,Math.round(bufferSize.y*scale));
+        bloom.current.luminancePass.setSize(width,height);bloom.current.mipmapBlurPass.setSize(width,height);
+        Object.assign(last,{width:bufferSize.x,height:bufferSize.y,scale});
+      }
+    }
     chroma.current?.offset.set(shift,shift*.45);runtime.grade.bloom=intensity;runtime.grade.chroma=shift;
+    pageSlice.setPose(s.scene==='MERGE'&&!s.reducedMotion,p.ceremonyTime,size.width/Math.max(1,size.height));
   },-2);
   return <EffectComposer multisampling={2} enableNormalPass={false}>
     <Bloom ref={bloom} luminanceThreshold={.6} luminanceSmoothing={.4} intensity={.75} mipmapBlur/>
     <Vignette eskil={false} offset={.25} darkness={.75}/>
-    <Noise opacity={.035} blendFunction={BlendFunction.SOFT_LIGHT}/>
+    <Noise opacity={.018} blendFunction={BlendFunction.SOFT_LIGHT}/>
     <ChromaticAberration ref={chroma} offset={offset} radialModulation={false} modulationOffset={.15}/>
+    <primitive object={pageSlice} dispose={null}/>
   </EffectComposer>;
 }
 
 function World({onAdvanceReady}:Props) {
+  const renderer=useThree(state=>state.gl);
   const scene=useJourney(state=>state.scene);const previous=useJourney(state=>state.previousScene);
-  useEffect(()=>{runtime.canvasMounts++;return()=>{runtime.canvasMounts--;runtime.webgl=false;};},[]);
-  return <><WorldClock onAdvanceReady={onAdvanceReady}/><CameraAdapter/><SharedAtmosphere/><ParticleSystem/>
+  useEffect(()=>{runtime.canvasMounts++;return()=>{runtime.canvasMounts--;runtime.webgl=false;releaseCeremonyStudio(renderer);};},[renderer]);
+  return <><WorldClock onAdvanceReady={onAdvanceReady}/><RenderQualityAdapter/><CameraAdapter/><SharedAtmosphere/><LightShafts/><AtmosphericSmoke/><ParticleSystem/>
     {previous&&previous!==scene&&<SceneGeometry key={`previous-${previous}`} scene={previous} previous/>}
     <SceneGeometry key={scene} scene={scene}/><GlobalGrade/>
   </>;
 }
 
 export default function WorldCanvas({onAdvanceReady}:Props) {
-  return <div className="world-canvas" aria-hidden="true"><Canvas frameloop="never" dpr={[1,1.5]} camera={{fov:45,near:.1,far:150,position:[0,0,8]}} gl={{antialias:false,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setClearColor(new Color(PALETTE.void),1);runtime.webgl=true;}} fallback={<div className="webgl-fallback">The story remains. The atmosphere rests.</div>}><World onAdvanceReady={onAdvanceReady}/></Canvas></div>;
+  const initialDpr=useMemo(()=>typeof window==='undefined'?1:getRenderQuality(innerWidth<760?'balanced':'cinematic',innerWidth<760,devicePixelRatio,innerWidth,innerHeight).dpr,[]);
+  return <div className="world-canvas" aria-hidden="true"><RenderBoundary><Canvas frameloop="never" shadows={{type:PCFShadowMap}} dpr={initialDpr} camera={{fov:45,near:.1,far:150,position:[0,0,8]}} gl={{antialias:false,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.debug.checkShaderErrors=process.env.NODE_ENV!=='production';gl.setClearColor(new Color(PALETTE.void),1);runtime.webgl=true;document.documentElement.dataset.renderFailed='false';}} fallback={<WorldFallback/>}><World onAdvanceReady={onAdvanceReady}/></Canvas></RenderBoundary></div>;
 }

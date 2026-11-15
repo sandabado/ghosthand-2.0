@@ -1,83 +1,71 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useCallback,useEffect,useRef,useState } from 'react';
-import { SCENES } from '../core/config';
+import { useCallback,useEffect,useLayoutEffect,useRef,useState } from 'react';
 import { startEngine,type EngineHandle } from '../core/engine';
-import { navigate,resetJourney } from '../core/director';
-import { useJourney,runtime } from '../core/world';
-import { useParam } from '../core/params';
+import { goHome,navigate,returnToStory } from '../core/director';
+import { useJourney } from '../core/world';
 import { soundDirector } from '../core/sound';
 import SceneDirector,{StoryboardStrip} from './SceneDirector';
 import CursorGhost from '../systems/CursorGhost';
-const WorldCanvas=dynamic(()=>import('../world/WorldCanvas'),{ssr:false,loading:()=>null});
-
-function Receipt(){
-  useParam('time');
-  const s=useJourney();
-  const [payload,setPayload]=useState<Record<string,unknown>|null>(null);
-  useEffect(()=>{fetch('/foundation-receipt.json').then(r=>r.json()).then(setPayload).catch(()=>{});},[]);
-  return <details className="receipt-drawer"><summary>Receipt :: 証 <span>{s.swordMoments.length} sword moments</span></summary>
-    <div className="receipt-panel"><div className="receipt-title">BUILT BY GHOST HANDS<span>V6 THE CUT / LOCAL</span></div>
-      <dl><dt>Clock owners / Canvas / grade</dt><dd>{runtime.heartbeatOwners} / {runtime.canvasMounts} / {runtime.composerMounts}</dd>
-      <dt>Observed GSAP heartbeat</dt><dd>{runtime.fps?`${runtime.fps.toFixed(1)} ticks/s`:'Sampling'} · this browser</dd>
-      <dt>Fog param → GPU uniform</dt><dd>{s.params.fogDensity.toFixed(3)} → {runtime.fogUniform.toFixed(3)}</dd>
-      <dt>Live ink strokes / ribbon vertices / tip seeds</dt><dd>{runtime.ink.instances} / {runtime.ink.ribbonVertices} / {runtime.ink.tipParticles}</dd>
-      <dt>Ink bleed / pressure uniforms</dt><dd>{runtime.ink.bleedUniform.toFixed(2)} / {runtime.ink.pressureUniform.toFixed(2)}</dd>
-      <dt>Live Drain filaments / segments / release motes</dt><dd>{runtime.drain.filaments} / {runtime.drain.segments} / {runtime.drain.particles}</dd>
-      <dt>Drain attached / dissolved / actual trace hits</dt><dd>{runtime.drain.attached} / {runtime.drain.dissolved} / {runtime.drain.pickHits}</dd>
-      <dt>Gate meshes / particles / uniform uploads</dt><dd>{runtime.gates.meshes} / {runtime.gates.particles} / {runtime.gates.uniformUploads}</dd>
-      <dt>Gate rites settled / four</dt><dd>{s.completedGates.length} / 4</dd>
-      <dt>Cut meshes / particles / local spill parameter</dt><dd>{runtime.cut.meshes} / {runtime.cut.particles} / {runtime.cut.spill.toFixed(2)}</dd>
-      <dt>Chapter passages / Fork commitments</dt><dd>{runtime.travelEvents.length} / {runtime.forkEvents.filter(event=>event.event==='commit').length}</dd>
-      <dt>Sword moments visited</dt><dd>{s.swordMoments.join(' · ')||'None yet'}</dd><dt>Shing cues accepted / cap</dt><dd>{s.shingCount} / 3</dd>
-      <dt>Trackers / external media</dt><dd>0 / 0 · source and network checked</dd><dt>Production payload</dt><dd>{payload?.measured?'See export measurement below':'Not yet measured in this session'}</dd></dl>
-      <p className="receipt-small">Heartbeat rate is observed here, not a desktop or mobile GPU benchmark. Geometry, hand paths, media, audio tones, and offering copy are temporary fixtures.</p>
-      <a href="/foundation-receipt.json" target="_blank" rel="noreferrer">Read payload measurement ↗</a>
-      <p className="receipt-small">Replay starts a new journey and clears commitments, traces, and ceremony counters. Branch changes preserve them. Review choices D08–D14 remain provisional.</p>
-      <button onClick={resetJourney}>Replay from the threshold ↺</button>
-    </div></details>;
+import JourneyGuide from './JourneyGuide';
+import Receipt from './Receipt';
+import WorkMenu from './WorkMenu';
+function CanvasUnavailable(){
+  useEffect(()=>{document.documentElement.dataset.renderFailed='true';},[]);
+  return null;
 }
+const WorldCanvas=dynamic<{onAdvanceReady:(advance:(time:number)=>void)=>void}>(()=>import('../world/WorldCanvas').catch(()=>({default:CanvasUnavailable})),{ssr:false,loading:()=>null});
+
+function SoundControl(){
+  const enabled=useJourney(s=>s.soundEnabled);
+  const [error,setError]=useState('');
+  const setSound=async()=>{
+    try{await soundDirector.enable(!useJourney.getState().soundEnabled);setError('');}
+    catch{setError('Audio unavailable in this browser. The journey remains silent.');}
+  };
+  return <><button className="sound-toggle" onClick={setSound} aria-pressed={enabled}>Sound :: 響 <span>{enabled?'ON':'OFF'}</span></button><p className="sr-only" role="status">{error}</p></>;
+}
+
+function PathNavigation(){
+  const unlocked=useJourney(s=>s.navUnlocked),scene=useJourney(s=>s.scene),canReturn=useJourney(s=>s.navigationStack.length>0);
+  if(!unlocked)return null;
+  return <nav className="path-navigation" aria-label="Studio navigation"><WorkMenu/><button onClick={()=>navigate('COMMISSION')} aria-current={scene==='COMMISSION'?'page':undefined}><span>Start a project</span></button>{canReturn&&<button type="button" className="story-return" onClick={returnToStory}>Return to story <span aria-hidden="true">↩</span></button>}</nav>;
+}
+
 export default function Foundation(){
   const root=useRef<HTMLDivElement>(null),stage=useRef<HTMLDivElement>(null),engine=useRef<EngineHandle|null>(null);
   const advance=useRef<(t:number)=>void>(()=>{});
-  const state=useJourney();
-  const [soundError,setSoundError]=useState('');
+  const scene=useJourney(s=>s.scene),previousScene=useJourney(s=>s.previousScene);
+  const reducedMotion=useJourney(s=>s.reducedMotion),resetVersion=useJourney(s=>s.resetVersion);
+  const focusedScene=useRef({scene,resetVersion});
   const onAdvanceReady=useCallback((fn:(t:number)=>void)=>{advance.current=fn;engine.current?.setAdvance(fn);},[]);
   useEffect(()=>{
     if(!root.current||!stage.current)return;
     engine.current=startEngine(root.current,stage.current);engine.current.setAdvance(advance.current);
     return()=>{engine.current?.destroy();engine.current=null;};
   },[]);
-  useEffect(()=>{
+  useLayoutEffect(()=>{
+    if(focusedScene.current.scene===scene&&focusedScene.current.resetVersion===resetVersion)return;
+    focusedScene.current={scene,resetVersion};
     const heading=root.current?.querySelector<HTMLElement>('.current-shell h1,.current-shell h2');
     if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}
-  },[state.scene,state.resetVersion]);
-  const setSound=async()=>{try{await soundDirector.enable(!state.soundEnabled);setSoundError('');}catch{setSoundError('Audio unavailable in this browser. The journey remains silent.');}};
-  const scene=SCENES[state.scene];
-  return <div ref={root} className="foundation-root" data-scene={state.scene} data-reduced={state.reducedMotion}>
-    <a href="#journey" className="skip-link">Enter the story</a>
+  },[scene,resetVersion]);
+  return <div ref={root} className="foundation-root" data-scene={scene} data-reduced={reducedMotion}>
+    <a href="#journey" className="skip-link" onClick={event=>{event.preventDefault();const heading=root.current?.querySelector<HTMLElement>('.current-shell h1,.current-shell h2');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}}}>Enter the story</a>
     <div className="world-canvas" aria-hidden="true"><WorldCanvas onAdvanceReady={onAdvanceReady}/></div>
     <div className="world-vignette" aria-hidden="true"/>
-    <header className="world-header"><a className="wordmark" href="#journey" aria-label="Ghost Hand Studio"><span className="wordmark-glyph">手</span><span>GHOST HAND<small>STUDIO / SOVEREIGN CRAFT</small></span></a>
-      <span className="local-edition">INCANTATION VI <b>•</b> THE CUT</span>
-      <button className="sound-toggle" onClick={setSound} aria-pressed={state.soundEnabled}>Sound :: 響 <span>{state.soundEnabled?'ON':'OFF'}</span></button>
-    </header>
+    <header className="world-header"><a className="wordmark" href="#home" onClick={event=>{event.preventDefault();goHome();}} aria-label="Ghost Hand Studio — Home"><span className="wordmark-glyph">手</span><span>GHOST HAND<small>STUDIO</small></span></a><SoundControl/></header>
     <div id="journey" ref={stage} className="journey-stage">
       <main className="journey-content" tabIndex={-1}>
-        <div className="scene-register"><span>{scene.index} / {scene.verb}</span><span>{scene.title}</span><span className="register-kanji">{scene.glyph}</span></div>
-        {state.previousScene&&<div className="previous-shell" aria-hidden="true" inert><SceneDirector sceneOverride={state.previousScene}/></div>}
-        <div className="current-shell" data-lenis-prevent><SceneDirector key={state.scene}/></div>
+        {previousScene&&<div className="previous-shell" aria-hidden="true" inert><SceneDirector sceneOverride={previousScene}/></div>}
+        <div key={`${scene}-${resetVersion}`} className="current-shell" data-lenis-prevent><SceneDirector sceneOverride={scene}/></div>
       </main>
-      <div className="journey-bottom"><span className="journey-progress">{state.scene==='THRESHOLD'?'A SIGNAL IN THE VOID.':state.scene==='CHAINS_HOLD'?'THE DOOR REMAINS OPEN.':'OWN THE INSTRUMENT. SHAPE THE SIGNAL.'}</span>
-        {state.navUnlocked&&<nav className="path-navigation" aria-label="Persistent paths"><button onClick={()=>navigate('DOJO')} aria-current={state.scene==='DOJO'?'page':undefined}>道 <span>Dojo</span></button><button onClick={()=>navigate('COMMISSION')} aria-current={state.scene==='COMMISSION'?'page':undefined}>代 <span>Commission</span></button></nav>}
-      </div>
+      <div className="journey-bottom"><JourneyGuide/><PathNavigation/></div>
     </div>
-    {state.reducedMotion&&<div className="reduced-strip"><p className="reduced-notice">Stillness is a way through. Your motion preference is respected; all paths and controls remain available.</p><StoryboardStrip/></div>}
-    <aside className="compositor-proof"><details><summary>Compositor :: 霧</summary><div className="proof-controls"><div className="proof-channel"><label htmlFor="fog-proof">Fog density</label><input id="fog-proof" type="range" min="0.05" max="1" step="0.01" defaultValue="0.36" onChange={event=>window.__GH_DEBUG?.setFog(Number(event.target.value))}/></div><div className="proof-channel"><label htmlFor="ink-bleed">Wet bleed</label><input id="ink-bleed" type="range" min="0" max="1.5" step="0.05" defaultValue="1" onChange={event=>window.__GH_DEBUG?.setInk({bleed:Number(event.target.value)})}/></div><div className="proof-channel"><label htmlFor="ink-pressure">Ink pressure</label><input id="ink-pressure" type="range" min="0.5" max="1.5" step="0.05" defaultValue="1" onChange={event=>window.__GH_DEBUG?.setInk({pressure:Number(event.target.value)})}/></div><span>GSAP → shared uniforms / local material study</span></div></details></aside>
-    <footer className="foundation-footer"><span>GHOSTHAND.STUDIO <i>/</i> V6 · LOCAL</span><Receipt/></footer>
-    <div className="ceremonial-flash" aria-hidden="true"/><div className="ceremonial-cut" aria-hidden="true"/>
+    {reducedMotion&&<div className="reduced-strip"><p className="reduced-notice">Stillness is a way through. Your motion preference is respected; all paths and controls remain available.</p><StoryboardStrip/></div>}
+    <footer className="foundation-footer"><Receipt/></footer>
+    <div className="ceremonial-flash" aria-hidden="true"/>
     <CursorGhost/>
-    <p className="sr-only" role="status">{soundError}</p>
     <noscript>Ghost Hand’s interactive foundation requires JavaScript. No form data is collected. Contact hello@ghosthand.studio.</noscript>
   </div>;
 }

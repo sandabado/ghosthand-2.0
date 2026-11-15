@@ -1,0 +1,22 @@
+/* P01: one word, one pointing hand, one deliberate command. */
+.gh-threshold{padding:0;min-height:0}
+.summon-entry{position:relative;min-height:calc(100svh - 240px);isolation:isolate;cursor:none}
+.summon-trigger{position:absolute;inset:0;border:0;padding:0;margin:0;background:none;color:var(--candle);cursor:none;appearance:none;touch-action:manipulation;z-index:2}
+.summon-trigger:disabled{cursor:none}
+.summon-word{position:absolute;left:47%;top:39%;transform:translate(-50%,-50%);font:400 clamp(72px,11vw,162px)/1 var(--mono);letter-spacing:-.075em;color:var(--candle);text-shadow:0 0 3px var(--candle),0 0 18px color-mix(in srgb,var(--candle) 38%,transparent),0 0 62px color-mix(in srgb,var(--candle) 13%,transparent);white-space:nowrap;opacity:calc(1 - clamp(0,var(--ceremony,0)/1.2,1));pointer-events:none;user-select:none}
+.summon-caret{font-size:.68em;margin-left:.08em;opacity:.75}
+.gh-scene .summon-trigger:focus-visible{outline:0}
+.summon-trigger:focus-visible .summon-word{outline:1px solid var(--candle);outline-offset:22px;border-radius:2px}
+.foundation-root[data-scene=THRESHOLD] .cursor-ghost{visibility:hidden}
+.foundation-root[data-scene=THRESHOLD] .world-vignette{opacity:.3}
+.foundation-root[data-scene=THRESHOLD] .journey-guide button{display:none}
+.foundation-root[data-scene=THRESHOLD] .journey-guide-icon{display:none}
+.foundation-root[data-scene=THRESHOLD] .journey-guide-label{font-size:12px;color:color-mix(in srgb,var(--bone) 68%,transparent)}
+
+/* The same pointing asset and canonical received sword preserve the command without WebGL. */
+.summon-hand-fallback{display:none;position:absolute;inset:0;pointer-events:none;z-index:1;opacity:calc(1 - var(--summon-leave,0))}
+html[data-render-failed=true] .summon-hand-fallback,[data-reduced=true] .summon-hand-fallback{display:block}
+.summon-hand-fallback>img{position:absolute;width:min(70vw,900px);max-width:none;height:auto;left:calc(50% + var(--summon-x,.3)*50vw);top:calc(50% - var(--summon-y,-.12)*50svh);filter:drop-shadow(0 0 20px color-mix(in srgb,var(--candle) 12%,transparent));mask-image:linear-gradient(135deg,var(--void) 0 65%,transparent 98%);mask-mode:alpha;z-index:2}
+.summon-hand-fallback>.summon-fallback-point{transform:translate(-19%,-14%)}
+@media(max-width:760px){.summon-entry{min-height:calc(100svh - 215px)}.summon-word{font-size:clamp(62px,15vw,104px);left:45%;top:31%;letter-spacing:-.08em}.summon-hand-fallback>img{width:118vw}.foundation-root[data-scene=THRESHOLD] .journey-guide-label{font-size:11px;max-width:220px}}
+@media(prefers-reduced-motion:reduce){.summon-word{opacity:1}.summon-entry[data-phase=receiving] .summon-word{opacity:0}.summon-entry{cursor:auto}.summon-trigger{cursor:pointer}}

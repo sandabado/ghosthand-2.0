@@ -1,24 +1,33 @@
 'use client';
 import { useEffect,useMemo,useRef } from 'react';
 import { useFrame,useThree } from '@react-three/fiber';
-import { AdditiveBlending,BoxGeometry,BufferAttribute,BufferGeometry,Color,DoubleSide,InstancedBufferAttribute,InstancedMesh,Matrix4,ShaderMaterial } from 'three';
+import { AdditiveBlending,BoxGeometry,BufferAttribute,BufferGeometry,Color,DoubleSide,InstancedBufferAttribute,InstancedMesh,Matrix4,PlaneGeometry,ShaderMaterial,SRGBColorSpace,Texture,TextureLoader } from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { PALETTE } from '../../core/config';
-import { runtime,useJourney } from '../../core/world';
+import { runtime,useJourney,type WorldParams } from '../../core/world';
 import { uploadUniforms,worldUniforms } from '../../world/shaders';
-import { createBrushGeometry,svgToStrokes } from '../ink/geometry';
-import { HAND_SVG } from '../ink/sources';
 import { buildGateData } from './geometry';
-import { fleetHandFragment,fleetHandVertex,gateBarFragment,gateBarVertex,gateParticleFragment,gateParticleVertex } from './shaders';
+import { gateBarFragment,gateBarVertex,gateParticleFragment,gateParticleVertex } from './shaders';
+
+const lastGateFrames:Partial<Record<number,WorldParams>>={};
+const fleetAnatomyVertex=`
+  attribute float aHand;uniform float uFleet0;uniform float uFleet1;uniform float uFleet2;uniform float uGateActive;uniform float uGateDragX;uniform float uGateDragY;
+  varying vec2 vUv;varying float vFlight;
+  void main(){float flight=aHand<.5?uFleet0:aHand<1.5?uFleet1:uFleet2;vec3 p=position;
+    p.x+=(aHand-1.0)*flight*1.1;p.y+=flight*flight*5.5;p.z-=flight*22.0;
+    float engaged=(1.0-step(.45,abs(aHand-uGateActive)))*(1.0-step(.001,flight));
+    p.x+=engaged*(uGateDragX-.5)*.3;p.y+=engaged*(.5-uGateDragY)*.35;
+    gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);vUv=uv;vFlight=flight;}`;
+const fleetAnatomyFragment=`
+  uniform sampler2D uHandImage;uniform float uHandLoaded;uniform float uSceneMix;varying vec2 vUv;varying float vFlight;
+  void main(){if(uHandLoaded<.5)discard;vec4 image=texture2D(uHandImage,vUv);
+    float alpha=image.a*.87*(1.0-smoothstep(.65,1.0,vFlight))*uSceneMix;
+    if(alpha<.003)discard;gl_FragColor=vec4(image.rgb*.96,alpha);}`;
 
 function fleetGeometry(){
-  const paths=svgToStrokes(HAND_SVG,{segments:48});
-  const strokes=paths.map(path=>createBrushGeometry(path.points,{width:path.width,pressure:path.pressure,seed:path.seed}));
-  const base=mergeGeometries(strokes);strokes.forEach(geometry=>geometry.dispose());
-  if(!base)return new BufferGeometry();
-  base.center();const hands:BufferGeometry[]=[];
+  const base=new PlaneGeometry(2.6,2.6),hands:BufferGeometry[]=[];
   for(let hand=0;hand<3;hand++){
-    const geometry=base.clone();geometry.scale(.42,.42,.42);geometry.translate(.6+hand*2.1,-.6,-6.0);
+    const geometry=base.clone();geometry.translate(.6+hand*2.1,-.6,-6.0);
     geometry.setAttribute('aHand',new BufferAttribute(new Float32Array(geometry.getAttribute('position').count).fill(hand),1));hands.push(geometry);
   }
   base.dispose();const merged=mergeGeometries(hands)??new BufferGeometry();hands.forEach(geometry=>geometry.dispose());return merged;
@@ -27,7 +36,7 @@ function fleetGeometry(){
 /** Four local craft artifacts. One shared heartbeat supplies every continuous value. */
 export default function GatesField({gate,previous=false}:{gate:number;previous?:boolean}){
   const compact=useThree(state=>state.size.width<760);
-  const frozen=useRef({...useJourney.getState().params});
+  const frozen=useRef<WorldParams>({...lastGateFrames[gate]??useJourney.getState().params});
   const resource=useMemo(()=>{
     const data=buildGateData(gate);
     const uniforms=()=>({...worldUniforms(),uGateMode:{value:data.gate},uGatePulse:{value:0},uGateActive:{value:-1},uGateDragX:{value:0},uGateDragY:{value:0},
@@ -45,22 +54,33 @@ export default function GatesField({gate,previous=false}:{gate:number;previous?:
     const particleMaterial=new ShaderMaterial({uniforms:uniforms(),vertexShader:gateParticleVertex,fragmentShader:gateParticleFragment,transparent:true,depthWrite:false,blending:AdditiveBlending});
     particleMaterial.name=`GhostHandGate${data.gate}Motes`;
     const handGeometry=data.gate===4?fleetGeometry():null;
-    const handMaterial=handGeometry?new ShaderMaterial({uniforms:uniforms(),vertexShader:fleetHandVertex,fragmentShader:fleetHandFragment,transparent:true,depthWrite:false,side:DoubleSide}):null;
-    if(handMaterial)handMaterial.name='GhostHandGateFleetAuthoredInkStudy';
-    return {data,barGeometry,barMaterial,bars,particleGeometry,particleMaterial,handGeometry,handMaterial,materials:handMaterial?[barMaterial,particleMaterial,handMaterial]:[barMaterial,particleMaterial]};
+    const handMaterial=handGeometry?new ShaderMaterial({uniforms:{...uniforms(),uHandImage:{value:null},uHandLoaded:{value:0}},vertexShader:fleetAnatomyVertex,fragmentShader:fleetAnatomyFragment,transparent:true,depthWrite:false,side:DoubleSide,toneMapped:false}):null;
+    if(handMaterial)handMaterial.name='GhostHandFleetReferenceAnatomy';
+    return {data,barGeometry,barMaterial,bars,particleGeometry,particleMaterial,handGeometry,handMaterial,handTexture:null as Texture|null,handLoaded:false,materials:handMaterial?[barMaterial,particleMaterial,handMaterial]:[barMaterial,particleMaterial]};
   },[gate]);
   useEffect(()=>{
     const meshes=resource.handGeometry?2:1,particles=resource.data.particleSeed.length;
     runtime.gates.meshes+=meshes;runtime.gates.particles+=particles;
+    let disposed=false;
+    if(resource.handMaterial){
+      runtime.referenceHand.meshes++;
+      resource.handTexture=new TextureLoader().load('/smithy-v8/hero-hand.webp',texture=>{
+        if(disposed){texture.dispose();return;}texture.colorSpace=SRGBColorSpace;
+        resource.handLoaded=true;resource.handMaterial!.uniforms.uHandImage.value=texture;resource.handMaterial!.uniforms.uHandLoaded.value=1;
+      });
+    }
     return()=>{
+      disposed=true;
       runtime.gates.meshes-=meshes;runtime.gates.particles-=particles;
       if(runtime.gates.activeGate===resource.data.gate)runtime.gates.activeGate=0;
       resource.barGeometry.dispose();resource.barMaterial.dispose();resource.bars.dispose();
       resource.particleGeometry.dispose();resource.particleMaterial.dispose();resource.handGeometry?.dispose();resource.handMaterial?.dispose();
+      resource.handTexture?.dispose();if(resource.handMaterial){runtime.referenceHand.meshes--;if(runtime.referenceHand.meshes===0)runtime.referenceHand.loaded=false;}
     };
   },[resource]);
   useFrame(()=>{
     const state=useJourney.getState(),p=previous?frozen.current:state.params;
+    if(!previous){lastGateFrames[gate]??={...p};Object.assign(lastGateFrames[gate]!,p);if(resource.handMaterial)runtime.referenceHand.loaded=resource.handLoaded;}
     for(const material of resource.materials){
       uploadUniforms(material,p);material.uniforms.uSceneMix.value=previous?1-state.params.sceneMix:state.params.sceneMix;
       if(state.reducedMotion)material.uniforms.uTime.value=0;

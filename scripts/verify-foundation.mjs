@@ -46,8 +46,8 @@ const mergeBlock = timingSource.match(/merge:\s*\{([^}]+)\}/)?.[1] || '';
 const mergeTiming = Object.fromEntries([...mergeBlock.matchAll(/(\w+):\s*([\d.]+)/g)].map(match => [match[1], Number(match[2])]));
 const approvedMerge = { summon:0.4, handStart:1.6, handDuration:2.2, swordStart:3.8, swordDuration:3,
   flashStart:6.9, flashDuration:0.5, cutStart:7, cutDuration:0.35, silenceStart:7, silenceEnd:8, fork:8 };
-check('Approved Merge schedule', Object.entries(approvedMerge).every(([key,value]) => mergeTiming[key] === value),
-  'D03 expected markers/durations are checked explicitly, including flash/cut overlap, 7–8s silence, and the 8s Fork. Browser timing remains separate.');
+check('Approved Merge schedule with story-flow-v2 contact handoff', Object.entries(approvedMerge).every(([key,value]) => mergeTiming[key] === value),
+  'D03 markers/durations remain explicit: flash/cut overlap and 7–8s silence. The eight-second handoff now reaches Commission; route callbacks are checked in verify-main-journey. Browser timing remains separate.');
 const fixtureSource = sources.find(file => file.path === 'src/core/fixtures.ts')?.text || '';
 const memberCount = (fixtureSource.match(/id: 'fixture-\d+'/g) || []).length;
 const auditSection = fixtureSource.split('export const drainAudit')[1]?.split('export const relics')[0] || '';
@@ -83,7 +83,7 @@ if (exported.length) {
   const initialReferencedGzipBytes = gzipSync(html).length + resources.reduce((sum, item) => sum + item.gzipBytes, 0);
   const conservativeClientRawBytes = Buffer.byteLength(html) + clientStats.reduce((sum, item) => sum + item.rawBytes, 0);
   const conservativeClientGzipBytes = gzipSync(html).length + clientStats.reduce((sum, item) => sum + item.gzipBytes, 0);
-  payload = { measuredAt: new Date().toISOString(), method: 'Filesystem byte measurement of static export. Root HTML references are a lower-bound entry set; all exported JS/CSS/font/image assets plus root HTML are a conservative client-asset upper bound including lazy and not-found chunks. The small eagerly fetched measurement receipt is counted separately in conservativeAppLoadRawBytes. Gzip is estimated with node:zlib, not measured network transfer.',
+  payload = { measuredAt: new Date().toISOString(), method: 'Filesystem byte measurement of static export. Root HTML references are a lower-bound entry set; all exported JS/CSS/font/image assets plus root HTML are a conservative client-asset upper bound including lazy and not-found chunks. The optional measurement receipt fetched when Details opens is counted separately in conservativeAppLoadRawBytes. Gzip is estimated with node:zlib, not measured network transfer.',
     targetBytes: 4_000_000, rootHtmlBytes: Buffer.byteLength(html), initialReferencedRawBytes, initialReferencedGzipBytes,
     conservativeClientRawBytes, conservativeClientGzipBytes, totalExportBytes, exportedFileCount: exported.length,
     referencedResources: resources, clientAssets: clientStats, runtimeFps: 'Unmeasured by this script', runtimeDevice: 'Unmeasured by this script' };
@@ -104,7 +104,7 @@ if (exported.length) {
   payload.totalExportBytes = (await Promise.all(finalExported.map(file => stat(file)))).reduce((sum, item) => sum + item.size, 0);
   payload.exportedFileCount = finalExported.length;
   check('Initial payload target (conservative raw upper bound)', payload.conservativeAppLoadRawBytes < 4_000_000,
-    `${payload.conservativeAppLoadRawBytes.toLocaleString()} raw bytes across root HTML, all exported client assets, and the eager receipt JSON; gzip estimate ${payload.conservativeAppLoadGzipBytes.toLocaleString()} bytes.`);
+    `${payload.conservativeAppLoadRawBytes.toLocaleString()} raw bytes across root HTML, all exported client assets, and the optional diagnostic receipt JSON; gzip estimate ${payload.conservativeAppLoadGzipBytes.toLocaleString()} bytes.`);
 } else {
   checks.push({ name: 'Static export and payload', passed: null, detail: 'out/ not present yet. Run after next build; no payload or export claim made.' });
 }

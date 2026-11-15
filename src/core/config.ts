@@ -5,7 +5,8 @@ export const PALETTE = {
 
 /** D03 is approved. Other durations and scroll budgets are builder choices. Seconds. */
 export const TIMING = {
-  threshold: { summon: 0.4, handStart: 1.6, handDuration: 2.2, glint: 4.2, glintDuration: 0.4, unlock: 8 },
+  threshold: { summon:0,handStart:0,handDuration:.28,glint:.35,glintDuration:5.05,
+    swordStart:.35,swordDuration:2,gripStart:2.15,gripDuration:.4,departure:3.8,departureDuration:1.6,unlock:5.4,reducedDuration:.45 },
   merge: { summon: 0.4, handStart: 1.6, handDuration: 2.2, swordStart: 3.8, swordDuration: 3,
     flashStart: 6.9, flashDuration: 0.5, cutStart: 7, cutDuration: 0.35, silenceStart: 7, silenceEnd: 8, fork: 8 },
   overlap: 0.4, pursuit: 2, pass: 0.8, draw: 0.9, nudge: 0.2, fogTween: 0.6, greeting: 3,
@@ -15,7 +16,10 @@ export const TIMING = {
     dawnStart:0.7,dawnDuration:2.4,settle:3.2},
   gates:{drag:.07,return:.28,forgeSnap:.52,trainType:2.2,trainCompile:.48,ownLock:1.05,fleetFlight:.95,pulse:.32},
   cut:{reveal:.55,collapse:.85,stroke:.07},
-  travel:{settle:.6,burstGap:160},
+  travel:{settle:.6,burstGap:160,intentLife:.85},
+  dojo:{stroke:.07,press:.24,impact:.8,bloom:.9,lift:.35},
+  smithy:{offer:1.2,unroll:1.35,paperDelay:.2,stroke:.07,press:.27,impact:.85,bloom:1.05,lift:.4},
+  oath:{word:2.4,fade:.45,rest:5.4,settle:1.4},
 } as const;
 
 export const SCENE_IDS = ['THRESHOLD','LEGEND','DRAIN','CRAFT_F1','CRAFT_F2','CRAFT_F3','CRAFT_F4','PURSUIT','MERGE','FORK','DOJO','COMMISSION','CHAINS_HOLD','OATH'] as const;
@@ -29,17 +33,17 @@ export interface MemberBuild { id: string; title: string; maker: string; shader:
 
 export const SCENES: Record<SceneId,SceneDef> = {
   THRESHOLD:{id:'THRESHOLD',index:'01',glyph:'手',title:'The threshold',verb:'FALL',budget:TIMING.scrollBudget},
-  LEGEND:{id:'LEGEND',index:'02',glyph:'刃',title:'The hands behind the work',verb:'FALL',budget:TIMING.scrollBudget},
-  DRAIN:{id:'DRAIN',index:'03',glyph:'縛',title:'The things that own you',verb:'FALL',budget:TIMING.scrollBudget},
+  LEGEND:{id:'LEGEND',index:'02',glyph:'刃',title:'An idea takes form',verb:'FALL',budget:TIMING.scrollBudget},
+  DRAIN:{id:'DRAIN',index:'03',glyph:'縛',title:'The practice',verb:'FALL',budget:TIMING.scrollBudget},
   CRAFT_F1:{id:'CRAFT_F1',index:'04.1',glyph:'鍛',title:'Forge',verb:'PASS',budget:TIMING.scrollBudget},
   CRAFT_F2:{id:'CRAFT_F2',index:'04.2',glyph:'修',title:'Train',verb:'PASS',budget:TIMING.scrollBudget},
   CRAFT_F3:{id:'CRAFT_F3',index:'04.3',glyph:'主',title:'Own',verb:'PASS',budget:TIMING.scrollBudget},
   CRAFT_F4:{id:'CRAFT_F4',index:'04.4',glyph:'霊',title:'Fleet',verb:'PASS',budget:TIMING.scrollBudget},
   PURSUIT:{id:'PURSUIT',index:'05',glyph:'刃',title:'Follow the blade',verb:'PURSUE',budget:0},
   MERGE:{id:'MERGE',index:'06',glyph:'手',title:'The merge',verb:'PURSUE',budget:0},
-  FORK:{id:'FORK',index:'07',glyph:'選',title:'Two destinies',verb:'PASS',budget:0},
-  DOJO:{id:'DOJO',index:'08',glyph:'道',title:'The dojo',verb:'ENTER',budget:TIMING.scrollBudget},
-  COMMISSION:{id:'COMMISSION',index:'09',glyph:'代',title:'Commission',verb:'PASS',budget:TIMING.scrollBudget},
+  FORK:{id:'FORK',index:'07',glyph:'選',title:'Two destinies',verb:'PASS',budget:TIMING.scrollBudget},
+  DOJO:{id:'DOJO',index:'08',glyph:'道',title:'Selected work',verb:'ENTER',budget:TIMING.scrollBudget},
+  COMMISSION:{id:'COMMISSION',index:'09',glyph:'代',title:'Start a project',verb:'PASS',budget:TIMING.scrollBudget},
   CHAINS_HOLD:{id:'CHAINS_HOLD',index:'10',glyph:'縛',title:'The holding room',verb:'PASS',budget:TIMING.scrollBudget},
   OATH:{id:'OATH',index:'11',glyph:'手',title:'The oath',verb:'PASS',budget:0},
 };

@@ -4,10 +4,14 @@ import { TIMING,type SceneId,type SwordMoment } from './config';
 import { initialParams,runtime,useJourney } from './world';
 import { soundDirector } from './sound';
 import { clearInput } from './input';
+import { canCommitSummon,summonPointer,type SummonPoint } from './summon';
 import { drainAudit } from './fixtures';
 import { stopGateRites } from './gate-director';
 import { stepForkSpring } from './cut';
-import { travelDestination } from './travel';
+import { backwardDestination,travelDestination } from './travel';
+import { stopDojo,commitHanko,selectDojoBuild } from './dojo-director';
+import { stopSmithy,commitCommissionSeal,selectCommissionRelic } from './smithy-director';
+import {requestNavigation} from './navigation';
 let overlap:gsap.core.Timeline|null=null;
 let drainRite:gsap.core.Timeline|null=null;
 let forkRite:gsap.core.Timeline|null=null,forkAim=0;
@@ -71,15 +75,25 @@ export function recordSword(moment:SwordMoment){
   const state=useJourney.getState();
   if(!state.swordMoments.includes(moment)) useJourney.setState({swordMoments:[...state.swordMoments,moment]});
 }
-export function transitionTo(scene:SceneId,ceremonial=false){
+/** Entry is a deliberate command. The shared engine starts the receiving timeline. */
+export function commitSummon(source:'pointer'|'touch'|'keyboard'='pointer',point?:SummonPoint){
+  const s=useJourney.getState();if(!canCommitSummon(s.scene,s.thresholdPhase))return false;
+  const target=point?summonPointer(point[0],point[1]):summonPointer(s.params.summonX,s.params.summonY);
+  s.params.summonX=target[0];s.params.summonY=target[1];s.params.summonTargetX=target[0];s.params.summonTargetY=target[1];
+  s.params.ceremonyTime=0;s.params.summonLeave=0;clearInput();
+  runtime.summonEvents.push({event:'commit',input:source,at:performance.now()});
+  useJourney.setState({thresholdPhase:'receiving',thresholdReady:false});
+  return true;
+}
+export function transitionTo(scene:SceneId,ceremonial=false,fromEnd=false){
   const state=useJourney.getState();
-  if(state.scene===scene)return;
+  if(state.scene===scene){clearInput();useJourney.setState({readerEntry:fromEnd?'end':'start'});return;}
   overlap?.kill();clearInput();
   const prev=state.scene;
   state.params.progress=0;state.params.sword=0;state.params.flash=0;
   state.params.sceneMix=ceremonial||state.reducedMotion?1:0;
   state.params.cutProgress=0;
-  useJourney.setState({scene,previousScene:ceremonial||state.reducedMotion?null:prev,
+  useJourney.setState({scene,readerEntry:fromEnd?'end':'start',previousScene:ceremonial||state.reducedMotion?null:prev,
     visitedScenes:state.visitedScenes.includes(scene)?state.visitedScenes:[...state.visitedScenes,scene]});
   if(!ceremonial&&!state.reducedMotion){
     overlap=gsap.timeline({onComplete:()=>useJourney.setState({previousScene:null})})
@@ -89,8 +103,11 @@ export function transitionTo(scene:SceneId,ceremonial=false){
 export function advanceJourney(){
   const s=useJourney.getState();
   const target=travelDestination(s);if(!target)return;
-  if(target==='PURSUIT'){if(s.pursuitUsed)return;useJourney.setState({pursuitUsed:true});}
+  if(target==='PURSUIT')useJourney.setState({pursuitUsed:true});
   transitionTo(target);
+}
+export function retreatJourney(){
+  const target=backwardDestination(useJourney.getState());if(target)transitionTo(target,false,true);
 }
 export function releaseDrain(input:'pointer'|'keyboard'='keyboard'){
   const s=useJourney.getState();if(s.scene!=='DRAIN'||s.drainReleased)return;
@@ -122,29 +139,32 @@ export function commitFork(branch:'DOJO'|'CHAINS_HOLD',input:'pointer'|'keyboard
   forkRite=gsap.timeline().to(s.params,{forkCollapse:1,duration:TIMING.cut.collapse,ease:'power2.in',onComplete:finish});
   return true;
 }
-export function navigate(scene:'DOJO'|'COMMISSION'|'FORK'|'OATH'){
+export function navigate(scene:'DOJO'|'CRAFT_F4'|'COMMISSION'|'FORK'|'OATH'){
   const s=useJourney.getState();if(!s.navUnlocked)return;
-  if(scene==='FORK'&&s.scene!=='CHAINS_HOLD')return;
-  if(scene==='OATH'&&!['DOJO','COMMISSION'].includes(s.scene))return;
-  transitionTo(scene);
+  if(scene==='FORK'&&s.scene!=='DRAIN'&&!s.scene.startsWith('CRAFT_F')&&s.scene!=='CHAINS_HOLD')return;
+  if(scene==='OATH'&&s.scene!=='COMMISSION')return;
+  if(!requestNavigation({kind:'scene',scene}))transitionTo(scene);
 }
+export function goHome(){if(!requestNavigation({kind:'home'}))transitionTo(useJourney.getState().navUnlocked?'LEGEND':'THRESHOLD');}
+export function navigateAbout(){if(useJourney.getState().navUnlocked&&!requestNavigation({kind:'about'}))transitionTo('OATH');}
+export function returnToStory(){requestNavigation({kind:'return'});}
 export function sealRitual(kind:'dojo'|'commission'){
-  const s=useJourney.getState();
-  if(kind==='dojo'&&s.scene==='DOJO')useJourney.setState({dojoSeal:true});
-  if(kind==='commission'&&s.scene==='COMMISSION')useJourney.setState({commissionSeal:true});
-  soundDirector.emit('ink_bloom');
+  if(kind==='dojo'){commitHanko('keyboard');return;}
+  if(kind==='commission'){commitCommissionSeal('keyboard');return;}
 }
-export function setSelectedMember(selectedMember:number){useJourney.setState({selectedMember});}
-export function setSelectedRelic(selectedRelic:number){useJourney.setState({selectedRelic});}
+export function setSelectedMember(selectedMember:number){selectDojoBuild(selectedMember);}
+export function setSelectedRelic(selectedRelic:number){selectCommissionRelic(selectedRelic);}
 export function resetJourney(){
-  const s=useJourney.getState();overlap?.kill();stopDrainRite();stopGateRites();stopForkRite();gsap.killTweensOf(s.params);soundDirector.reset();clearInput();
+  const s=useJourney.getState();overlap?.kill();stopDrainRite();stopGateRites();stopForkRite();stopDojo();stopSmithy();gsap.killTweensOf(s.params);soundDirector.reset();clearInput();
   Object.assign(s.params,initialParams());
-  runtime.ceremonyEvents=[];runtime.soundEvents=[];runtime.silenceViolations=0;runtime.drainEvents=[];
+  runtime.ceremonyEvents=[];runtime.summonEvents=[];runtime.soundEvents=[];runtime.silenceViolations=0;runtime.drainEvents=[];
   runtime.drain.pickHits=0;runtime.drain.releaseSamples=0;runtime.drain.lastPicked=-1;
   runtime.gateEvents=[];runtime.gates.uniformUploads=0;
   runtime.forkEvents=[];runtime.travelEvents=[];runtime.cut.uniformUploads=0;
-  useJourney.setState({scene:'THRESHOLD',previousScene:null,navUnlocked:false,thresholdReady:false,
+  runtime.dojoEvents=[];runtime.dojo.uniformUploads=0;
+  runtime.smithyEvents=[];runtime.smithy.uniformUploads=0;
+  useJourney.setState({scene:'THRESHOLD',previousScene:null,readerEntry:'start',navigationStack:[],navUnlocked:false,thresholdReady:false,thresholdPhase:'pointing',
     drainReleased:false,drainSettled:false,drainAuditIndex:0,drainAuditSource:'keyboard',completedGates:[],swordMoments:[],pursuitUsed:false,shingCount:0,dojoSeal:false,
     commissionSeal:false,selectedMember:0,selectedRelic:0,journeyNumber:s.journeyNumber+1,
-    resetVersion:s.resetVersion+1,visitedScenes:['THRESHOLD'],forgeSeated:[],forgeSettled:[],trainSeed:'',trainPhase:'idle',ownPhase:'idle',fleetSent:[],fleetSettled:[],forkChoice:null});
+    resetVersion:s.resetVersion+1,visitedScenes:['THRESHOLD'],forgeSeated:[],forgeSettled:[],trainSeed:'',trainPhase:'idle',ownPhase:'idle',fleetSent:[],fleetSettled:[],forkChoice:null,dojoPhase:'idle',dojoExploring:false,commissionExploring:false,practiceExploring:false,commissionPhase:'idle',commissionSealedRelic:null});
 }

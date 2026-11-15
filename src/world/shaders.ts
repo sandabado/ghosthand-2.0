@@ -30,25 +30,27 @@ export function uploadUniforms(material:ShaderMaterial,params:WorldParams) {
 }
 
 export const fogVertex=`
-  uniform float uTime; uniform float uFogDensity;
-  attribute float aSeed; varying float vSeed; varying float vDepth;
+  uniform float uTime;uniform float uFogDensity;
+  attribute float aSeed;attribute float aAlong;attribute float aLane;
+  varying float vSeed;varying float vDepth;varying float vAlong;
   void main(){
     vec3 p=position;
-    p.y=mod(p.y+uTime*(0.055+aSeed*0.035)+6.0,12.0)-6.0;
-    p.x+=sin(uTime*0.13+aSeed*20.0)*0.22;
+    p.y+=sin(aAlong*12.0+aLane*.8-uTime*.18)*.06;
+    p.z+=cos(aAlong*8.0+aLane*1.2+uTime*.09)*.1;
     vec4 mv=modelViewMatrix*vec4(p,1.0);
     gl_Position=projectionMatrix*mv;
-    gl_PointSize=clamp((17.0+aSeed*35.0)*(0.4+uFogDensity)/max(1.0,-mv.z),1.0,24.0);
-    vSeed=aSeed;vDepth=clamp((-mv.z)/30.0,0.0,1.0);
+    gl_PointSize=clamp(17.0/max(1.0,-mv.z),.7,1.65);
+    vSeed=aSeed;vDepth=clamp((-mv.z)/30.0,0.0,1.0);vAlong=aAlong;
   }`;
 export const fogFragment=`
-  uniform float uFogDensity;uniform float uLightIntensity;uniform vec3 uColor;uniform vec3 uBone;
-  varying float vSeed;varying float vDepth;
+  uniform float uFogDensity;uniform float uLightIntensity;uniform float uMoteStrength;uniform float uTime;uniform vec3 uColor;uniform vec3 uBone;
+  varying float vSeed;varying float vDepth;varying float vAlong;
   void main(){
     vec2 uv=gl_PointCoord-0.5;float d=length(uv);
     float soft=exp(-d*d*17.0)*smoothstep(0.5,0.2,d);
-    float alive=smoothstep(vSeed-0.08,vSeed+0.04,uFogDensity);
-    gl_FragColor=vec4(mix(uColor,uBone,vSeed*0.4),soft*alive*(0.14+uFogDensity*0.2)*uLightIntensity*(1.0-vDepth*0.5));
+    float alive=.42+.58*pow(.5+.5*sin(vAlong*13.0-uTime*.22),3.0);
+    float ends=smoothstep(0.0,.12,vAlong)*(1.0-smoothstep(.85,1.0,vAlong));
+    gl_FragColor=vec4(mix(uColor,uBone,.45+vSeed*.25),soft*alive*ends*uMoteStrength*uLightIntensity*(1.0-vDepth*.6));
   }`;
 
 export const atmosphereVertex=`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`;

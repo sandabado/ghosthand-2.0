@@ -81,50 +81,58 @@ export default function DrainScene() {
     else updateDrainGesture(0);
   };
 
-  const status = settled ? 'The threads are released. The way is open.' : released ? 'The threads are releasing. Stay with the dawn.' : ready ? 'The upward stroke is ready. Release to let go.' : armed ? 'Draw upward, then release.' : 'Follow a thread, then deliberately look up.';
+  const status = settled ? 'The study threads are released. Scrolling continues.' : released ? 'The threads are releasing. You can keep scrolling.' : ready ? 'The upward stroke is ready. Release to let go.' : armed ? 'Draw upward, then release.' : 'Optional study. Follow a thread, then look up to release it.';
 
-  return <div className="drain-v4" data-phase={phase} data-armed={armed} data-ready={ready}>
-    <div className="drain-v4-label"><span>03 / THE DRAIN</span><span>{settled ? 'THE WEIGHT HAS LIFTED.' : released ? 'THE THREADS LET GO.' : 'THE COST OF BORROWED POWER'}</span></div>
+  return <div className="drain-v4" data-story="work-first" data-phase={phase} data-armed={armed} data-ready={ready}>
     <div className="drain-v4-stage">
       <div className="drain-story">
-        <span className="drain-overline">{settled ? 'A DIFFERENT DAWN.' : released ? 'NO NEED TO HOLD ON.' : 'EVERY THREAD TAKES SOMETHING.'}</span>
-        <h2 className="drain-v4-title">{settled ? <>Air,<br/><em>again.</em></> : released ? <>Let it<br/><em>leave.</em></> : <>What is<br/><em>owning you?</em></>}</h2>
-        <p className="drain-v4-lede">{settled ? 'Nothing pulling at your attention. The next move is yours.' : released ? 'The grip loosens. The room opens. Stay with the light.' : 'Rent. Noise. Friction. Follow an invisible thread and see what it carries.'}</p>
-
-        <div className="drain-look-zone" role="group" aria-label={released ? 'Look up complete' : 'Look up interaction area'} aria-describedby="drain-look-help" aria-disabled={released} tabIndex={released ? -1 : 0}
-          onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={cancel} onLostPointerCapture={cancel} onBlur={cancel}
-          onKeyDown={event => {
-            if (event.key === 'Escape') { event.preventDefault(); cancel(); }
-            if (event.key === 'ArrowUp' && !released) { event.preventDefault(); cancel(); releaseDrain('keyboard'); }
-          }}>
-          <div className="drain-gesture-rail" aria-hidden="true"><i/></div>
-          <span className="drain-look-arrow" aria-hidden="true">{settled ? '手' : '↑'}</span>
-          <div><strong>{settled ? 'A little more room.' : released ? 'Let the threads fall away.' : ready ? 'Release.' : armed ? 'Keep going.' : 'Look up.'}</strong>
-            <span id="drain-look-help">{released ? 'A little room to choose.' : 'Press here. Draw upward. Release.'}</span>
-            <small>{settled ? 'NO PULL. JUST POSSIBILITY.' : released ? 'LET THE WEIGHT LEAVE.' : 'KEYBOARD / FOCUS HERE + ↑'}</small></div>
-        </div>
-        <button className="keyboard-action drain-key-release" type="button" disabled={released} onClick={event => releaseDrain(event.detail === 0 ? 'keyboard' : 'pointer')}>{settled ? 'The threads are released' : released ? 'The threads are letting go' : 'Release the threads · keyboard alternative'}</button>
-        <p className="drain-phase-status sr-only" role="status" aria-live="polite">{status}</p>
+        <h2 className="drain-v4-title">Make room<br/><em>for the work.</em></h2>
+        <p className="drain-v4-lede">A useful instrument starts with room to think. Wishh’s documented build connected AI assistance to a rich editor.</p>
       </div>
-
-      <aside className="drain-inspection" aria-label="Illustrative filament audit">
-        <div className="drain-airspace" aria-hidden="true"><span>{settled ? 'NO PULL. JUST POSSIBILITY.' : released ? 'FOLLOW THE RELEASE.' : 'FOLLOW A THREAD.'}</span><i>+</i><span>{released ? 'THE LIGHT IS COMING THROUGH.' : 'HOVER A FILAMENT TO TRACE IT.'}</span></div>
-        {!settled ? <>
-          <div className="drain-trace-card" role="group" aria-label="Selected illustrative thread" data-source={source}>
-            <div className="drain-trace-top"><span>{released ? 'THE GRIP IS LOOSENING' : source === 'filament' ? 'FILAMENT TRACED' : 'A THREAD IN THE SYSTEM'}</span><span>{String(selected + 1).padStart(2, '0')} / {String(drainAudit.length).padStart(2, '0')}</span></div>
-            <h3>{item?.name}</h3><p className="drain-trace-rate">{item?.rate}</p>
-            <p id="drain-trace-meaning" className="drain-trace-meaning">{item?.meaning}</p>
-          </div>
-          <details id="drain-thread-list" className="drain-thread-list">
-            <summary><span>Inspect all threads</span><span>{drainAudit.length} / AUDIT <b aria-hidden="true">+</b></span></summary>
-            <ul>{drainAudit.map((thread, index) => <li key={thread.id}><button type="button" className="drain-thread-option" disabled={released} aria-pressed={selected === index} aria-describedby={selected === index ? 'drain-trace-meaning' : undefined}
-              onPointerEnter={() => { if (!released) selectDrainAudit(index, 'pointer'); }}
-              onFocus={() => selectDrainAudit(index, 'keyboard')}
-              onClick={event => selectDrainAudit(index, event.detail === 0 ? 'keyboard' : 'pointer')}><span>{thread.name}</span><b>{thread.rate}</b></button></li>)}</ul>
-          </details>
-        </> : <div className="drain-free-space"><span aria-hidden="true">手</span><p>Less pulling.<br/>More room to make.</p><small>THE NEXT MOVE IS YOURS.</small></div>}
-      </aside>
     </div>
-    <div className="drain-v4-bottom"><p>{settled ? 'THE WAY IS OPEN.' : released ? 'STAY WITH THE DAWN.' : 'ILLUSTRATIVE BURDENS. NOT YOUR ACCOUNT DATA.'}</p><ScrollCue ready={settled} label="Scroll into the craft" waiting={released?'Stay with the dawn':'First, release the threads'}/></div>
+    <details className="practice-experiment drain-experiment" onToggle={event => { if(event.target===event.currentTarget&&event.currentTarget.closest('.current-shell'))useJourney.setState({practiceExploring:event.currentTarget.open});if (!event.currentTarget.open) cancel(); }}>
+      <summary><span>Explore the filament study</span><span className="practice-optional">Optional</span><i className="practice-toggle" aria-hidden="true">+</i></summary>
+      <div className="practice-experiment-body">
+        <p className="practice-study-note">Conceptual study · illustrative burdens, not visitor data.</p>
+        <div className="drain-study-layout">
+          <div className="drain-study-controls">
+            <h3 className="drain-study-heading">{settled ? 'Air, again.' : released ? 'Let it leave.' : 'Release the threads.'}</h3>
+            <div className="drain-look-zone" role="group" aria-label={released ? 'Look up complete' : 'Look up interaction area'} aria-describedby="drain-look-help" aria-disabled={released} tabIndex={released ? -1 : 0}
+              onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={cancel} onLostPointerCapture={cancel} onBlur={cancel}
+              onKeyDown={event => {
+                if (event.key === 'Escape') { event.preventDefault(); cancel(); }
+                if (event.key === 'ArrowUp' && !released) { event.preventDefault(); cancel(); releaseDrain('keyboard'); }
+              }}>
+              <div className="drain-gesture-rail" aria-hidden="true"><i/></div>
+              <span className="drain-look-arrow" aria-hidden="true">{settled ? '手' : '↑'}</span>
+              <div><strong>{settled ? 'Complete' : released ? 'Releasing…' : ready ? 'Release now' : armed ? 'Draw upward' : 'Release the threads'}</strong>
+                <span id="drain-look-help">{released ? 'Keep scrolling.' : 'Drag upward here, then release.'}</span>
+                <small>{settled ? '' : released ? '' : 'OR USE RELEASE BELOW · KEYBOARD ↑'}</small></div>
+            </div>
+            <button className="keyboard-action drain-key-release" type="button" disabled={released} onClick={event => releaseDrain(event.detail === 0 ? 'keyboard' : 'pointer')}>{settled ? 'The threads are released' : released ? 'The threads are letting go' : 'Release the threads ↑'}</button>
+            <p className="drain-phase-status sr-only" role="status" aria-live="polite">{status}</p>
+          </div>
+
+          <aside className="drain-inspection" aria-label="Illustrative filament audit">
+            <div className="drain-airspace" aria-hidden="true"/>
+            {!settled ? <>
+              <div className="drain-trace-card" role="group" aria-label="Selected illustrative thread" data-source={source}>
+                <div className="drain-trace-top"><span>{released ? 'THE GRIP IS LOOSENING' : source === 'filament' ? 'FILAMENT TRACED' : 'A THREAD IN THE SYSTEM'}</span><span>{String(selected + 1).padStart(2, '0')} / {String(drainAudit.length).padStart(2, '0')}</span></div>
+                <h3>{item?.name}</h3><p className="drain-trace-rate">{item?.rate}</p>
+                <p id="drain-trace-meaning" className="drain-trace-meaning">{item?.meaning}</p>
+              </div>
+              <details id="drain-thread-list" className="drain-thread-list">
+                <summary><span>Inspect all threads</span><span>{drainAudit.length} / AUDIT <b aria-hidden="true">+</b></span></summary>
+                <ul>{drainAudit.map((thread, index) => <li key={thread.id}><button type="button" className="drain-thread-option" disabled={released} aria-pressed={selected === index} aria-describedby={selected === index ? 'drain-trace-meaning' : undefined}
+                  onPointerEnter={() => { if (!released) selectDrainAudit(index, 'pointer'); }}
+                  onFocus={() => selectDrainAudit(index, 'keyboard')}
+                  onClick={event => selectDrainAudit(index, event.detail === 0 ? 'keyboard' : 'pointer')}><span>{thread.name}</span><b>{thread.rate}</b></button></li>)}</ul>
+              </details>
+            </> : <div className="drain-free-space"><span aria-hidden="true">手</span><p>Less pulling.<br/>More room to make.</p></div>}
+          </aside>
+        </div>
+      </div>
+    </details>
+    <div className="drain-v4-bottom"><ScrollCue label="Scroll into the practice"/></div>
   </div>;
 }

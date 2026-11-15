@@ -1,37 +1,64 @@
 'use client';
 
-import { useCallback,useEffect,useRef,useState,type KeyboardEvent,type PointerEvent } from 'react';
+import { useCallback,useEffect,useLayoutEffect,useRef,useState,type KeyboardEvent,type PointerEvent } from 'react';
+import dynamic from 'next/dynamic';
 import { TIMING } from '@/core/config';
 import { useJourney } from '@/core/world';
 import { useParam } from '@/core/params';
 import { aimFork,previewForkStroke,cancelForkStroke,commitFork } from '@/core/director';
 import { strokeComplete } from '@/core/cut';
-import { HAND_SVG } from '@/systems/ink/sources';
+import { useRenderFailure } from '@/core/render-fallback';
+
+const StillHeldSword=dynamic(()=>import('./StillHeldSword'),{ssr:false});
 
 type ForkBranch='DOJO'|'CHAINS_HOLD';
 type StrokeKind='pointer'|'keyboard';
 type PointerOrigin={pointer:number;x:number;y:number;element:HTMLButtonElement};
 
-function CutLabel({number,title,detail}:{number:string;title:string;detail:string}){
-  return <div className="cut6-label"><span>{number} / {title}</span><span>{detail}</span></div>;
+function CutLabel({number,title}:{number:string;title:string;detail:string}){
+  return <div className="cut6-label"><span>{number} / {title}</span></div>;
 }
 
 export function PursuitScene(){
   return <div className="cut6-scene cut6-pursuit">
     <CutLabel number="05" title="THE PURSUIT" detail="ONE INVITATION."/>
-    <div className="cut6-pursuit-stage"><span className="cut6-overline">THE BLADE HAS A DIRECTION.</span><h2>Follow.</h2><p>Through the noise.<br/>Toward the hand.</p><div className="cut6-pursuit-vector" aria-hidden="true"><i/><span>INTENTION IN MOTION.</span></div></div>
+    <div className="cut6-pursuit-stage"><h2>Follow.</h2><div className="cut6-pursuit-vector" aria-hidden="true"><i/></div></div>
   </div>;
+}
+
+function MergeContent({command}:{command:string}){
+  return <div className="cut6-merge-stage"><div className="cut6-summon" aria-label="Summon"><span aria-hidden="true">&gt;</span><span aria-hidden="true">{command}</span><i aria-hidden="true">_</i></div><h2 className="cut6-merge-title">One hand.<br/><em>One purpose.</em></h2></div>;
 }
 
 export function MergeScene(){
   const time=useParam('ceremonyTime'),ink=useParam('inkFlow');
   const reduced=useJourney(state=>state.reducedMotion);
-  const command=reduced?'summon':Array.from('summon').slice(0,Math.ceil(Math.max(0,Math.min(1,ink))*6)).join('');
-  const phase=time<TIMING.merge.handStart?'A SIGNAL IN THE VOID.':time<TIMING.merge.swordStart?'THE HAND WRITES.':time<TIMING.merge.cutStart?'THE EDGE ARRIVES.':'THE WORLD OPENS.';
+  const failed=useRenderFailure(),fallback=reduced||failed;
+  const original=useRef<HTMLDivElement>(null),shear=useRef<HTMLDivElement>(null);
+  useLayoutEffect(()=>{
+    const source=original.current,layer=shear.current;if(!source||!layer||fallback)return;
+    // Two inert visual pieces reproduce the same page-space type. Only layout
+    // and reading changes require measurement; the shared engine owns motion.
+    const align=()=>{
+      const rect=source.getBoundingClientRect();
+      layer.style.setProperty('--slice-content-left',`${rect.left}px`);layer.style.setProperty('--slice-content-top',`${rect.top}px`);
+      layer.style.setProperty('--slice-content-width',`${rect.width}px`);layer.style.setProperty('--slice-content-height',`${rect.height}px`);
+    };
+    const reader=source.closest('.current-shell'),observer=new ResizeObserver(align);
+    observer.observe(source);reader?.addEventListener('scroll',align,{passive:true});window.addEventListener('resize',align);align();
+    return()=>{observer.disconnect();reader?.removeEventListener('scroll',align);window.removeEventListener('resize',align);};
+  },[fallback]);
+  const command=fallback?'summon':Array.from('summon').slice(0,Math.ceil(Math.max(0,Math.min(1,ink))*6)).join('');
+  const phase=time<TIMING.merge.handStart?'The hand arrives.':time<TIMING.merge.swordStart?'The hand opens to receive the blade.':time<TIMING.merge.cutStart?'The hand receives the glowing blade.':'The blade cuts the page open.';
   return <div className="cut6-scene cut6-merge">
-    <CutLabel number="06" title="THE MERGE" detail="INSTRUMENT MEETS INSTINCT."/>
-    <div className="cut6-merge-stage"><div className="cut6-summon" aria-label="Summon"><span aria-hidden="true">&gt;</span><span aria-hidden="true">{command}</span><i aria-hidden="true">_</i></div><h2 className="cut6-merge-title">One hand.<br/><em>One purpose.</em></h2><p>{time<TIMING.merge.swordStart?'An intention takes form.':time<TIMING.merge.cutStart?'Let the edge find its purpose.':'The next move is yours.'}</p><div className="cut6-hand" aria-hidden="true" dangerouslySetInnerHTML={{__html:HAND_SVG}}/></div>
-    <div className="cut6-merge-signature" aria-live="off"><span>INSTINCT / INSTRUMENT / INTENTION</span><span>{phase}</span></div>
+    <div ref={original} className="cut6-merge-original"><MergeContent command={command}/></div>
+    {!fallback&&<div className="cut6-next-reveal" aria-hidden="true" inert><p>Bring the<br/><em>impossible thing.</em></p></div>}
+    {!fallback&&<div ref={shear} className="cut6-merge-shear" aria-hidden="true" inert>
+      <div className="cut6-merge-half cut6-merge-half-upper"><div className="cut6-page-content"><MergeContent command={command}/></div></div>
+      <div className="cut6-merge-half cut6-merge-half-lower"><div className="cut6-page-content"><MergeContent command={command}/></div></div>
+    </div>}
+    {fallback&&<StillHeldSword/>}
+    <p className="sr-only" aria-live="off">{phase}</p>
   </div>;
 }
 
@@ -84,7 +111,7 @@ function ForkHalf({branch,title,number,copy,glyph}:{branch:ForkBranch;title:Reac
     if(complete)commitFork(branch,'pointer');else cancelForkStroke();
   };
   const onKey=(event:KeyboardEvent<HTMLButtonElement>)=>{
-    if(event.key==='Escape'){event.preventDefault();cancel();return;}
+    if(event.key==='Escape'){if(mode.current!==null){event.preventDefault();cancel();}return;}
     if(disabled)return;
     if(event.key===' '){
       event.preventDefault();if(event.repeat)return;
@@ -119,17 +146,17 @@ export function ForkScene(){
   const choice=useJourney(state=>state.forkChoice);
   return <div className="cut6-scene cut6-fork" data-committing={choice!==null}>
     <CutLabel number="07" title="THE FORK" detail="ONE STROKE. TWO DESTINIES."/>
-    <div className="cut6-fork-heading"><div><span className="cut6-overline">THE WAY IS A CHOICE.</span><h2>Choose what<br/><em>holds you.</em></h2></div><p>The tool can become yours.<br/>Or the terms can stay borrowed.</p></div>
-    <div className="cut6-fork-stage"><ForkHalf branch="DOJO" number="01 / SOVEREIGN" glyph="主" title={<>FORGE<br/>THE BLADE.</>} copy={<>Build the instinct.<br/>Own the instrument.</>}/><ForkHalf branch="CHAINS_HOLD" number="02 / BORROWED" glyph="縛" title={<>WEAR<br/>THE CHAINS.</>} copy={<>The familiar room.<br/>The borrowed power.</>}/><span className="cut6-fork-seam" aria-hidden="true"/></div>
-    <p id="cut6-fork-help" className="cut6-fork-help"><span>PRESS THE GRIP. DRAW A STROKE. RELEASE.</span><span>KEYBOARD / SPACE → ↓ → ENTER. ESC CANCELS.</span></p>
-    <p className="cut6-fork-status" role="status">{choice!==null?'The choice is made. The other path is falling away.':'The Fork is ready. Choose a half with a deliberate stroke. Scrolling does not choose a path.'}</p>
+    <div className="cut6-fork-heading"><div><span className="ritual-option required-action">Choose your path</span><h2>Choose what<br/><em>holds you.</em></h2></div><p>Press and drag either grip to choose.<br/>Or enter Dojo or Commission below.</p></div>
+    <div className="cut6-fork-stage"><ForkHalf branch="DOJO" number="01 / SOVEREIGN" glyph="主" title={<>FORGE<br/>THE BLADE.</>} copy={<>Explore the work in the Dojo.</>}/><ForkHalf branch="CHAINS_HOLD" number="02 / BORROWED" glyph="縛" title={<>WEAR<br/>THE CHAINS.</>} copy={<>Enter the holding room.<br/>You can return here.</>}/><span className="cut6-fork-seam" aria-hidden="true"/></div>
+    <p id="cut6-fork-help" className="cut6-fork-help"><span>Drag either grip at least 40px, then release.</span><span>KEYBOARD: SPACE → ↓ → ENTER · ESC CANCELS</span></p>
+    <p className="cut6-fork-status" role="status">{choice!==null?'The choice is made. The other path is falling away.':'Choose a path above, or use Dojo or Commission below.'}</p>
   </div>;
 }
 
 export function ChainsHoldScene(){
   return <div className="cut6-scene cut6-hold">
     <CutLabel number="10" title="THE HOLDING ROOM" detail="THE DOOR REMAINS OPEN."/>
-    <div className="cut6-hold-stage"><div className="cut6-hold-copy"><span aria-hidden="true">縛</span><h2>The room<br/>is <em>familiar.</em></h2><p>Borrowed power has a familiar weight.<br/>You can still put it down.</p></div><div className="cut6-hold-door" role="img" aria-label="One green doorway returns to the Fork. Scroll down to pass through."><span>RETURN TO<br/>THE FORK</span><b aria-hidden="true">↓</b></div></div>
-    <div className="cut6-hold-foot"><span>THE WAY BACK IS STILL YOURS.</span><span>SCROLL THROUGH THE DOOR ↓</span></div>
+    <div className="cut6-hold-stage"><div className="cut6-hold-copy"><span aria-hidden="true">縛</span><h2>The room<br/>is <em>familiar.</em></h2><p>You can still put it down.</p></div><div className="cut6-hold-door" role="img" aria-label="One green doorway returns to the Fork. Scroll down to pass through."><span>RETURN TO<br/>THE FORK</span><b aria-hidden="true">↓</b></div></div>
+    <div className="cut6-hold-foot"><span>Scroll through the green door ↓</span></div>
   </div>;
 }

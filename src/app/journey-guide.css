@@ -1,0 +1,18 @@
+.journey-guide{display:flex;gap:15px;align-items:center;min-height:40px;max-width:520px;color:color-mix(in srgb,var(--bone) 68%,transparent)}
+.journey-guide-icon{color:var(--candle);font:20px/1 var(--mono);flex:0 0 20px}
+.journey-bottom{justify-content:space-between;gap:24px}
+.journey-guide-label{font:12px/1.5 Arial,Helvetica,sans-serif;letter-spacing:0}
+.journey-guide button{display:block;padding:2px 0;background:none;color:var(--candle);font:10px/1.7 Arial,Helvetica,sans-serif;text-align:left;border-bottom:1px solid color-mix(in srgb,var(--candle) 35%,transparent)}
+.journey-guide button span{margin-left:10px}.journey-guide[data-mode=required] .journey-guide-label{color:var(--bone)}
+.journey-guide[data-mode=ceremony] .journey-guide-icon,.journey-guide[data-mode=settling] .journey-guide-icon{color:var(--bone)}
+@media(max-width:760px){.journey-guide{gap:10px;max-width:calc(100% - 155px);min-height:42px}.journey-guide-label{font-size:11px;line-height:1.5}.journey-guide-icon{font-size:17px;flex-basis:15px}.journey-guide button{font-size:10px;min-height:28px}.journey-bottom:not(:has(.path-navigation)) .journey-guide{max-width:100%}.journey-guide[data-mode=end]{max-width:calc(100% - 165px)}}
+.foundation-root[data-reduced=false] .journey-stage{touch-action:pinch-zoom}
+.foundation-root[data-reduced=false] .scroll-cue{display:none}
+.journey-guide[data-mode=end]{display:none}
+.foundation-root[data-scene=OATH] .journey-bottom{justify-content:flex-end}
+@media(max-width:480px){
+  .journey-bottom:has(.path-navigation){flex-wrap:wrap;row-gap:7px}
+  .journey-bottom:has(.path-navigation) .journey-guide{flex:1 1 100%;max-width:none;min-height:42px}
+  .journey-bottom:has(.path-navigation) .path-navigation{margin-left:auto}
+  .foundation-root:has(.path-navigation):not([data-scene=OATH])[data-reduced=false] .current-shell{height:calc(100svh - 285px)}
+}

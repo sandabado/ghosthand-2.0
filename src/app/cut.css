@@ -62,9 +62,52 @@
 .cut6-hold-door>b{font:28px/1 var(--mono);font-weight:400;margin-top:12px}
 .cut6-hold-foot{display:flex;justify-content:space-between;gap:25px;border-top:1px solid color-mix(in srgb,var(--bone) 13%,transparent);padding-top:20px;font:7px/1.8 var(--mono);letter-spacing:.08em;color:color-mix(in srgb,var(--bone) 43%,transparent)}
 .cut6-hold-foot>span:last-child{color:color-mix(in srgb,var(--candle) 70%,transparent)}
-[data-reduced=true] .cut6-hand{display:block}
 [data-reduced=true] .cut6-fork-card,[data-reduced=true] .cut6-fork-seam{transform:none;filter:none}
 @media(max-width:1050px){.cut6-merge-title{font-size:76px}.cut6-fork-heading{gap:6%}.cut6-fork-heading h2{font-size:55px}.cut6-fork-heading>p{font-size:11px}.cut6-fork-card{padding-left:29px;padding-right:29px}.cut6-fork-title{font-size:40px}.cut6-fork-copy{font-size:10px}.cut6-fork-glyph{font-size:135px}.cut6-fork-help{font-size:7px}.cut6-hold-stage{gap:8%}.cut6-hold-copy h2{font-size:66px}}
 @media(max-width:760px){.cut6-scene{min-height:calc(100svh - 205px)}.cut6-label{font-size:7px;gap:18px}.cut6-label>span:last-child{font-size:5px;max-width:145px}.cut6-pursuit-stage{min-height:510px;padding:35px 0}.cut6-pursuit-stage h2{font-size:clamp(82px,17vw,135px)}.cut6-pursuit-stage>p{font-size:11px;max-width:220px}.cut6-pursuit-vector{bottom:30px;font-size:5px}.cut6-pursuit-vector i{width:75px}.cut6-merge-stage{min-height:530px;justify-content:flex-start;padding-top:48px}.cut6-summon{font-size:13px}.cut6-merge-title{font-size:clamp(51px,9.4vw,73px);margin-top:35px}.cut6-merge-stage>p{font-size:8px;max-width:235px}.cut6-merge-signature{font-size:5px;gap:18px}.cut6-hand{width:62%;right:-1%;top:26%;opacity:.42}.cut6-fork-heading{display:block;padding-top:29px;padding-bottom:25px}.cut6-fork-heading h2{font-size:48px;margin-top:14px}.cut6-fork-heading>p{font-size:11px;max-width:320px;margin-top:20px}.cut6-overline{font-size:6px}.cut6-fork-stage{min-height:355px;perspective:850px}.cut6-fork-card{min-height:355px;padding:22px 18px}.cut6-fork-number{font-size:5px;line-height:1.9;margin-bottom:29px;max-width:100px}.cut6-fork-title{font-size:32px}.cut6-fork-copy{font-size:9px;line-height:1.9;max-width:150px;margin-top:22px}.cut6-fork-glyph{font-size:112px;right:2%;top:22%}.cut6-stroke-guide{font-size:7px;gap:8px;flex-wrap:wrap;line-height:1.8;margin-top:0}.cut6-stroke-guide>i{width:23px}.cut6-fork-help{font-size:7px;display:block;line-height:2}.cut6-fork-help>span{display:block}.cut6-fork-help>span:last-child{text-align:left;margin-top:5px}.cut6-hold-stage{grid-template-columns:1fr;gap:40px;padding-top:38px;padding-bottom:43px;min-height:0}.cut6-hold-copy>span:first-child{font-size:28px}.cut6-hold-copy h2{font-size:57px}.cut6-hold-copy>p{font-size:11px;max-width:290px}.cut6-hold-door{justify-self:end;width:151px;height:265px;margin-right:20px}.cut6-hold-door>span{font-size:6px}.cut6-hold-foot{font-size:6px;gap:15px}.cut6-hold-foot>span:first-child{max-width:150px}}
 @media(max-width:420px){.cut6-fork-card{padding-left:12px;padding-right:12px}.cut6-fork-title{font-size:28px}.cut6-fork-number{font-size:4px}.cut6-fork-copy{font-size:8px}.cut6-fork-help{font-size:6px}.cut6-fork-glyph{font-size:97px}.cut6-merge-title{font-size:55px}.cut6-merge-stage>p{font-size:7px}.cut6-merge-signature{font-size:4px}.cut6-hold-copy h2{font-size:52px}.cut6-hold-foot{font-size:5px}}
 @media(max-width:370px){.cut6-fork-card{padding-left:9px;padding-right:9px}.cut6-fork-title{font-size:22px}.cut6-fork-copy{font-size:7px}.cut6-fork-glyph{font-size:83px}.cut6-stroke-guide{font-size:6px}.cut6-merge-title{font-size:46px}.cut6-hold-copy h2{font-size:46px}}
+
+/* The blade draws one viewport seam, then the actual page-space type parts
+   along the same normal as the compositor. These are inert visual pieces. */
+.cut6-merge{position:relative;isolation:isolate}
+.cut6-merge-original{position:relative;flex:1}
+.cut6-merge-shear{position:fixed;inset:0;pointer-events:none;z-index:4;isolation:isolate;opacity:clamp(0,var(--slice-strike,0)*100,1)}
+.cut6-merge-half{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%}
+.cut6-page-content{position:absolute;left:var(--slice-content-left,5vw);top:var(--slice-content-top,140px);width:var(--slice-content-width,90vw);height:var(--slice-content-height,calc(100svh - 285px))}
+.cut6-merge-half-upper{clip-path:polygon(0 0,100% 0,100% var(--slice-right-y,103.664%),0 var(--slice-left-y,-6.992%));transform:translate3d(var(--slice-upper-x,0px),var(--slice-upper-y,0px),0)}
+.cut6-merge-half-lower{clip-path:polygon(0 var(--slice-left-y,-6.992%),100% var(--slice-right-y,103.664%),100% 100%,0 100%);transform:translate3d(var(--slice-lower-x,0px),var(--slice-lower-y,0px),0)}
+[data-reduced=false] .cut6-merge-original{opacity:calc(1 - clamp(0,var(--slice-strike,0)*100,1))}
+.cut6-next-reveal{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:clamp(0,var(--slice-opening,0)*2,1);clip-path:polygon(0 var(--slice-gap-upper-left-y,0%),100% var(--slice-gap-upper-right-y,100%),100% var(--slice-gap-lower-right-y,100%),0 var(--slice-gap-lower-left-y,0%))}
+.cut6-next-reveal>p{position:absolute;top:170px;left:5%;margin:0;font-size:clamp(46px,4.5vw,66px);line-height:1.02;letter-spacing:-.06em;font-weight:400;color:var(--bone)}
+.cut6-next-reveal>p>em{font-family:var(--serif,Georgia,serif);font-weight:400;color:color-mix(in srgb,var(--bone) 80%,var(--candle))}
+.foundation-root[data-scene=MERGE][data-reduced=false] .world-header{will-change:transform;transform:translate3d(var(--slice-upper-x,0px),var(--slice-upper-y,0px),0)}
+.foundation-root[data-scene=MERGE][data-reduced=false] .foundation-footer,.foundation-root[data-scene=MERGE][data-reduced=false] .journey-bottom{will-change:transform;transform:translate3d(var(--slice-lower-x,0px),var(--slice-lower-y,0px),0)}
+.foundation-root[data-scene=MERGE][data-reduced=false] .ceremonial-flash{opacity:calc(var(--flash,0)*.72*(1 - clamp(0,var(--slice-strike,0)*12,1)))}
+.cut6-merge-stage{min-height:calc(100svh - 285px);justify-content:flex-end;padding:35px 0 14svh}
+.cut6-merge-title{position:fixed;left:50vw;top:49svh;transform:translate(-50%,-50%);font-size:clamp(35px,4.3vw,64px);line-height:1.03;max-width:76vw;width:max-content;margin:0;text-align:center;color:color-mix(in srgb,var(--bone) 78%,transparent)}
+.cut6-merge-title>em{color:color-mix(in srgb,var(--bone) 75%,var(--candle))}
+.cut6-summon{font-size:11px;opacity:calc(1 - clamp(0,(var(--ceremony,0) - 1.6)*5,1))}
+[data-reduced=true] .cut6-merge-original{opacity:1}
+[data-reduced=true] .cut6-merge-title{position:relative;left:auto;top:auto;transform:none;text-align:left;width:auto;max-width:380px;margin:22px 0 0}
+[data-reduced=true] .cut6-merge-stage{justify-content:flex-start;min-height:78svh;padding-top:30px}
+[data-reduced=true] .cut6-summon{opacity:1}
+@media(max-width:760px){.cut6-merge-stage{padding-bottom:13svh;min-height:calc(100svh - 250px)}.cut6-merge-title{font-size:clamp(30px,8vw,43px);max-width:235px}.cut6-summon{font-size:10px}}
+@media(max-width:760px){.cut6-next-reveal>p{font-size:48px;top:163px}}
+@media(max-width:520px){.cut6-next-reveal>p{left:6%;top:159px}}
+
+/* Stillness uses the same received pose, physical blade profile and palm pivot. */
+.cut6-still-sword{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.cut6-still-sword>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cut6-still-sword>img{position:absolute;max-width:none;transform-origin:0 0;mask-image:linear-gradient(135deg,var(--bone) 65%,transparent 98%)}
+[data-reduced=true] .cut6-merge-original{z-index:1}
+[data-reduced=true] .cut6-merge-stage{justify-content:flex-end;padding-bottom:5svh}
+[data-reduced=true] .cut6-summon{display:none}
+
+/* A failed renderer uses the same still composition without an empty cut. */
+html[data-render-failed=true] .cut6-merge-original{opacity:1;z-index:1}
+html[data-render-failed=true] .cut6-merge-title{position:relative;left:auto;top:auto;transform:none;text-align:left;width:auto;max-width:380px;margin:22px 0 0}
+html[data-render-failed=true] .cut6-merge-stage{justify-content:flex-end;padding-bottom:5svh}
+html[data-render-failed=true] .cut6-summon{display:none}
+html[data-render-failed=true] .foundation-root[data-scene=MERGE] .world-header,html[data-render-failed=true] .foundation-root[data-scene=MERGE] .foundation-footer,html[data-render-failed=true] .foundation-root[data-scene=MERGE] .journey-bottom{transform:none}
+html[data-render-failed=true] .ceremonial-flash{visibility:hidden}

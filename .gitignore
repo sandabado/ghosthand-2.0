@@ -7,3 +7,7 @@ node_modules/
 .next/
 out/
 *.tsbuildinfo
+
+# Per-workstation review records and unused originals remain local.
+docs/user-pass/
+docs/checkpoints/2026-11-14-user-flow.md

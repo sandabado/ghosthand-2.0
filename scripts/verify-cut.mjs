@@ -65,31 +65,37 @@ check('Fork spring clamps extreme targets and frame gaps without changing ordina
   assert(near(gap.position,capped.position)&&near(gap.velocity,capped.velocity),'A large visible gap cannot throw the hinge');
 });
 
-const initial={scene:'THRESHOLD',thresholdReady:false,drainSettled:false,completedGates:[]};
-check('Travel readiness preserves every interaction and ceremony hold',()=>{
+const initial={scene:'THRESHOLD',thresholdReady:false,drainSettled:false,completedGates:[],forkChoice:null};
+// Story-flow-v2: approved scroll-first main journey supersedes the V6 practice gates.
+// Earlier results remain preserved under docs/user-pass/inherited-checks/.
+check('Story-flow-v2 holds the opening and timed ceremonies while practice remains optional',()=>{
   assert.equal(travelReady(initial),false);
   assert.equal(travelReady({...initial,thresholdReady:true}),true);
   assert.equal(travelReady({...initial,scene:'LEGEND'}),true);
-  assert.equal(travelReady({...initial,scene:'DRAIN'}),false);
+  assert.equal(travelReady({...initial,scene:'DRAIN'}),true);
   assert.equal(travelReady({...initial,scene:'DRAIN',drainSettled:true}),true);
   for(let gate=1;gate<=4;gate++){
     const state={...initial,scene:`CRAFT_F${gate}`};
-    assert.equal(travelReady(state),false);
+    assert.equal(travelReady(state),true);
     assert.equal(travelReady({...state,completedGates:[gate]}),true);
-    assert.equal(travelReady({...state,completedGates:[gate%4+1]}),false,'Another gate cannot satisfy this chamber');
+    assert.equal(travelReady({...state,completedGates:[gate%4+1]}),true,'Optional completion cannot block reading');
   }
-  for(const scene of ['PURSUIT','MERGE','FORK','OATH'])assert.equal(travelReady({...initial,scene,thresholdReady:true,drainSettled:true,completedGates:[1,2,3,4]}),false);
+  for(const scene of ['PURSUIT','MERGE','OATH'])assert.equal(travelReady({...initial,scene,thresholdReady:true,drainSettled:true,completedGates:[1,2,3,4]}),false);
+  assert.equal(travelReady({...initial,scene:'FORK'}),true,'The optional choice can be passed by scrolling');
+  for(const forkChoice of ['DOJO','CHAINS_HOLD'])assert.equal(travelReady({...initial,scene:'FORK',forkChoice}),false,'A committed collapse retains its own route');
   for(const scene of ['DOJO','COMMISSION','CHAINS_HOLD'])assert.equal(travelReady({...initial,scene}),true);
 });
 
-check('Scroll destinations preserve the forward story and approved branch returns',()=>{
+check('Story-flow-v2 shows work before practice and keeps optional branch returns',()=>{
   const ready={...initial,thresholdReady:true,drainSettled:true,completedGates:[1,2,3,4]};
-  const route={THRESHOLD:'LEGEND',LEGEND:'DRAIN',DRAIN:'CRAFT_F1',CRAFT_F1:'CRAFT_F2',CRAFT_F2:'CRAFT_F3',CRAFT_F3:'CRAFT_F4',CRAFT_F4:'PURSUIT',DOJO:'OATH',COMMISSION:'OATH',CHAINS_HOLD:'FORK'};
+  const route={THRESHOLD:'LEGEND',LEGEND:'DOJO',DOJO:'DRAIN',DRAIN:'CRAFT_F1',CRAFT_F1:'CRAFT_F2',CRAFT_F2:'CRAFT_F3',CRAFT_F3:'CRAFT_F4',CRAFT_F4:'PURSUIT',COMMISSION:'OATH',CHAINS_HOLD:'FORK',FORK:'COMMISSION'};
   for(const [scene,destination] of Object.entries(route))assert.equal(travelDestination({...ready,scene}),destination);
-  for(const scene of ['PURSUIT','MERGE','FORK','OATH'])assert.equal(travelDestination({...ready,scene}),null,'Scroll must not commit a choice or bypass a timed rite');
+  for(const scene of ['PURSUIT','MERGE','OATH'])assert.equal(travelDestination({...ready,scene}),null,'Scroll must not bypass a timed rite or the ending');
+  for(const forkChoice of ['DOJO','CHAINS_HOLD'])assert.equal(travelDestination({...ready,scene:'FORK',forkChoice}),null,'Scroll must not override a committed choice');
   assert.equal(travelDestination(initial),null);
-  assert.equal(travelDestination({...initial,scene:'DRAIN'}),null);
-  for(let gate=1;gate<=4;gate++)assert.equal(travelDestination({...initial,scene:`CRAFT_F${gate}`}),null);
+  assert.equal(travelDestination({...initial,scene:'DRAIN'}),'CRAFT_F1');
+  for(let gate=1;gate<=4;gate++)assert.equal(travelDestination({...initial,scene:`CRAFT_F${gate}`}),gate===4?'PURSUIT':`CRAFT_F${gate+1}`);
+  assert.equal(travelDestination({...initial,scene:'CRAFT_F4',pursuitUsed:true}),'COMMISSION','A return to work cannot stall at a spent pursuit');
 });
 
 check('Fresh travel requires finished content, readiness, a new downward burst, and settled entry',()=>{
@@ -102,7 +108,7 @@ check('Fresh travel requires finished content, readiness, a new downward burst, 
   assert.equal(freshTravel({...good,progress:NaN}),false);
 });
 
-check('Approved Merge markers retain flash/cut overlap, complete silence, and the eight-second Fork',()=>{
+check('Approved Merge markers retain flash/cut overlap, complete silence, and the eight-second contact handoff',()=>{
   const expected={summon:.4,handStart:1.6,handDuration:2.2,swordStart:3.8,swordDuration:3,flashStart:6.9,flashDuration:.5,cutStart:7,cutDuration:.35,silenceStart:7,silenceEnd:8,fork:8};
   assert.deepEqual(TIMING.merge,expected);
   assert(TIMING.merge.flashStart<TIMING.merge.cutStart);
@@ -195,7 +201,7 @@ const result={
   limitations:[
     'Math/source checks do not prove GPU shader compilation, cursor/touch capture, keyboard operation, native scrolling, stage-travel freshness, or visual/emotional quality.',
     'Exactly-once branch commitment, rejected-half appearance, Chains Hold return/reset, resource lifecycle, and contextual palette permissions require browser/source review.',
-    'Locked constants are not observed playback timing; actual Merge timing, all-audio silence, Fork interactivity, and native callback ownership require separate evidence.',
+    'Locked constants are not observed playback timing; actual Merge timing, all-audio silence, contact handoff, and native callback ownership require separate evidence.',
     'No GPU presented FPS, physical phone acceptance, production media provenance, or public deployment is inferred.'
   ]
 };

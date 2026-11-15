@@ -6,3 +6,6 @@
 [data-reduced=false] .cut6-hold-door{border-color:transparent;background:none;box-shadow:none}
 [data-reduced=false] .cut6-hold-door:before,[data-reduced=false] .cut6-hold-door:after{opacity:0}
 @media(max-width:760px){.scroll-cue{width:100%;min-width:0;max-width:340px;padding-top:17px;font-size:8px}.drain-v4-bottom .scroll-cue,.gate5-footer .scroll-cue{min-width:0}.scroll-cue>small{font-size:5px}}
+/* Keep exploratory drags and reading gestures inside the local journey. */
+html,body{overscroll-behavior-x:none}
+.current-shell{overscroll-behavior:contain}

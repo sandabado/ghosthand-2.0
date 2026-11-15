@@ -1,0 +1,34 @@
+/* A quiet receipt. Live observers mount only after its native Details opens. */
+.receipt-drawer>summary{min-height:44px;display:flex;align-items:center;gap:14px;font-size:11px;padding:10px 0}
+.receipt-drawer>summary>span{display:inline-block;margin:0;font-size:15px;transition:transform .2s ease}
+.receipt-drawer[open]>summary>span{transform:rotate(45deg)}
+.receipt-panel{width:min(620px,92vw);max-height:min(78svh,760px);padding:26px 28px;scrollbar-width:thin;scrollbar-color:var(--candle-dim) transparent;contain:content}
+.receipt-title{font-size:12px;letter-spacing:.025em;margin-bottom:20px}
+.receipt-title span{font-size:9px;letter-spacing:.06em;line-height:1.7;margin-top:5px;opacity:.6}
+.receipt-section{padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid color-mix(in srgb,var(--bone) 14%,transparent)}
+.receipt-section h3{font:12px/1.6 var(--mono);font-weight:400;color:var(--candle);margin:0 0 12px}
+.receipt-panel .receipt-metrics{display:grid;gap:11px;margin:0}
+.receipt-panel .receipt-metrics>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:24px;align-items:baseline}
+.receipt-panel .receipt-metrics dt{font:11px/1.6 var(--mono);margin:0;opacity:.6}
+.receipt-panel .receipt-metrics dd{font:11px/1.6 var(--mono);margin:0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.receipt-panel .receipt-metrics dd>span{color:color-mix(in srgb,var(--bone) 58%,transparent)}
+.receipt-panel .receipt-small{font:10px/1.7 var(--mono);opacity:.58;margin:14px 0 0}
+.receipt-panel a{font:11px/1.6 var(--mono);margin:12px 0 0}
+.receipt-diagnostics,.receipt-atmosphere{padding:0 0 16px;margin:0 0 16px;border:0;border-bottom:1px solid color-mix(in srgb,var(--bone) 14%,transparent)}
+.receipt-diagnostics>summary,.receipt-atmosphere>summary{font:11px/1.7 var(--mono);color:var(--bone);min-height:34px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.receipt-diagnostics>summary>span,.receipt-atmosphere>summary>span{margin:0;font-size:14px;color:var(--candle)}
+.receipt-diagnostics[open]>.receipt-metrics{margin-top:15px}
+.receipt-diagnostics[open]>summary>span,.receipt-atmosphere[open]>summary>span{transform:rotate(45deg)}
+.receipt-atmosphere .proof-controls{margin:12px 0 0}
+.receipt-panel .receipt-replay{font:11px/1.6 var(--mono);margin:2px 0 0;padding:12px 14px;min-height:44px}
+@media(max-width:560px){.receipt-panel{right:4vw;padding:22px 20px;width:92vw;max-width:92vw}.receipt-panel .receipt-metrics>div{grid-template-columns:1fr;gap:2px}.receipt-panel .receipt-metrics dt{font-size:10px}.receipt-panel .receipt-metrics dd{font-size:12px}.receipt-panel .receipt-small{font-size:10px}.receipt-atmosphere label{grid-template-columns:90px 1fr;font-size:11px}}
+@media(prefers-reduced-motion:reduce){.receipt-drawer>summary>span{transition:none}}
+
+/* The same held reference image supports real WebGL failure and stillness. */
+.ink-hand-fallback.threshold-held-fallback{display:none;isolation:isolate;right:-9%;top:31%;width:78%;opacity:.82}
+.threshold-held-fallback>img{position:relative;z-index:1;mix-blend-mode:screen}
+.threshold-still-held-blade{position:absolute;z-index:0;left:11.9%;top:20.6%;width:4%;height:75%;transform-origin:50% 0;transform:translateX(-50%) rotate(144deg);filter:drop-shadow(0 0 4px var(--candle)) drop-shadow(0 0 17px color-mix(in srgb,var(--candle) 50%,transparent))}
+.threshold-still-held-blade>i{display:block;position:absolute;inset:0;background:linear-gradient(90deg,var(--candle),var(--white-flash) 42%,var(--bone) 65%,var(--candle));clip-path:polygon(10% 0,90% 0,84% 91%,50% 100%,16% 91%)}
+.threshold-still-held-blade>b{position:absolute;left:-85%;top:-1%;width:270%;height:1.8%;border-radius:2px;background:linear-gradient(var(--bone),var(--candle-dim));box-shadow:0 0 6px color-mix(in srgb,var(--candle) 50%,transparent)}
+[data-reduced=true] .threshold-held-fallback,html[data-render-failed=true] .threshold-held-fallback{display:block}
+@media(max-width:760px){.ink-hand-fallback.threshold-held-fallback{width:135%;right:-45%;top:47%;opacity:.72}.threshold-still-held-blade{height:65%}}
